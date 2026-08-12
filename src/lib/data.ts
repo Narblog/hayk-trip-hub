@@ -50,21 +50,25 @@ export type SearchParams = {
 
 export async function searchProperties(p: SearchParams): Promise<{ items: SearchResult[]; total: number }> {
   const pageSize = p.pageSize ?? 12;
-  const { data, error } = await supabase.rpc("search_properties", {
-    p_destination: p.destination?.trim() || undefined,
-    p_check_in: p.checkIn || undefined,
-    p_check_out: p.checkOut || undefined,
+  const args: Record<string, unknown> = {
     p_guests: Math.max(1, p.guests ?? 1),
-    p_types: p.types?.length ? p.types : undefined,
-    p_amenities: p.amenities?.length ? p.amenities : undefined,
-    p_min_price: p.minPrice ?? undefined,
-    p_max_price: p.maxPrice ?? undefined,
-    p_bedrooms: p.bedrooms ?? undefined,
-    p_min_rating: p.minRating ?? undefined,
     p_sort: p.sort ?? "recommended",
     p_limit: pageSize,
     p_offset: ((p.page ?? 1) - 1) * pageSize,
-  });
+  };
+  if (p.destination?.trim()) args["p_destination"] = p.destination.trim();
+  if (p.checkIn) args["p_check_in"] = p.checkIn;
+  if (p.checkOut) args["p_check_out"] = p.checkOut;
+  if (p.types?.length) args["p_types"] = p.types;
+  if (p.amenities?.length) args["p_amenities"] = p.amenities;
+  if (p.minPrice != null) args["p_min_price"] = p.minPrice;
+  if (p.maxPrice != null) args["p_max_price"] = p.maxPrice;
+  if (p.bedrooms != null) args["p_bedrooms"] = p.bedrooms;
+  if (p.minRating != null) args["p_min_rating"] = p.minRating;
+  const { data, error } = await supabase.rpc(
+    "search_properties",
+    args as Parameters<typeof supabase.rpc<"search_properties">>[1],
+  );
   if (error) throw error;
   const items = (data ?? []) as unknown as SearchResult[];
   return { items, total: items[0]?.total_count ? Number(items[0].total_count) : 0 };
