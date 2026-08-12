@@ -51,16 +51,16 @@ export type SearchParams = {
 export async function searchProperties(p: SearchParams): Promise<{ items: SearchResult[]; total: number }> {
   const pageSize = p.pageSize ?? 12;
   const { data, error } = await supabase.rpc("search_properties", {
-    p_destination: p.destination?.trim() || null,
-    p_check_in: p.checkIn || null,
-    p_check_out: p.checkOut || null,
+    p_destination: p.destination?.trim() || undefined,
+    p_check_in: p.checkIn || undefined,
+    p_check_out: p.checkOut || undefined,
     p_guests: Math.max(1, p.guests ?? 1),
-    p_types: p.types?.length ? p.types : null,
-    p_amenities: p.amenities?.length ? p.amenities : null,
-    p_min_price: p.minPrice ?? null,
-    p_max_price: p.maxPrice ?? null,
-    p_bedrooms: p.bedrooms ?? null,
-    p_min_rating: p.minRating ?? null,
+    p_types: p.types?.length ? p.types : undefined,
+    p_amenities: p.amenities?.length ? p.amenities : undefined,
+    p_min_price: p.minPrice ?? undefined,
+    p_max_price: p.maxPrice ?? undefined,
+    p_bedrooms: p.bedrooms ?? undefined,
+    p_min_rating: p.minRating ?? undefined,
     p_sort: p.sort ?? "recommended",
     p_limit: pageSize,
     p_offset: ((p.page ?? 1) - 1) * pageSize,
@@ -377,8 +377,11 @@ export async function adminSetStatus(
   status: ListingStatus,
   note?: string,
 ) {
-  const patch: Record<string, unknown> = { status, admin_note: note ?? null };
-  if (status === "APPROVED") patch['approved_at'] = new Date().toISOString();
+  const patch = {
+    status,
+    admin_note: note ?? null,
+    ...(status === "APPROVED" ? { approved_at: new Date().toISOString() } : {}),
+  };
   const { error } = await supabase.from("properties").update(patch).eq("id", propertyId);
   if (error) throw error;
   await supabase.from("admin_actions").insert({
