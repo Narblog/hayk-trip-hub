@@ -35,12 +35,12 @@ function SearchPage() {
   const s = Route.useSearch();
   const { t } = useI18n();
   const params = {
-    destination: s.destination,
-    checkIn: s.checkIn,
-    checkOut: s.checkOut,
-    guests: s.guests,
-    sort: s.sort,
-    page: Math.max(1, s.page),
+    destination: s["destination"],
+    checkIn: s["checkIn"],
+    checkOut: s["checkOut"],
+    guests: s["guests"],
+    sort: s["sort"],
+    page: Math.max(1, s["page"]),
     pageSize: 12,
   };
   const { data, isPending, error, refetch } = useQuery(searchQuery(params));
@@ -62,7 +62,7 @@ function SearchPage() {
               from="/search"
               search={(prev) => ({ ...prev, sort: k, page: 1 })}
               className={`rounded-full border px-3 py-1.5 text-xs font-medium ${
-                s.sort === k ? "border-brand bg-brand-soft text-brand" : "border-border hover:bg-surface"
+                s["sort"] === k ? "border-brand bg-brand-soft text-brand" : "border-border hover:bg-surface"
               }`}
             >
               {t(`sort.${k}`)}
@@ -81,7 +81,7 @@ function SearchPage() {
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {data!.items.map((p) => (
-              <PropertyCard key={p.id} p={p} showAvailable={!!s.checkIn && !!s.checkOut} />
+              <PropertyCard key={p.id} p={p} showAvailable={!!s["checkIn"] && !!s["checkOut"]} />
             ))}
           </div>
         )}
@@ -89,16 +89,16 @@ function SearchPage() {
 
       {pages > 1 ? (
         <div className="mt-10 flex items-center justify-center gap-2">
-          <Button asChild variant="outline" size="sm" disabled={s.page <= 1}>
-            <Link from="/search" search={(prev) => ({ ...prev, page: Math.max(1, prev.page - 1) })}>
+          <Button asChild variant="outline" size="sm" disabled={s["page"] <= 1}>
+            <Link from="/search" search={(prev) => ({ ...prev, page: Math.max(1, prev["page"] - 1) })}>
               {t("common.back")}
             </Link>
           </Button>
           <span className="text-sm text-muted-foreground">
-            {s.page} / {pages}
+            {s["page"]} / {pages}
           </span>
-          <Button asChild variant="outline" size="sm" disabled={s.page >= pages}>
-            <Link from="/search" search={(prev) => ({ ...prev, page: Math.min(pages, prev.page + 1) })}>
+          <Button asChild variant="outline" size="sm" disabled={s["page"] >= pages}>
+            <Link from="/search" search={(prev) => ({ ...prev, page: Math.min(pages, prev["page"] + 1) })}>
               {t("wizard.next")}
             </Link>
           </Button>

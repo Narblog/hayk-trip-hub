@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
 import { useI18n } from "@/lib/i18n";
 
@@ -67,34 +66,12 @@ function AuthPage() {
     }
   }
 
-  async function google() {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: `${window.location.origin}${safeRedirect}`,
-    });
-    if (result.error) {
-      toast.error(String(result.error));
-      return;
-    }
-    if (result.redirected) return;
-    navigate({ to: safeRedirect });
-  }
-
   return (
     <div className="container-page flex justify-center py-16">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-card">
         <h1 className="font-display text-2xl font-semibold">
           {isRegister ? t("auth.registerTitle") : t("auth.loginTitle")}
         </h1>
-
-        <Button variant="outline" className="mt-6 w-full" onClick={() => void google()}>
-          {t("auth.google")}
-        </Button>
-        <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          {t("auth.or")}
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
         <form onSubmit={submit} className="space-y-4">
           {isRegister ? (
             <div className="space-y-1.5">
