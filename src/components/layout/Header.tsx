@@ -1,0 +1,187 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Bell, Heart, LayoutDashboard, LogOut, Menu, Shield, User as UserIcon } from "lucide-react";
+import { useState } from "react";
+import { Logo } from "./Logo";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/lib/auth";
+import { notificationsQuery, profileQuery } from "@/lib/data";
+import { initials } from "@/lib/format";
+import { useI18n } from "@/lib/i18n";
+
+export function Header() {
+  const { t } = useI18n();
+  const { user, isOwner, isAdmin, signOut } = useAuth();
+  const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const transparent = pathname === "/";
+
+  const { data: profile } = useQuery(profileQuery(user?.id ?? null));
+  const { data: notifications = [] } = useQuery(notificationsQuery(user?.id ?? null));
+  const unread = notifications.filter((n) => !n.is_read).length;
+
+  const navItems = [
+    { to: "/search" as const, label: t("nav.stays") },
+    { to: "/tours" as const, label: t("nav.tours") },
+    { to: "/about" as const, label: t("nav.about") },
+  ];
+
+  return (
+    <header
+      className={`sticky top-0 z-50 w-full border-b transition-colors ${
+        transparent ? "border-transparent bg-background/80" : "border-border bg-background/90"
+      } backdrop-blur-xl`}
+    >
+      <div className="container-page flex h-16 items-center justify-between gap-4">
+        <div className="flex items-center gap-8">
+          <Logo />
+          <nav className="hidden items-center gap-1 md:flex">
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+                activeProps={{ className: "text-foreground bg-surface" }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <Button asChild variant="ghost" size="sm" className="hidden lg:inline-flex">
+            <Link to="/owner/properties/new">{t("nav.listProperty")}</Link>
+          </Button>
+          <LanguageSwitcher compact />
+
+          {user ? (
+            <>
+              <Button asChild variant="ghost" size="icon" className="relative hidden sm:inline-flex">
+                <Link to="/account/notifications" aria-label={t("notif.title")}>
+                  <Bell className="size-4" />
+                  {unread > 0 ? (
+                    <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-brand" />
+                  ) : null}
+                </Link>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="ml-1 rounded-full ring-offset-background focus-visible:ring-2 focus-visible:ring-ring">
+                    <Avatar className="size-9 border border-border">
+                      <AvatarFallback className="bg-brand-soft text-xs font-semibold text-brand">
+                        {initials(profile?.full_name ?? user.email)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="truncate">{profile?.full_name || user.email}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/account">
+                      <UserIcon className="size-4" /> {t("nav.account")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/favorites">
+                      <Heart className="size-4" /> {t("nav.favorites")}
+                    </Link>
+                  </DropdownMenuItem>
+                  {isOwner ? (
+                    <DropdownMenuItem asChild>
+                      <Link to="/owner">
+                        <LayoutDashboard className="size-4" /> {t("nav.ownerDashboard")}
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : null}
+                  {isAdmin ? (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin">
+                        <Shield className="size-4" /> {t("nav.adminDashboard")}
+                      </Link>
+                    </DropdownMenuItem>
+                  ) : null}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={() => void signOut()}>
+                    <LogOut className="size-4" /> {t("nav.logout")}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <div className="hidden items-center gap-1.5 sm:flex">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/auth">{t("nav.login")}</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to="/auth" search={{ mode: "register" }}>
+                  {t("nav.register")}
+                </Link>
+              </Button>
+            </div>
+          )}
+
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label={t("nav.menu")}>
+                <Menu className="size-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[86vw] max-w-sm">
+              <SheetTitle className="sr-only">{t("nav.menu")}</SheetTitle>
+              <div className="flex flex-col gap-1 p-6 pt-12">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-3 py-3 font-display text-lg hover:bg-surface"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                <Link
+                  to="/owner/properties/new"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-3 font-display text-lg hover:bg-surface"
+                >
+                  {t("nav.listProperty")}
+                </Link>
+                <div className="mt-4 border-t border-border pt-4">
+                  {user ? (
+                    <Button variant="outline" className="w-full" onClick={() => void signOut()}>
+                      {t("nav.logout")}
+                    </Button>
+                  ) : (
+                    <div className="grid gap-2">
+                      <Button asChild onClick={() => setOpen(false)}>
+                        <Link to="/auth">{t("nav.login")}</Link>
+                      </Button>
+                      <Button asChild variant="outline" onClick={() => setOpen(false)}>
+                        <Link to="/auth" search={{ mode: "register" }}>
+                          {t("nav.register")}
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
+}
