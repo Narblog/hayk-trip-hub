@@ -1,5 +1,17 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InlineLoader } from "@/components/common/states";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
+import { refDataQuery } from "@/lib/data";
+import { slugify } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/owner/properties/new")({
@@ -15,12 +27,264 @@ export const Route = createFileRoute("/owner/properties/new")({
 });
 
 function NewPropertyPage() {
-  const { t } = useI18n();
+  const { t, localized } = useI18n();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { data: ref, isPending } = useQuery(refDataQuery());
+  const [saving, setSaving] = useState(false);
+  const [amenities, setAmenities] = useState<string[]>([]);
+  const [form, setForm] = useState({
+    name: "",
+    property_type: "",
+    region_code: "",
+    city_code: "",
+    address: "",
+    description: "",
+    price_per_night: "",
+    max_guests: "2",
+    bedrooms: "1",
+    beds: "1",
+    bathrooms: "1",
+    main_image_url: "",
+    contact_phone: "",
+    contact_whatsapp: "",
+    contact_instagram: "",
+  });
+
+  const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const cities = useMemo(
+    () => (ref?.cities ?? []).filter((c) => !form.region_code || c.region_code === form.region_code),
+    [ref, form.region_code],
+  );
+
+  async function save(status: "DRAFT" | "PENDING_REVIEW") {
+    if (!user) return;
+    if (!form.name.trim() || !form.property_type || !form.city_code || !form.price_per_night) {
+      toast.error(t("form.required"));
+      return;
+    }
+    setSaving(true);
+    try {
+      const city = (ref?.cities ?? []).find((c) => c.code === form.city_code);
+      const { data, error } = await supabase
+        .from("properties")
+        .insert({
+          owner_id: user.id,
+          name: form.name.trim(),
+          slug: `${slugify(form.name)}-${Math.random().toString(36).slice(2, 8)}`,
+          description: form.description || null,
+          property_type: form.property_type,
+          city_code: form.city_code,
+          region_code: form.region_code || city?.region_code || null,
+          address: form.address || null,
+          price_per_night: Number(form.price_per_night),
+          max_guests: Number(form.max_guests) || 1,
+          bedrooms: Number(form.bedrooms) || 0,
+          beds: Number(form.beds) || 0,
+          bathrooms: Number(form.bathrooms) || 0,
+          main_image_url: form.main_image_url || null,
+          contact_phone: form.contact_phone || null,
+          contact_whatsapp: form.contact_whatsapp || null,
+          contact_instagram: form.contact_instagram || null,
+          status,
+          submitted_at: status === "PENDING_REVIEW" ? new Date().toISOString() : null,
+        })
+        .select("id")
+        .single();
+      if (error) throw error;
+      if (amenities.length && data) {
+        await supabase
+          .from("property_amenities")
+          .insert(amenities.map((code) => ({ property_id: data.id, amenity_code: code })));
+      }
+      toast.success(status === "DRAFT" ? t("form.savedDraft") : t("form.submitted"));
+      void navigate({ to: "/owner" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!user)
+    return (
+      <div className="container-page max-w-2xl py-20 text-center">
+        <h1 className="font-display text-3xl font-semibold">{t("nav.listProperty")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("home.ownerCtaSub")}</p>
+        <Button asChild className="mt-6">
+          <Link to="/auth" search={{ mode: "register" }}>{t("nav.register")}</Link>
+        </Button>
+      </div>
+    );
+
+  if (isPending) return <InlineLoader />;
+
+  const section = "rounded-2xl border border-border bg-card p-5 space-y-4";
+  const selectCls =
+    "h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
+
   return (
-    <div className="container-page max-w-2xl py-16 text-center">
+    <div className="container-page max-w-3xl py-10">
       <h1 className="font-display text-3xl font-semibold">{t("nav.listProperty")}</h1>
-      <p className="mt-3 text-muted-foreground">{t("home.ownerCtaSub")}</p>
-      <Button asChild className="mt-6"><Link to="/owner">{t("owner.dashboard")}</Link></Button>
+
+      <form
+        className="mt-6 space-y-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void save("PENDING_REVIEW");
+        }}
+      >
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.basics")}</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="name">{t("form.name")} *</Label>
+              <Input id="name" value={form.name} onChange={(e) => set("name", e.target.value)} required />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="type">{t("form.type")} *</Label>
+              <select
+                id="type"
+                className={selectCls}
+                value={form.property_type}
+                onChange={(e) => set("property_type", e.target.value)}
+                required
+              >
+                <option value="">{t("form.select")}</option>
+                {(ref?.types ?? []).map((ty) => (
+                  <option key={ty.code} value={ty.code}>
+                    {localized(ty, "name")}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="description">{t("form.description")}</Label>
+            <Textarea id="description" rows={4} value={form.description} onChange={(e) => set("description", e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="img">{t("form.mainImage")}</Label>
+            <Input id="img" value={form.main_image_url} onChange={(e) => set("main_image_url", e.target.value)} placeholder="https://…" />
+          </div>
+        </div>
+
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.location")}</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="region">{t("form.region")}</Label>
+              <select
+                id="region"
+                className={selectCls}
+                value={form.region_code}
+                onChange={(e) => {
+                  set("region_code", e.target.value);
+                  set("city_code", "");
+                }}
+              >
+                <option value="">{t("form.select")}</option>
+                {(ref?.regions ?? []).map((r) => (
+                  <option key={r.code} value={r.code}>
+                    {localized(r, "name")}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="city">{t("form.city")} *</Label>
+              <select
+                id="city"
+                className={selectCls}
+                value={form.city_code}
+                onChange={(e) => set("city_code", e.target.value)}
+                required
+              >
+                <option value="">{t("form.select")}</option>
+                {cities.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {localized(c, "name")}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="address">{t("form.address")}</Label>
+            <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
+          </div>
+        </div>
+
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.capacity")}</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {([
+              ["price_per_night", t("form.price")],
+              ["max_guests", t("form.maxGuests")],
+              ["bedrooms", t("form.bedrooms")],
+              ["beds", t("form.beds")],
+              ["bathrooms", t("form.bathrooms")],
+            ] as const).map(([key, label]) => (
+              <div key={key} className="space-y-1.5">
+                <Label htmlFor={key}>{label}</Label>
+                <Input
+                  id={key}
+                  type="number"
+                  min={key === "price_per_night" ? 0 : 0}
+                  value={form[key]}
+                  onChange={(e) => set(key, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.amenities")}</h2>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {(ref?.amenities ?? []).map((a) => (
+              <label key={a.code} className="flex items-center gap-2 text-sm">
+                <Checkbox
+                  checked={amenities.includes(a.code)}
+                  onCheckedChange={(v) =>
+                    setAmenities((prev) => (v ? [...prev, a.code] : prev.filter((c) => c !== a.code)))
+                  }
+                />
+                {localized(a, "name")}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.contact")}</h2>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="space-y-1.5">
+              <Label htmlFor="phone">{t("form.phone")}</Label>
+              <Input id="phone" value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="wa">{t("form.whatsapp")}</Label>
+              <Input id="wa" value={form.contact_whatsapp} onChange={(e) => set("contact_whatsapp", e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="ig">{t("form.instagram")}</Label>
+              <Input id="ig" value={form.contact_instagram} onChange={(e) => set("contact_instagram", e.target.value)} />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          <Button type="submit" disabled={saving}>{t("form.submit")}</Button>
+          <Button type="button" variant="outline" disabled={saving} onClick={() => void save("DRAFT")}>
+            {t("form.saveDraft")}
+          </Button>
+          <Button asChild type="button" variant="ghost">
+            <Link to="/owner">{t("common.cancel")}</Link>
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }
