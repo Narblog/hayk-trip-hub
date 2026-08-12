@@ -65,10 +65,11 @@ export async function searchProperties(p: SearchParams): Promise<{ items: Search
   if (p.maxPrice != null) args["p_max_price"] = p.maxPrice;
   if (p.bedrooms != null) args["p_bedrooms"] = p.bedrooms;
   if (p.minRating != null) args["p_min_rating"] = p.minRating;
-  const { data, error } = await supabase.rpc(
-    "search_properties",
-    args as Parameters<typeof supabase.rpc<"search_properties">>[1],
-  );
+  const rpc = supabase.rpc as unknown as (
+    fn: "search_properties",
+    params: Record<string, unknown>,
+  ) => Promise<{ data: unknown; error: { message: string } | null }>;
+  const { data, error } = await rpc("search_properties", args);
   if (error) throw error;
   const items = (data ?? []) as unknown as SearchResult[];
   return { items, total: items[0]?.total_count ? Number(items[0].total_count) : 0 };
