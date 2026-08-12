@@ -15,8 +15,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ToursRouteImport } from './routes/tours'
+import { Route as AccountIndexRouteImport } from './routes/account.index'
+import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as OwnerIndexRouteImport } from './routes/owner.index'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
 import { Route as TourSlugRouteImport } from './routes/tour.$slug'
+import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.properties.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -48,6 +53,26 @@ const ToursRoute = ToursRouteImport.update({
   path: '/tours',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/account/',
+  path: '/account/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountNotificationsRoute = AccountNotificationsRouteImport.update({
+  id: '/account/notifications',
+  path: '/account/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerIndexRoute = OwnerIndexRouteImport.update({
+  id: '/owner/',
+  path: '/owner/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertySlugRoute = PropertySlugRouteImport.update({
   id: '/property/$slug',
   path: '/property/$slug',
@@ -58,6 +83,11 @@ const TourSlugRoute = TourSlugRouteImport.update({
   path: '/tour/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerPropertiesNewRoute = OwnerPropertiesNewRouteImport.update({
+  id: '/owner/properties/new',
+  path: '/owner/properties/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,8 +96,13 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof FavoritesRoute
   '/search': typeof SearchRoute
   '/tours': typeof ToursRoute
+  '/account/notifications': typeof AccountNotificationsRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
+  '/account/': typeof AccountIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/owner/': typeof OwnerIndexRoute
+  '/owner/properties/new': typeof OwnerPropertiesNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,8 +111,13 @@ export interface FileRoutesByTo {
   '/favorites': typeof FavoritesRoute
   '/search': typeof SearchRoute
   '/tours': typeof ToursRoute
+  '/account/notifications': typeof AccountNotificationsRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
+  '/account': typeof AccountIndexRoute
+  '/admin': typeof AdminIndexRoute
+  '/owner': typeof OwnerIndexRoute
+  '/owner/properties/new': typeof OwnerPropertiesNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +127,13 @@ export interface FileRoutesById {
   '/favorites': typeof FavoritesRoute
   '/search': typeof SearchRoute
   '/tours': typeof ToursRoute
+  '/account/notifications': typeof AccountNotificationsRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
+  '/account/': typeof AccountIndexRoute
+  '/admin/': typeof AdminIndexRoute
+  '/owner/': typeof OwnerIndexRoute
+  '/owner/properties/new': typeof OwnerPropertiesNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +144,13 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/search'
     | '/tours'
+    | '/account/notifications'
     | '/property/$slug'
     | '/tour/$slug'
+    | '/account/'
+    | '/admin/'
+    | '/owner/'
+    | '/owner/properties/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +159,13 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/search'
     | '/tours'
+    | '/account/notifications'
     | '/property/$slug'
     | '/tour/$slug'
+    | '/account'
+    | '/admin'
+    | '/owner'
+    | '/owner/properties/new'
   id:
     | '__root__'
     | '/'
@@ -119,8 +174,13 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/search'
     | '/tours'
+    | '/account/notifications'
     | '/property/$slug'
     | '/tour/$slug'
+    | '/account/'
+    | '/admin/'
+    | '/owner/'
+    | '/owner/properties/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,8 +190,13 @@ export interface RootRouteChildren {
   FavoritesRoute: typeof FavoritesRoute
   SearchRoute: typeof SearchRoute
   ToursRoute: typeof ToursRoute
+  AccountNotificationsRoute: typeof AccountNotificationsRoute
   PropertySlugRoute: typeof PropertySlugRoute
   TourSlugRoute: typeof TourSlugRoute
+  AccountIndexRoute: typeof AccountIndexRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  OwnerIndexRoute: typeof OwnerIndexRoute
+  OwnerPropertiesNewRoute: typeof OwnerPropertiesNewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,6 +243,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToursRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/': {
+      id: '/account/'
+      path: '/account'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/notifications': {
+      id: '/account/notifications'
+      path: '/account/notifications'
+      fullPath: '/account/notifications'
+      preLoaderRoute: typeof AccountNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner/': {
+      id: '/owner/'
+      path: '/owner'
+      fullPath: '/owner/'
+      preLoaderRoute: typeof OwnerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/property/$slug': {
       id: '/property/$slug'
       path: '/property/$slug'
@@ -192,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TourSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/properties/new': {
+      id: '/owner/properties/new'
+      path: '/owner/properties/new'
+      fullPath: '/owner/properties/new'
+      preLoaderRoute: typeof OwnerPropertiesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -202,8 +302,13 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritesRoute: FavoritesRoute,
   SearchRoute: SearchRoute,
   ToursRoute: ToursRoute,
+  AccountNotificationsRoute: AccountNotificationsRoute,
   PropertySlugRoute: PropertySlugRoute,
   TourSlugRoute: TourSlugRoute,
+  AccountIndexRoute: AccountIndexRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  OwnerIndexRoute: OwnerIndexRoute,
+  OwnerPropertiesNewRoute: OwnerPropertiesNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
