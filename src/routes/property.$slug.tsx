@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BedDouble, Bath, MapPin, Phone, Star, Users } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
+import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
 import { Button } from "@/components/ui/button";
 import { propertyQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
@@ -95,6 +96,13 @@ function PropertyPage() {
               <p className="mt-3 whitespace-pre-line text-muted-foreground">{p.house_rules}</p>
             </section>
           ) : null}
+
+          <section className="mt-8">
+            <h2 className="font-display text-xl font-semibold">{t("cal.title")}</h2>
+            <div className="mt-3 max-w-md">
+              <AvailabilityCalendar propertyId={p.id} />
+            </div>
+          </section>
         </div>
 
         <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">

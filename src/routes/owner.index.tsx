@@ -65,7 +65,14 @@ function OwnerDashboard() {
                   <p className="truncate font-medium">{p.name}</p>
                   <p className="text-xs text-muted-foreground">{p.city_code}</p>
                 </div>
-                <StatusBadge status={p.status} />
+                <div className="flex shrink-0 items-center gap-2">
+                  <StatusBadge status={p.status} />
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/owner/properties/$id/calendar" params={{ id: p.id }}>
+                      {t("owner.openCalendar")}
+                    </Link>
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>
