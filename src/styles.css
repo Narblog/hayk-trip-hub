@@ -182,7 +182,17 @@
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    letter-spacing: -0.02em;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  img {
+    background-color: var(--color-surface);
   }
 }
 
@@ -205,4 +215,20 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+@utility eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+@utility hero-fade {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, oklch(0.235 0.012 70) 34%, transparent) 0%,
+    color-mix(in oklab, oklch(0.235 0.012 70) 16%, transparent) 40%,
+    color-mix(in oklab, var(--color-background) 45%, transparent) 78%,
+    var(--color-background) 100%
+  );
 }
