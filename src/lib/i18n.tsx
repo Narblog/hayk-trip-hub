@@ -823,7 +823,119 @@ const ru: Dict = {
   "owner.openCalendar": "\u041a\u0430\u043b\u0435\u043d\u0434\u0430\u0440\u044c",
 };
 
-const dicts: Record<Lang, Dict> = { en, hy, ru };
+/* ---- editorial redesign copy ---- */
+const extraEn: Dict = {
+  "hero.l1": "Find your perfect stay",
+  "hero.l2a": "in the heart of ",
+  "hero.hl": "Armenia",
+  "hero.l2b": "",
+  "filter.all": "All",
+  "home.staysEyebrow": "Selected stays",
+  "home.staysTitle": "Places worth the journey",
+  "home.experiencesEyebrow": "Curated",
+  "home.experiencesTitle": "Unforgettable experiences",
+  "home.viewAll": "View all",
+  "property.backToAll": "Back to all stays",
+  "property.contactOwner": "Contact the owner",
+  "property.directNote": "Hyur takes no commission. You speak with the owner directly and agree the details together.",
+  "property.similar": "Similar stays",
+  "property.host": "Host",
+  "property.gallery": "Gallery",
+  "owner.loginTitle": "Sign in to manage your listings",
+  "owner.loginSub": "Log in or create a Hyur host account to add properties, edit details and keep your calendar current.",
+  "owner.offer": "Listing a property on Hyur costs 2,000 AMD — no commission on your bookings.",
+  "about.lead": "Hyur is an Armenian travel directory built on trust: verified listings, real availability and a direct line to the person who hosts you.",
+  "about.p1Title": "Verified listings",
+  "about.p1": "Every property is reviewed by our team before it appears publicly.",
+  "about.p2Title": "Real availability",
+  "about.p2": "Hosts keep their own calendar, so what you see is what is free.",
+  "about.p3Title": "Direct communication",
+  "about.p3": "Call, WhatsApp or Instagram the owner. No commission, no middleman.",
+  "about.ctaGuest": "Explore stays",
+  "about.ctaOwner": "List your property",
+  "footer.desc": "Armenian stays and experiences, listed by the people who host them.",
+  "footer.contact": "Contact",
+  "footer.social": "Social",
+  "footer.madeIn": "Made in Armenia",
+  "error.friendly": "Something went wrong while loading this content. Please try again.",
+};
+const extraHy: Dict = {
+  "hero.l1": "Գտիր քո հանգիստը",
+  "hero.l2a": "",
+  "hero.hl": "Հայաստանի",
+  "hero.l2b": " սրտում",
+  "filter.all": "Բոլորը",
+  "home.staysEyebrow": "Ընտրված կացարաններ",
+  "home.staysTitle": "Վայրեր, որոնք արժեն ճանապարհը",
+  "home.experiencesEyebrow": "Բացառիկ",
+  "home.experiencesTitle": "Անմոռանալի փորձառություններ",
+  "home.viewAll": "Դիտել բոլորը",
+  "property.backToAll": "Բոլոր կացարանները",
+  "property.contactOwner": "Կապվել տանտիրոջ հետ",
+  "property.directNote": "Hyur-ը միջնորդավճար չի վերցնում։ Դուք ուղիղ շփվում եք տանտիրոջ հետ և պայմանավորվում միասին։",
+  "property.similar": "Նմանատիպ կացարաններ",
+  "property.host": "Տանտեր",
+  "property.gallery": "Պատկերասրահ",
+  "owner.loginTitle": "Մուտք գործեք՝ ձեր հայտարարությունները կառավարելու համար",
+  "owner.loginSub": "Մուտք գործեք կամ ստեղծեք տանտիրոջ հաշիվ՝ գույք ավելացնելու, խմբագրելու և օրացույցը թարմ պահելու համար։",
+  "owner.offer": "Hyur-ում գույք ավելացնելը արժե 2 000 ֏՝ առանց միջնորդավճարի։",
+  "about.lead": "Hyur-ը հայկական ճամփորդական տեղեկատու է՝ հիմնված վստահության վրա՝ ստուգված հայտարարություններ, իրական զբաղվածություն և ուղիղ կապ տանտիրոջ հետ։",
+  "about.p1Title": "Ստուգված հայտարարություններ",
+  "about.p1": "Յուրաքանչյուր գույք ստուգվում է մեր թիմի կողմից՝ նախքան հրապարակվելը։",
+  "about.p2Title": "Իրական զբաղվածություն",
+  "about.p2": "Տանտերերն իրենք են վարում օրացույցը, ուստի տեսածդ ազատ օրերն իրական են։",
+  "about.p3Title": "Ուղիղ հաղորդակցություն",
+  "about.p3": "Զանգ, WhatsApp կամ Instagram՝ ուղիղ տանտիրոջը։ Առանց միջնորդավճարի։",
+  "about.ctaGuest": "Դիտել կացարանները",
+  "about.ctaOwner": "Ավելացնել գույք",
+  "footer.desc": "Հայկական կացարաններ և փորձառություններ՝ ներկայացված հենց տանտերերի կողմից։",
+  "footer.contact": "Կապ",
+  "footer.social": "Սոցիալական",
+  "footer.madeIn": "Ստեղծված է Հայաստանում",
+  "error.friendly": "Բովանդակությունը բեռնելիս սխալ տեղի ունեցավ։ Խնդրում ենք փորձել կրկին։",
+};
+const extraRu: Dict = {
+  "hero.l1": "Найди свой отдых",
+  "hero.l2a": "в сердце ",
+  "hero.hl": "Армении",
+  "hero.l2b": "",
+  "filter.all": "Все",
+  "home.staysEyebrow": "Избранные места",
+  "home.staysTitle": "Места, ради которых стоит ехать",
+  "home.experiencesEyebrow": "Особенное",
+  "home.experiencesTitle": "Незабываемые впечатления",
+  "home.viewAll": "Смотреть все",
+  "property.backToAll": "Все варианты",
+  "property.contactOwner": "Связаться с хозяином",
+  "property.directNote": "Hyur не берёт комиссию. Вы общаетесь с хозяином напрямую и договариваетесь сами.",
+  "property.similar": "Похожие варианты",
+  "property.host": "Хозяин",
+  "property.gallery": "Галерея",
+  "owner.loginTitle": "Войдите, чтобы управлять объявлениями",
+  "owner.loginSub": "Войдите или создайте аккаунт хозяина, чтобы добавлять объекты, редактировать их и вести календарь.",
+  "owner.offer": "Размещение объекта на Hyur стоит 2 000 драм — без комиссии с бронирований.",
+  "about.lead": "Hyur — армянский travel-справочник, построенный на доверии: проверенные объявления, реальная доступность и прямая связь с хозяином.",
+  "about.p1Title": "Проверенные объявления",
+  "about.p1": "Каждый объект проверяется нашей командой перед публикацией.",
+  "about.p2Title": "Реальная доступность",
+  "about.p2": "Хозяева сами ведут календарь, поэтому свободные даты настоящие.",
+  "about.p3Title": "Прямое общение",
+  "about.p3": "Звонок, WhatsApp или Instagram хозяину. Без комиссии и посредников.",
+  "about.ctaGuest": "Смотреть жильё",
+  "about.ctaOwner": "Добавить объект",
+  "footer.desc": "Армянское жильё и впечатления от тех, кто принимает гостей.",
+  "footer.contact": "Контакты",
+  "footer.social": "Соцсети",
+  "footer.madeIn": "Сделано в Армении",
+  "error.friendly": "Не удалось загрузить содержимое. Пожалуйста, попробуйте ещё раз.",
+};
+
+const dicts: Record<Lang, Dict> = {
+  en: { ...en, ...extraEn },
+  hy: { ...hy, ...extraHy },
+  ru: { ...ru, ...extraRu },
+};
+const enAll: Dict = dicts.en;
 
 type I18nValue = {
   lang: Lang;
@@ -849,7 +961,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       window.localStorage.setItem(STORAGE_KEY, l);
       document.documentElement.lang = l;
     };
-    const t = (key: string) => dicts[lang][key] ?? en[key] ?? key;
+    const t = (key: string) => dicts[lang][key] ?? enAll[key] ?? key;
     const localized = <T extends Record<string, unknown>>(row: T | null | undefined, base: string) => {
       if (!row) return "";
       return (row[`${base}_${lang}`] as string) ?? (row[`${base}_en`] as string) ?? "";
