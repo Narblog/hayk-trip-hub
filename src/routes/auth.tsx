@@ -6,8 +6,11 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import { useI18n } from "@/lib/i18n";
+import { Chrome } from "lucide-react";
 
 const schema = z.object({
   mode: fallback(z.string(), "login").default("login"),
@@ -66,6 +69,22 @@ function AuthPage() {
     }
   }
 
+  async function signInWithGoogle() {
+    setBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw result.error;
+      if (result.redirected) return;
+      navigate({ to: safeRedirect });
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <div className="container-page flex justify-center py-16">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-card">
@@ -98,6 +117,23 @@ function AuthPage() {
             {isRegister ? t("auth.register") : t("auth.login")}
           </Button>
         </form>
+
+        <div className="mt-6 flex items-center gap-3">
+          <Separator className="flex-1" />
+          <span className="text-xs text-muted-foreground">{t("auth.or")}</span>
+          <Separator className="flex-1" />
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-4 w-full"
+          onClick={signInWithGoogle}
+          disabled={busy}
+        >
+          <Chrome className="mr-2 h-4 w-4" />
+          {t("auth.google")}
+        </Button>
 
         <p className="mt-5 text-center text-sm text-muted-foreground">
           {isRegister ? t("auth.haveAccount") : t("auth.noAccount")}{" "}
