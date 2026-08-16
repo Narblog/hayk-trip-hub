@@ -549,6 +549,44 @@ export type Database = {
           },
         ]
       }
+      property_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          new_status: Database["public"]["Enums"]["listing_status"]
+          note: string | null
+          old_status: Database["public"]["Enums"]["listing_status"] | null
+          property_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_status: Database["public"]["Enums"]["listing_status"]
+          note?: string | null
+          old_status?: Database["public"]["Enums"]["listing_status"] | null
+          property_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          new_status?: Database["public"]["Enums"]["listing_status"]
+          note?: string | null
+          old_status?: Database["public"]["Enums"]["listing_status"] | null
+          property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_status_history_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_types: {
         Row: {
           code: string
@@ -950,6 +988,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      become_owner: { Args: never; Returns: undefined }
       check_property_availability: {
         Args: { p_check_in: string; p_check_out: string; p_property_id: string }
         Returns: boolean
