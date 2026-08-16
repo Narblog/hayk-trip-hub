@@ -118,6 +118,12 @@ function AuthPage() {
           </Button>
         </form>
 
+        <div className="mt-6 flex items-center gap-3">
+          <Separator className="flex-1" />
+          <span className="text-xs text-muted-foreground">{t("auth.or")}</span>
+          <Separator className="flex-1" />
+        </div>
+
         <Button
           type="button"
           variant="outline"
