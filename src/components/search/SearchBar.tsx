@@ -58,12 +58,12 @@ export function SearchBar({
   }
 
   const fieldClass =
-    "flex min-w-0 flex-1 items-center gap-2.5 rounded-xl px-3.5 py-2.5 transition-colors hover:bg-surface md:rounded-none md:px-4 md:hover:bg-surface/70";
+    "flex min-w-0 flex-1 items-center gap-2.5 rounded-2xl px-4 py-3 transition-colors hover:bg-surface md:rounded-none md:px-5 md:hover:bg-surface/60";
 
   return (
     <form
       onSubmit={submit}
-      className={`w-full rounded-2xl border border-border bg-card p-2 md:rounded-full md:p-1.5 ${
+      className={`w-full rounded-3xl border border-border/70 bg-card p-2 md:rounded-full md:p-2 ${
         variant === "hero" ? "shadow-search" : "shadow-card"
       }`}
     >

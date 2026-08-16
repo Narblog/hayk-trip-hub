@@ -5,11 +5,11 @@ import { useI18n } from "@/lib/i18n";
 export function Footer() {
   const { t } = useI18n();
   return (
-    <footer className="mt-24 border-t border-border bg-surface">
-      <div className="container-page grid gap-10 py-14 md:grid-cols-4">
+    <footer className="mt-24 border-t border-border/70 bg-surface">
+      <div className="container-page grid gap-10 py-16 md:grid-cols-4">
         <div className="space-y-3">
           <Logo />
-          <p className="max-w-xs text-sm text-muted-foreground">{t("hero.subtitle")}</p>
+          <p className="max-w-xs text-sm text-muted-foreground">{t("footer.desc")}</p>
         </div>
         <div>
           <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -39,9 +39,10 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-border">
-        <div className="container-page py-5 text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Hyur — {t("footer.rights")}
+      <div className="border-t border-border/70">
+        <div className="container-page flex flex-wrap items-center justify-between gap-2 py-5 text-xs text-muted-foreground">
+          <span>© {new Date().getFullYear()} Hyur — {t("footer.rights")}</span>
+          <span className="eyebrow">{t("footer.madeIn")}</span>
         </div>
       </div>
     </footer>

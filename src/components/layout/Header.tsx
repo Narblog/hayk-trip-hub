@@ -40,18 +40,18 @@ export function Header() {
   return (
     <header
       className={`sticky top-0 z-50 w-full border-b transition-colors ${
-        transparent ? "border-transparent bg-background/80" : "border-border bg-background/90"
+        transparent ? "border-transparent bg-background/70" : "border-border/70 bg-background/85"
       } backdrop-blur-xl`}
     >
-      <div className="container-page flex h-16 items-center justify-between gap-4">
+      <div className="container-page flex h-20 items-center justify-between gap-4">
         <div className="flex items-center gap-8">
           <Logo />
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-2 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
+                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
                 activeProps={{ className: "text-foreground bg-surface" }}
               >
                 {item.label}
@@ -60,8 +60,8 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <Button asChild variant="ghost" size="sm" className="hidden lg:inline-flex">
+        <div className="flex items-center gap-2">
+          <Button asChild variant="outline" size="sm" className="hidden rounded-full lg:inline-flex">
             <Link to="/owner/properties/new">{t("nav.listProperty")}</Link>
           </Button>
           <LanguageSwitcher compact />
@@ -121,11 +121,11 @@ export function Header() {
               </DropdownMenu>
             </>
           ) : (
-            <div className="hidden items-center gap-1.5 sm:flex">
-              <Button asChild variant="ghost" size="sm">
+            <div className="hidden items-center gap-2 sm:flex">
+              <Button asChild variant="ghost" size="sm" className="rounded-full">
                 <Link to="/auth">{t("nav.login")}</Link>
               </Button>
-              <Button asChild size="sm">
+              <Button asChild size="sm" className="rounded-full">
                 <Link to="/auth" search={{ mode: "register" }}>
                   {t("nav.register")}
                 </Link>
