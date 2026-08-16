@@ -134,12 +134,13 @@ function NewPropertyPage() {
         .single();
       if (error) throw error;
       if (amenities.length && data) {
-        await supabase
+        const { error: amenitiesError } = await supabase
           .from("property_amenities")
           .insert(amenities.map((code) => ({ property_id: data.id, amenity_code: code })));
+        if (amenitiesError) throw amenitiesError;
       }
       if (photos.length && data) {
-        await supabase.from("property_images").insert(
+        const { error: imagesError } = await supabase.from("property_images").insert(
           photos.map((ph, i) => ({
             property_id: data.id,
             image_url: ph.url,
@@ -148,6 +149,7 @@ function NewPropertyPage() {
             is_cover: ph.url === (mainPhoto || photos[0]?.url),
           })),
         );
+        if (imagesError) throw imagesError;
       }
       toast.success(status === "DRAFT" ? t("form.savedDraft") : t("form.submitted"));
       void navigate({ to: "/owner" });
