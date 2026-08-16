@@ -397,3 +397,28 @@ export async function adminSetStatus(
     notes: note ?? null,
   });
 }
+export async function adminDeleteProperty(adminId: string, propertyId: string) {
+  const { error } = await supabase.from("properties").delete().eq("id", propertyId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "property.deleted",
+    target_type: "property",
+    target_id: propertyId,
+  });
+}
+
+export async function adminUpdateProperty(
+  adminId: string,
+  propertyId: string,
+  patch: { name?: string; price_per_night?: number; max_guests?: number; is_featured?: boolean; is_active?: boolean },
+) {
+  const { error } = await supabase.from("properties").update(patch).eq("id", propertyId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "property.updated",
+    target_type: "property",
+    target_id: propertyId,
+  });
+}
