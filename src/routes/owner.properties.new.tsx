@@ -366,15 +366,31 @@ function NewPropertyPage() {
           <h2 className="font-display text-lg font-semibold">{t("form.amenities")}</h2>
           <div className="grid gap-2 sm:grid-cols-3">
             {(ref?.amenities ?? []).map((a) => (
-              <label key={a.code} className="flex items-center gap-2 text-sm">
-                <Checkbox
-                  checked={amenities.includes(a.code)}
-                  onCheckedChange={(v) =>
-                    setAmenities((prev) => (v ? [...prev, a.code] : prev.filter((c) => c !== a.code)))
-                  }
-                />
-                {localized(a, "name")}
-              </label>
+              <button
+                key={a.code}
+                type="button"
+                aria-pressed={amenities.includes(a.code)}
+                onClick={() =>
+                  setAmenities((prev) =>
+                    prev.includes(a.code) ? prev.filter((c) => c !== a.code) : [...prev, a.code],
+                  )
+                }
+                className={`flex items-center gap-3 rounded-2xl border p-3 text-left text-sm transition-colors ${
+                  amenities.includes(a.code)
+                    ? "border-brand bg-brand/10 text-foreground"
+                    : "border-border bg-card hover:border-brand/50"
+                }`}
+              >
+                <span
+                  className={`flex size-9 shrink-0 items-center justify-center rounded-xl border ${
+                    amenities.includes(a.code) ? "border-brand/40 bg-brand/15 text-brand" : "border-border text-muted-foreground"
+                  }`}
+                >
+                  <AmenityIcon icon={(a as { icon?: string }).icon} className="size-4.5" />
+                </span>
+                <span className="min-w-0 flex-1 truncate">{localized(a, "name")}</span>
+                {amenities.includes(a.code) ? <Check className="size-4 shrink-0 text-brand" /> : null}
+              </button>
             ))}
           </div>
         </div>
