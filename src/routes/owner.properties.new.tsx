@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { ImagePlus, Star, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,10 @@ function NewPropertyPage() {
   const { data: ref, isPending } = useQuery(refDataQuery());
   const [saving, setSaving] = useState(false);
   const [amenities, setAmenities] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<{ url: string; path: string }[]>([]);
+  const [mainPhoto, setMainPhoto] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
     property_type: "",
@@ -52,6 +57,41 @@ function NewPropertyPage() {
   });
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function uploadFiles(files: FileList | null) {
+    if (!files?.length || !user) return;
+    setUploading(true);
+    try {
+      const added: { url: string; path: string }[] = [];
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop() ?? "jpg";
+        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage.from("property-images").upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+        if (error) throw error;
+        const { data: signed, error: signErr } = await supabase.storage
+          .from("property-images")
+          .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signErr || !signed) throw signErr ?? new Error("sign failed");
+        added.push({ url: signed.signedUrl, path });
+      }
+      setPhotos((prev) => [...prev, ...added]);
+      setMainPhoto((m) => m || added[0]?.url || "");
+    } catch (e) {
+      toast.error(`${t("form.uploadError")}: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
+  async function removePhoto(p: { url: string; path: string }) {
+    setPhotos((prev) => prev.filter((x) => x.path !== p.path));
+    setMainPhoto((m) => (m === p.url ? "" : m));
+    await supabase.storage.from("property-images").remove([p.path]);
+  }
 
   const cities = useMemo(
     () => (ref?.cities ?? []).filter((c) => !form.region_code || c.region_code === form.region_code),
@@ -83,7 +123,7 @@ function NewPropertyPage() {
           bedrooms: Number(form.bedrooms) || 0,
           beds: Number(form.beds) || 0,
           bathrooms: Number(form.bathrooms) || 0,
-          main_image_url: form.main_image_url || null,
+          main_image_url: mainPhoto || form.main_image_url || null,
           contact_phone: form.contact_phone || null,
           contact_whatsapp: form.contact_whatsapp || null,
           contact_instagram: form.contact_instagram || null,
@@ -97,6 +137,17 @@ function NewPropertyPage() {
         await supabase
           .from("property_amenities")
           .insert(amenities.map((code) => ({ property_id: data.id, amenity_code: code })));
+      }
+      if (photos.length && data) {
+        await supabase.from("property_images").insert(
+          photos.map((ph, i) => ({
+            property_id: data.id,
+            image_url: ph.url,
+            storage_path: ph.path,
+            sort_order: i,
+            is_cover: ph.url === (mainPhoto || photos[0]?.url),
+          })),
+        );
       }
       toast.success(status === "DRAFT" ? t("form.savedDraft") : t("form.submitted"));
       void navigate({ to: "/owner" });
@@ -177,6 +228,66 @@ function NewPropertyPage() {
             <Label htmlFor="img">{t("form.mainImage")}</Label>
             <Input id="img" value={form.main_image_url} onChange={(e) => set("main_image_url", e.target.value)} placeholder="https://…" />
           </div>
+        </div>
+
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.photos")}</h2>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => void uploadFiles(e.target.files)}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            disabled={uploading}
+            onClick={() => fileRef.current?.click()}
+          >
+            <ImagePlus className="mr-2 h-4 w-4" />
+            {uploading ? t("form.uploading") : t("form.uploadPhotos")}
+          </Button>
+
+          {photos.length > 0 && (
+            <div className="grid gap-3 sm:grid-cols-3">
+              {photos.map((ph) => {
+                const isMain = ph.url === mainPhoto;
+                return (
+                  <div key={ph.path} className="overflow-hidden rounded-xl border border-border">
+                    <div className="relative aspect-[4/3]">
+                      <img src={ph.url} alt={form.name || "photo"} className="h-full w-full object-cover" />
+                      {isMain && (
+                        <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
+                          {t("form.mainPhoto")}
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        aria-label={t("form.removePhoto")}
+                        onClick={() => void removePhoto(ph)}
+                        className="absolute right-2 top-2 rounded-full bg-background/85 p-1.5 text-foreground shadow-sm"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    <Button
+                      type="button"
+                      variant={isMain ? "secondary" : "ghost"}
+                      size="sm"
+                      className="w-full rounded-none"
+                      disabled={isMain}
+                      onClick={() => setMainPhoto(ph.url)}
+                    >
+                      <Star className={`mr-2 h-3.5 w-3.5 ${isMain ? "fill-current" : ""}`} />
+                      {isMain ? t("form.mainPhoto") : t("form.setMain")}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className={section}>
