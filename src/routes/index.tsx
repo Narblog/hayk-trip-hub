@@ -52,14 +52,14 @@ function Home() {
 
   return (
     <div>
-      <section className="relative -mt-20 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-border/70">
         <img
           src={heroImage}
           alt="Armenian mountain landscape at sunrise"
           className="absolute inset-0 size-full object-cover"
         />
         <div className="hero-fade absolute inset-0" />
-        <div className="container-page relative pb-16 pt-40 text-center md:pb-24 md:pt-52">
+        <div className="container-page relative pb-16 pt-24 text-center md:pb-24 md:pt-32">
           <p className="eyebrow text-background/80">{t("home.staysEyebrow")}</p>
           <h1 className="mx-auto mt-4 max-w-4xl font-display text-4xl leading-[1.1] text-background md:text-6xl">
             {t("hero.l1")}
