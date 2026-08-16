@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { ImagePlus, Star, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,6 +34,10 @@ function NewPropertyPage() {
   const { data: ref, isPending } = useQuery(refDataQuery());
   const [saving, setSaving] = useState(false);
   const [amenities, setAmenities] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<{ url: string; path: string }[]>([]);
+  const [mainPhoto, setMainPhoto] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
     property_type: "",
@@ -52,6 +57,41 @@ function NewPropertyPage() {
   });
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function uploadFiles(files: FileList | null) {
+    if (!files?.length || !user) return;
+    setUploading(true);
+    try {
+      const added: { url: string; path: string }[] = [];
+      for (const file of Array.from(files)) {
+        const ext = file.name.split(".").pop() ?? "jpg";
+        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+        const { error } = await supabase.storage.from("property-images").upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+        if (error) throw error;
+        const { data: signed, error: signErr } = await supabase.storage
+          .from("property-images")
+          .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+        if (signErr || !signed) throw signErr ?? new Error("sign failed");
+        added.push({ url: signed.signedUrl, path });
+      }
+      setPhotos((prev) => [...prev, ...added]);
+      setMainPhoto((m) => m || added[0]?.url || "");
+    } catch (e) {
+      toast.error(`${t("form.uploadError")}: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
+  async function removePhoto(p: { url: string; path: string }) {
+    setPhotos((prev) => prev.filter((x) => x.path !== p.path));
+    setMainPhoto((m) => (m === p.url ? "" : m));
+    await supabase.storage.from("property-images").remove([p.path]);
+  }
 
   const cities = useMemo(
     () => (ref?.cities ?? []).filter((c) => !form.region_code || c.region_code === form.region_code),
@@ -83,7 +123,7 @@ function NewPropertyPage() {
           bedrooms: Number(form.bedrooms) || 0,
           beds: Number(form.beds) || 0,
           bathrooms: Number(form.bathrooms) || 0,
-          main_image_url: form.main_image_url || null,
+          main_image_url: mainPhoto || form.main_image_url || null,
           contact_phone: form.contact_phone || null,
           contact_whatsapp: form.contact_whatsapp || null,
           contact_instagram: form.contact_instagram || null,
@@ -97,6 +137,17 @@ function NewPropertyPage() {
         await supabase
           .from("property_amenities")
           .insert(amenities.map((code) => ({ property_id: data.id, amenity_code: code })));
+      }
+      if (photos.length && data) {
+        await supabase.from("property_images").insert(
+          photos.map((ph, i) => ({
+            property_id: data.id,
+            image_url: ph.url,
+            storage_path: ph.path,
+            sort_order: i,
+            is_cover: ph.url === (mainPhoto || photos[0]?.url),
+          })),
+        );
       }
       toast.success(status === "DRAFT" ? t("form.savedDraft") : t("form.submitted"));
       void navigate({ to: "/owner" });
