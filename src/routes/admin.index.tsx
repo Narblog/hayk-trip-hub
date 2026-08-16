@@ -179,7 +179,7 @@ function AdminPage() {
                   </Button>
                 ) : null}
                 <Button size="sm" variant="outline" onClick={() => setEditing(p)}>
-                  {t("common.save")}
+                  {t("admin.edit")}
                 </Button>
                 <Button
                   size="sm"
