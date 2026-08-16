@@ -286,6 +286,13 @@ const en: Dict = {
   "owner.notHostTitle": "Host account required",
   "owner.notHostSub": "Your account is registered as a traveller. Become a host to publish listings.",
   "owner.becomeHost": "Become a host",
+  "form.photos": "Photos",
+  "form.uploadPhotos": "Upload from your computer",
+  "form.setMain": "Set as main photo",
+  "form.mainPhoto": "Main photo",
+  "form.uploading": "Uploading…",
+  "form.removePhoto": "Remove",
+  "form.uploadError": "Upload failed",
   "owner.becameHost": "Your account is now a host account.",
 };
 
@@ -565,6 +572,13 @@ const hy: Dict = {
   "owner.notHostTitle": "Անհրաժեշտ է տանտիրոջ հաշիվ",
   "owner.notHostSub": "Ձեր հաշիվը գրանցված է որպես ճանապարհորդ։ Հայտարարություն ավելացնելու համար դարձեք տանտեր։",
   "owner.becomeHost": "Դառնալ տանտեր",
+  "form.photos": "Լուսանկարներ",
+  "form.uploadPhotos": "Ավելացնել համակարգչից",
+  "form.setMain": "Դարձնել գլխավոր նկար",
+  "form.mainPhoto": "Գլխավոր նկար",
+  "form.uploading": "Բեռնվում է…",
+  "form.removePhoto": "Հեռացնել",
+  "form.uploadError": "Չհաջողվեց բեռնել",
   "owner.becameHost": "Ձեր հաշիվն այժմ տանտիրոջ հաշիվ է։",
 };
 
@@ -844,6 +858,13 @@ const ru: Dict = {
   "owner.notHostTitle": "Нужен аккаунт хозяина",
   "owner.notHostSub": "Ваш аккаунт зарегистрирован как путешественник. Станьте хозяином, чтобы размещать объекты.",
   "owner.becomeHost": "Стать хозяином",
+  "form.photos": "Фотографии",
+  "form.uploadPhotos": "Загрузить с компьютера",
+  "form.setMain": "Сделать главным фото",
+  "form.mainPhoto": "Главное фото",
+  "form.uploading": "Загрузка…",
+  "form.removePhoto": "Удалить",
+  "form.uploadError": "Ошибка загрузки",
   "owner.becameHost": "Ваш аккаунт теперь аккаунт хозяина.",
 };
 
