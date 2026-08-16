@@ -21,7 +21,7 @@ export const Route = createFileRoute("/property/$slug")({
   component: PropertyPage,
 });
 
-type Img = { id: string; url: string; is_cover: boolean | null };
+type Img = { id: string; image_url: string; is_cover: boolean | null; sort_order: number };
 
 function PropertyPage() {
   const { slug } = Route.useParams();
@@ -47,7 +47,11 @@ function PropertyPage() {
     address: string | null; contact_phone: string | null; house_rules: string | null;
     property_images: Img[];
   };
-  const images = (p.property_images ?? []).map((i) => i.url);
+  const images = (p.property_images ?? [])
+    .slice()
+    .sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort_order - b.sort_order)
+    .map((image) => image.image_url)
+    .filter(Boolean);
   const gallery = images.length ? images : p.main_image_url ? [p.main_image_url] : [];
 
   return (
