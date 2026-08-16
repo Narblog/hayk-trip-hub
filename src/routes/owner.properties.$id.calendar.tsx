@@ -124,11 +124,11 @@ function CalendarPage() {
         <span className="text-sm text-muted-foreground">{t("cal.mode")}</span>
       </div>
 
-      <div className="mt-6 rounded-2xl border border-border bg-card p-4 sm:p-6">
+      <div className="mt-6 rounded-2xl border border-border bg-card p-3 sm:p-6">
         <div className="flex items-center justify-between gap-3">
-          <Button variant="ghost" size="sm" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}>←</Button>
-          <p className="font-display text-lg font-semibold capitalize">{monthLabel}</p>
-          <Button variant="ghost" size="sm" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}>→</Button>
+          <Button aria-label="Previous month" variant="ghost" size="icon" className="size-11 shrink-0 text-xl" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}>←</Button>
+          <p className="min-w-0 text-center font-display text-base font-semibold capitalize sm:text-lg">{monthLabel}</p>
+          <Button aria-label="Next month" variant="ghost" size="icon" className="size-11 shrink-0 text-xl" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}>→</Button>
         </div>
 
         <div className="mt-4 grid grid-cols-7 gap-1 text-center text-xs text-muted-foreground">
@@ -141,13 +141,15 @@ function CalendarPage() {
             const isBlocked = blocked.has(key);
             const past = key < iso(today);
             return (
-              <button
+              <Button
                 key={key}
                 type="button"
+                variant="outline"
+                size="icon"
                 disabled={past || save.isPending}
                 onClick={() => save.mutate({ dates: [key], status: isBlocked ? "AVAILABLE" : mode })}
                 className={[
-                  "aspect-square rounded-lg border text-sm transition",
+                  "aspect-square h-auto min-h-10 w-full rounded-lg p-0 text-xs transition touch-manipulation sm:text-sm",
                   past ? "cursor-not-allowed border-transparent text-muted-foreground/40" : "hover:border-primary",
                   isBlocked
                     ? "border-destructive/40 bg-destructive/10 text-destructive line-through"
@@ -155,7 +157,7 @@ function CalendarPage() {
                 ].join(" ")}
               >
                 {d.getDate()}
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -163,11 +165,11 @@ function CalendarPage() {
         <div className="mt-5 flex flex-wrap items-center gap-4 text-sm">
           <span className="flex items-center gap-2"><span className="size-3 rounded border border-border bg-background" />{t("cal.legendFree")}</span>
           <span className="flex items-center gap-2"><span className="size-3 rounded border border-destructive/40 bg-destructive/20" />{t("cal.legendBlocked")}</span>
-          <div className="ms-auto flex gap-2">
-            <Button variant="outline" size="sm" disabled={save.isPending} onClick={() => save.mutate({ dates: monthDates, status: "BLOCKED" })}>
+          <div className="grid w-full grid-cols-1 gap-2 sm:ms-auto sm:flex sm:w-auto">
+            <Button variant="outline" size="sm" className="min-h-11 whitespace-normal" disabled={save.isPending} onClick={() => save.mutate({ dates: monthDates, status: "BLOCKED" })}>
               {t("cal.blockMonth")}
             </Button>
-            <Button variant="outline" size="sm" disabled={save.isPending} onClick={() => save.mutate({ dates: monthDates, status: "AVAILABLE" })}>
+            <Button variant="outline" size="sm" className="min-h-11 whitespace-normal" disabled={save.isPending} onClick={() => save.mutate({ dates: monthDates, status: "AVAILABLE" })}>
               {t("cal.clearMonth")}
             </Button>
           </div>

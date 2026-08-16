@@ -10,6 +10,7 @@ const iso = (d: Date) =>
 export function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
   const { t, lang } = useI18n();
   const today = new Date();
+  const todayKey = iso(today);
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const { data } = useQuery(availabilityQuery(propertyId));
 
@@ -30,11 +31,11 @@ export function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
   );
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-4">
+    <div className="w-full rounded-2xl border border-border bg-card p-3 sm:p-4">
       <div className="flex items-center justify-between gap-2">
-        <Button variant="ghost" size="sm" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}>←</Button>
-        <p className="font-medium capitalize">{cursor.toLocaleDateString(locale, { month: "long", year: "numeric" })}</p>
-        <Button variant="ghost" size="sm" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}>→</Button>
+        <Button aria-label="Previous month" variant="ghost" size="icon" className="size-11 shrink-0 text-xl" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}>←</Button>
+        <p className="min-w-0 text-center text-sm font-medium capitalize sm:text-base">{cursor.toLocaleDateString(locale, { month: "long", year: "numeric" })}</p>
+        <Button aria-label="Next month" variant="ghost" size="icon" className="size-11 shrink-0 text-xl" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}>→</Button>
       </div>
       <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[11px] text-muted-foreground">
         {weekdays.map((w) => <div key={w}>{w}</div>)}
@@ -45,10 +46,12 @@ export function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
             <div
               key={iso(d)}
               className={[
-                "aspect-square rounded-lg border py-1",
-                blocked.has(iso(d))
+                "flex aspect-square min-w-0 items-center justify-center rounded-lg border text-xs sm:text-sm",
+                iso(d) < todayKey
+                  ? "border-transparent bg-muted/60 text-muted-foreground/50 line-through"
+                  : blocked.has(iso(d))
                   ? "border-destructive/40 bg-destructive/10 text-destructive line-through"
-                  : "border-border",
+                  : "border-border bg-background",
               ].join(" ")}
             >
               {d.getDate()}

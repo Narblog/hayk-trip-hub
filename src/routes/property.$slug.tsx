@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BedDouble, Bath, MapPin, Phone, Star, Users } from "lucide-react";
+import { BedDouble, Bath, Instagram, MapPin, MessageCircle, Phone, Star, Users } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
@@ -16,6 +16,8 @@ export const Route = createFileRoute("/property/$slug")({
       { name: "description", content: "Photos, amenities, availability and host contact details for this Armenian stay." },
       { property: "og:title", content: "Stay in Armenia — Hyur" },
       { property: "og:description", content: "Photos, amenities and availability for this Armenian stay." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PropertyPage,
@@ -44,7 +46,8 @@ function PropertyPage() {
     id: string; name: string; description: string | null; city_code: string | null;
     price_per_night: number; currency: string; max_guests: number; bedrooms: number;
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
-    address: string | null; contact_phone: string | null; house_rules: string | null;
+    address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
+    contact_instagram: string | null; house_rules: string | null;
     property_images: Img[];
   };
   const images = (p.property_images ?? [])
@@ -53,20 +56,25 @@ function PropertyPage() {
     .map((image) => image.image_url)
     .filter(Boolean);
   const gallery = images.length ? images : p.main_image_url ? [p.main_image_url] : [];
+  const whatsappNumber = p.contact_whatsapp?.replace(/[^\d]/g, "") ?? "";
+  const instagramHandle = p.contact_instagram?.replace(/^https?:\/\/(www\.)?instagram\.com\//, "").replace(/^@/, "").replace(/\/$/, "") ?? "";
 
   return (
     <div className="container-page py-8">
-      <div className="grid gap-2 overflow-hidden rounded-3xl sm:grid-cols-4 sm:grid-rows-2">
+      <div className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:grid-rows-2 sm:overflow-hidden sm:px-0">
         {gallery.slice(0, 5).map((url, i) => (
           <img
             key={url + i}
             src={url}
             alt={p.name}
             loading={i === 0 ? "eager" : "lazy"}
-            className={`h-full w-full object-cover ${i === 0 ? "sm:col-span-2 sm:row-span-2 aspect-4/3" : "aspect-4/3 hidden sm:block"}`}
+            className={`aspect-4/3 w-[88%] shrink-0 snap-center rounded-3xl object-cover sm:w-full sm:rounded-none ${i === 0 ? "sm:col-span-2 sm:row-span-2" : ""}`}
           />
         ))}
       </div>
+      {gallery.length > 1 ? (
+        <p className="mt-2 text-center text-xs text-muted-foreground sm:hidden">1 / {Math.min(gallery.length, 5)}</p>
+      ) : null}
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_22rem]">
         <div>
@@ -114,13 +122,32 @@ function PropertyPage() {
             {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
             <span className="ml-1 text-sm font-normal text-muted-foreground">/ {t("card.perNight")}</span>
           </p>
-          {p.contact_phone ? (
-            <Button asChild className="mt-5 w-full">
-              <a href={`tel:${p.contact_phone}`}>
-                <Phone className="size-4" /> {t("property.call")}
-              </a>
-            </Button>
-          ) : null}
+          <div className="mt-5 space-y-2">
+            {p.contact_phone ? (
+              <Button asChild className="h-auto w-full justify-start py-3">
+                <a href={`tel:${p.contact_phone}`}>
+                  <Phone className="size-5 shrink-0" />
+                  <span className="min-w-0 text-left"><span className="block text-xs opacity-75">{t("property.call")}</span><span className="block truncate">{p.contact_phone}</span></span>
+                </a>
+              </Button>
+            ) : null}
+            {whatsappNumber ? (
+              <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
+                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer">
+                  <MessageCircle className="size-5 shrink-0" />
+                  <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.whatsapp")}</span><span className="block truncate">{p.contact_whatsapp}</span></span>
+                </a>
+              </Button>
+            ) : null}
+            {instagramHandle ? (
+              <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
+                <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer">
+                  <Instagram className="size-5 shrink-0" />
+                  <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.instagram")}</span><span className="block truncate">@{instagramHandle}</span></span>
+                </a>
+              </Button>
+            ) : null}
+          </div>
           <p className="mt-3 text-xs text-muted-foreground">{t("property.approxLocation")}</p>
         </aside>
       </div>
