@@ -115,9 +115,9 @@ function AdminPage() {
           ["ALL", t("common.all")],
         ].map(([k, label]) => (
           <button
-            key={k}
+            key={k as string}
             type="button"
-            onClick={() => setTab(k)}
+            onClick={() => setTab(k as string)}
             className={`rounded-full border px-4 py-1.5 text-xs font-medium ${
               tab === k ? "border-brand bg-brand-soft text-brand" : "border-border hover:bg-surface"
             }`}
