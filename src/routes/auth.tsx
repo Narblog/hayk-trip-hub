@@ -118,6 +118,17 @@ function AuthPage() {
           </Button>
         </form>
 
+        <Button
+          type="button"
+          variant="outline"
+          className="mt-4 w-full"
+          onClick={signInWithGoogle}
+          disabled={busy}
+        >
+          <Chrome className="mr-2 h-4 w-4" />
+          {t("auth.google")}
+        </Button>
+
         <p className="mt-5 text-center text-sm text-muted-foreground">
           {isRegister ? t("auth.haveAccount") : t("auth.noAccount")}{" "}
           <button
