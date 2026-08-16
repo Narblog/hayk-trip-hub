@@ -69,6 +69,22 @@ function AuthPage() {
     }
   }
 
+  async function signInWithGoogle() {
+    setBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw result.error;
+      if (result.redirected) return;
+      navigate({ to: safeRedirect });
+    } catch (err) {
+      toast.error((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <div className="container-page flex justify-center py-16">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-8 shadow-card">
