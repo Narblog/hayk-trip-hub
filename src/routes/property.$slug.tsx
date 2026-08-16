@@ -5,8 +5,9 @@ import { BedDouble, Bath, Instagram, MapPin, MessageCircle, Phone, Star, Users }
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
+import { AmenityIcon } from "@/components/property/AmenityIcon";
 import { Button } from "@/components/ui/button";
-import { propertyQuery } from "@/lib/data";
+import { propertyQuery, refDataQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -28,8 +29,9 @@ type Img = { id: string; image_url: string; is_cover: boolean | null; sort_order
 
 function PropertyPage() {
   const { slug } = Route.useParams();
-  const { t, lang } = useI18n();
+  const { t, lang, localized } = useI18n();
   const { data, isPending } = useQuery(propertyQuery(slug));
+  const { data: ref } = useQuery(refDataQuery());
   const [activeImage, setActiveImage] = useState(0);
   const galleryRef = useRef<HTMLDivElement>(null);
 
@@ -52,7 +54,11 @@ function PropertyPage() {
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
     contact_instagram: string | null; house_rules: string | null;
     property_images: Img[];
+    property_amenities?: { amenity_code: string }[];
   };
+  const amenityList = (p.property_amenities ?? [])
+    .map((row) => (ref?.amenities ?? []).find((a) => a.code === row.amenity_code))
+    .filter(Boolean) as { code: string; icon?: string | null }[];
   const images = (p.property_images ?? [])
     .slice()
     .sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort_order - b.sort_order)
@@ -128,6 +134,22 @@ function PropertyPage() {
             <h2 className="font-display text-xl font-semibold">{t("property.about")}</h2>
             <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{p.description}</p>
           </section>
+
+          {amenityList.length ? (
+            <section className="mt-8">
+              <h2 className="font-display text-xl font-semibold">{t("property.amenities")}</h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {amenityList.map((a) => (
+                  <div key={a.code} className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3">
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand/30 bg-brand/10 text-brand">
+                      <AmenityIcon icon={a.icon} className="size-5" />
+                    </span>
+                    <span className="min-w-0 truncate text-sm">{localized(a, "name")}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
           {p.house_rules ? (
             <section className="mt-8">
