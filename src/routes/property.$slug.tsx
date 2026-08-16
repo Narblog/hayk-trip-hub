@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useRef, useState } from "react";
 import { BedDouble, Bath, Instagram, MapPin, MessageCircle, Phone, Star, Users } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
@@ -29,6 +30,8 @@ function PropertyPage() {
   const { slug } = Route.useParams();
   const { t, lang } = useI18n();
   const { data, isPending } = useQuery(propertyQuery(slug));
+  const [activeImage, setActiveImage] = useState(0);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   if (isPending) return <InlineLoader />;
   if (!data)
@@ -59,12 +62,36 @@ function PropertyPage() {
   const whatsappNumber = p.contact_whatsapp?.replace(/[^\d]/g, "") ?? "";
   const instagramHandle = p.contact_instagram?.replace(/^https?:\/\/(www\.)?instagram\.com\//, "").replace(/^@/, "").replace(/\/$/, "") ?? "";
 
+  function updateActiveImage() {
+    const galleryElement = galleryRef.current;
+    if (!galleryElement) return;
+    const slides = Array.from(galleryElement.querySelectorAll<HTMLElement>("[data-gallery-slide]"));
+    if (!slides.length) return;
+    const center = galleryElement.scrollLeft + galleryElement.clientWidth / 2;
+    let closestIndex = 0;
+    let closestDistance = Number.POSITIVE_INFINITY;
+    slides.forEach((slide, index) => {
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      const distance = Math.abs(center - slideCenter);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+    setActiveImage(closestIndex);
+  }
+
   return (
     <div className="container-page py-8">
-      <div className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:grid-rows-2 sm:overflow-hidden sm:px-0">
-        {gallery.slice(0, 5).map((url, i) => (
+      <div
+        ref={galleryRef}
+        onScroll={updateActiveImage}
+        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0"
+      >
+        {gallery.map((url, i) => (
           <img
             key={url + i}
+            data-gallery-slide
             src={url}
             alt={p.name}
             loading={i === 0 ? "eager" : "lazy"}
@@ -73,7 +100,7 @@ function PropertyPage() {
         ))}
       </div>
       {gallery.length > 1 ? (
-        <p className="mt-2 text-center text-xs text-muted-foreground sm:hidden">1 / {Math.min(gallery.length, 5)}</p>
+        <p aria-live="polite" className="mt-2 text-center text-xs text-muted-foreground sm:hidden">{activeImage + 1} / {gallery.length}</p>
       ) : null}
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_22rem]">

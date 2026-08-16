@@ -25,15 +25,16 @@ export function SearchBar({
   const navigate = useNavigate();
   const listId = useId();
   const { data: ref } = useQuery(refDataQuery());
+  const today = todayISO();
+  const initialCheckIn = initial?.checkIn && initial.checkIn >= today ? initial.checkIn : "";
+  const initialCheckOut = initial?.checkOut && initial.checkOut > (initialCheckIn || today) ? initial.checkOut : "";
   const [values, setValues] = useState<SearchBarValues>({
     destination: initial?.destination ?? "",
-    checkIn: initial?.checkIn ?? "",
-    checkOut: initial?.checkOut ?? "",
+    checkIn: initialCheckIn,
+    checkOut: initialCheckOut,
     guests: initial?.guests ?? 2,
   });
   const [error, setError] = useState<string | null>(null);
-
-  const today = todayISO();
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -95,7 +96,14 @@ export function SearchBar({
             type="date"
             min={today}
             value={values.checkIn}
-            onChange={(e) => setValues((v) => ({ ...v, checkIn: e.target.value }))}
+            onChange={(e) => {
+              const checkIn = e.target.value >= today ? e.target.value : "";
+              setValues((v) => ({
+                ...v,
+                checkIn,
+                checkOut: v.checkOut && checkIn && v.checkOut > checkIn ? v.checkOut : "",
+              }));
+            }}
             className="w-full bg-transparent text-sm outline-none"
             aria-label={t("search.checkIn")}
           />
@@ -108,7 +116,10 @@ export function SearchBar({
             type="date"
             min={values.checkIn ? addDaysISO(values.checkIn, 1) : addDaysISO(today, 1)}
             value={values.checkOut}
-            onChange={(e) => setValues((v) => ({ ...v, checkOut: e.target.value }))}
+            onChange={(e) => {
+              const minimum = values.checkIn ? addDaysISO(values.checkIn, 1) : addDaysISO(today, 1);
+              setValues((v) => ({ ...v, checkOut: e.target.value >= minimum ? e.target.value : "" }));
+            }}
             className="w-full bg-transparent text-sm outline-none"
             aria-label={t("search.checkOut")}
           />
