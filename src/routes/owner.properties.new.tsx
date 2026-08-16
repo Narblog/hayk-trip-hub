@@ -231,6 +231,66 @@ function NewPropertyPage() {
         </div>
 
         <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.photos")}</h2>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => void uploadFiles(e.target.files)}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            disabled={uploading}
+            onClick={() => fileRef.current?.click()}
+          >
+            <ImagePlus className="mr-2 h-4 w-4" />
+            {uploading ? t("form.uploading") : t("form.uploadPhotos")}
+          </Button>
+
+          {photos.length > 0 && (
+            <div className="grid gap-3 sm:grid-cols-3">
+              {photos.map((ph) => {
+                const isMain = ph.url === mainPhoto;
+                return (
+                  <div key={ph.path} className="overflow-hidden rounded-xl border border-border">
+                    <div className="relative aspect-[4/3]">
+                      <img src={ph.url} alt={form.name || "photo"} className="h-full w-full object-cover" />
+                      {isMain && (
+                        <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground">
+                          {t("form.mainPhoto")}
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        aria-label={t("form.removePhoto")}
+                        onClick={() => void removePhoto(ph)}
+                        className="absolute right-2 top-2 rounded-full bg-background/85 p-1.5 text-foreground shadow-sm"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    <Button
+                      type="button"
+                      variant={isMain ? "secondary" : "ghost"}
+                      size="sm"
+                      className="w-full rounded-none"
+                      disabled={isMain}
+                      onClick={() => setMainPhoto(ph.url)}
+                    >
+                      <Star className={`mr-2 h-3.5 w-3.5 ${isMain ? "fill-current" : ""}`} />
+                      {isMain ? t("form.mainPhoto") : t("form.setMain")}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className={section}>
           <h2 className="font-display text-lg font-semibold">{t("form.location")}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
