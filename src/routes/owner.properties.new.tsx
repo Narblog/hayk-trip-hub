@@ -28,7 +28,7 @@ export const Route = createFileRoute("/owner/properties/new")({
 
 function NewPropertyPage() {
   const { t, localized } = useI18n();
-  const { user } = useAuth();
+  const { user, isOwner } = useAuth();
   const navigate = useNavigate();
   const { data: ref, isPending } = useQuery(refDataQuery());
   const [saving, setSaving] = useState(false);
@@ -119,6 +119,15 @@ function NewPropertyPage() {
     );
 
   if (isPending) return <InlineLoader />;
+
+  if (!isOwner)
+    return (
+      <div className="container-page max-w-xl py-20 text-center">
+        <h1 className="font-display text-3xl font-semibold">{t("owner.notHostTitle")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("owner.notHostSub")}</p>
+        <Button asChild className="mt-6"><Link to="/owner">{t("owner.becomeHost")}</Link></Button>
+      </div>
+    );
 
   const section = "rounded-2xl border border-border bg-card p-5 space-y-4";
   const selectCls =

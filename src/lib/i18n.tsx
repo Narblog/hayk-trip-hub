@@ -280,6 +280,13 @@ const en: Dict = {
   "cal.blockMonth": "Block the whole month",
   "cal.notFound": "Property not found or not yours.",
   "owner.openCalendar": "Calendar",
+  "owner.history": "Status history",
+  "owner.historyEmpty": "No status changes yet.",
+  "owner.historyNote": "Admin note",
+  "owner.notHostTitle": "Host account required",
+  "owner.notHostSub": "Your account is registered as a traveller. Become a host to publish listings.",
+  "owner.becomeHost": "Become a host",
+  "owner.becameHost": "Your account is now a host account.",
 };
 
 const hy: Dict = {
@@ -552,6 +559,13 @@ const hy: Dict = {
   "cal.blockMonth": "\u0553\u0561\u056f\u0565\u056c \u0561\u0574\u0562\u0578\u0572\u057b \u0561\u0574\u056b\u057d\u0568",
   "cal.notFound": "\u0533\u0578\u0582\u0575\u0584\u0568 \u0579\u056b \u0563\u057f\u0576\u057e\u0565\u056c \u056f\u0561\u0574 \u0571\u0565\u0580\u0568 \u0579\u0567\u0589",
   "owner.openCalendar": "\u0555\u0580\u0561\u0581\u0578\u0582\u0575\u0581",
+  "owner.history": "Կարգավիճակի պատմություն",
+  "owner.historyEmpty": "Դեռ փոփոխություններ չկան։",
+  "owner.historyNote": "Ադմինի մեկնաբանություն",
+  "owner.notHostTitle": "Անհրաժեշտ է տանտիրոջ հաշիվ",
+  "owner.notHostSub": "Ձեր հաշիվը գրանցված է որպես ճանապարհորդ։ Հայտարարություն ավելացնելու համար դարձեք տանտեր։",
+  "owner.becomeHost": "Դառնալ տանտեր",
+  "owner.becameHost": "Ձեր հաշիվն այժմ տանտիրոջ հաշիվ է։",
 };
 
 const ru: Dict = {
@@ -824,6 +838,13 @@ const ru: Dict = {
   "cal.blockMonth": "\u0417\u0430\u043a\u0440\u044b\u0442\u044c \u0432\u0435\u0441\u044c \u043c\u0435\u0441\u044f\u0446",
   "cal.notFound": "\u041e\u0431\u044a\u0435\u043a\u0442 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d \u0438\u043b\u0438 \u043d\u0435 \u0432\u0430\u0448.",
   "owner.openCalendar": "\u041a\u0430\u043b\u0435\u043d\u0434\u0430\u0440\u044c",
+  "owner.history": "История статусов",
+  "owner.historyEmpty": "Изменений пока нет.",
+  "owner.historyNote": "Комментарий администратора",
+  "owner.notHostTitle": "Нужен аккаунт хозяина",
+  "owner.notHostSub": "Ваш аккаунт зарегистрирован как путешественник. Станьте хозяином, чтобы размещать объекты.",
+  "owner.becomeHost": "Стать хозяином",
+  "owner.becameHost": "Ваш аккаунт теперь аккаунт хозяина.",
 };
 
 /* ---- editorial redesign copy ---- */

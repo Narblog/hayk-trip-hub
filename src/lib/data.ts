@@ -276,6 +276,39 @@ export const ownerStatsQuery = (userId: string | null) =>
     },
   });
 
+export type StatusHistoryRow = {
+  id: string;
+  property_id: string;
+  old_status: ListingStatus | null;
+  new_status: ListingStatus;
+  note: string | null;
+  created_at: string;
+};
+
+export const ownerStatusHistoryQuery = (propertyIds: string[]) =>
+  queryOptions({
+    queryKey: ["status-history", [...propertyIds].sort()],
+    enabled: propertyIds.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("property_status_history")
+        .select("id,property_id,old_status,new_status,note,created_at")
+        .in("property_id", propertyIds)
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return (data ?? []) as StatusHistoryRow[];
+    },
+  });
+
+export async function becomeOwner() {
+  const rpc = (supabase.rpc as unknown as (
+    fn: "become_owner",
+  ) => Promise<{ error: { message: string } | null }>).bind(supabase);
+  const { error } = await rpc("become_owner");
+  if (error) throw error;
+}
+
 export const notificationsQuery = (userId: string | null) =>
   queryOptions({
     queryKey: ["notifications", userId],
