@@ -65,10 +65,10 @@ export async function searchProperties(p: SearchParams): Promise<{ items: Search
   if (p.maxPrice != null) args["p_max_price"] = p.maxPrice;
   if (p.bedrooms != null) args["p_bedrooms"] = p.bedrooms;
   if (p.minRating != null) args["p_min_rating"] = p.minRating;
-  const rpc = supabase.rpc as unknown as (
+  const rpc = (supabase.rpc as unknown as (
     fn: "search_properties",
     params: Record<string, unknown>,
-  ) => Promise<{ data: unknown; error: { message: string } | null }>;
+  ) => Promise<{ data: unknown; error: { message: string } | null }>).bind(supabase);
   const { data, error } = await rpc("search_properties", args);
   if (error) throw error;
   const items = (data ?? []) as unknown as SearchResult[];
@@ -395,5 +395,30 @@ export async function adminSetStatus(
     target_type: "property",
     target_id: propertyId,
     notes: note ?? null,
+  });
+}
+export async function adminDeleteProperty(adminId: string, propertyId: string) {
+  const { error } = await supabase.from("properties").delete().eq("id", propertyId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "property.deleted",
+    target_type: "property",
+    target_id: propertyId,
+  });
+}
+
+export async function adminUpdateProperty(
+  adminId: string,
+  propertyId: string,
+  patch: { name?: string; price_per_night?: number; max_guests?: number; is_featured?: boolean; is_active?: boolean },
+) {
+  const { error } = await supabase.from("properties").update(patch).eq("id", propertyId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "property.updated",
+    target_type: "property",
+    target_id: propertyId,
   });
 }
