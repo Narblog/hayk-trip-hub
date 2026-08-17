@@ -156,7 +156,7 @@ export function SearchBar({
             className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           {open && suggestions.length > 0 ? (
-            <div className="absolute left-0 top-[calc(100%+0.5rem)] z-[60] w-full min-w-[18rem] max-w-[min(24rem,90vw)] overflow-hidden rounded-2xl border border-border bg-card shadow-lift">
+            <div className="absolute left-0 top-[calc(100%+0.5rem)] z-[60] w-full max-w-full overflow-hidden rounded-2xl border border-border bg-card shadow-lift md:min-w-[18rem] md:max-w-[min(24rem,90vw)]">
               <p className="eyebrow px-4 pb-1 pt-3 text-muted-foreground">{listHeading}</p>
               <ul className="scrollbar-none max-h-72 overflow-auto p-1.5">
               {suggestions.map((s, i) => (
