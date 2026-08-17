@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { BedDouble, Bath, Instagram, MapPin, MessageCircle, Phone, Star, Users } from "lucide-react";
+import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, MessageCircle, Phone, Star, Users, X } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
@@ -33,6 +33,7 @@ function PropertyPage() {
   const { data, isPending } = useQuery(propertyQuery(slug));
   const { data: ref } = useQuery(refDataQuery());
   const [activeImage, setActiveImage] = useState(0);
+  const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
 
   if (isPending) return <InlineLoader />;
@@ -65,6 +66,7 @@ function PropertyPage() {
     .map((image) => image.image_url)
     .filter(Boolean);
   const gallery = images.length ? images : p.main_image_url ? [p.main_image_url] : [];
+  const heroGallery = gallery.slice(0, 5);
   const whatsappNumber = p.contact_whatsapp?.replace(/[^\d]/g, "") ?? "";
   const instagramHandle = p.contact_instagram?.replace(/^https?:\/\/(www\.)?instagram\.com\//, "").replace(/^@/, "").replace(/\/$/, "") ?? "";
 
@@ -92,7 +94,7 @@ function PropertyPage() {
       <div
         ref={galleryRef}
         onScroll={updateActiveImage}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0"
+        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 sm:mx-0 sm:hidden"
       >
         {gallery.map((url, i) => (
           <img
@@ -101,12 +103,83 @@ function PropertyPage() {
             src={url}
             alt={p.name}
             loading={i === 0 ? "eager" : "lazy"}
-            className={`aspect-4/3 w-[88%] shrink-0 snap-center rounded-3xl object-cover sm:w-full sm:rounded-none ${i === 0 ? "sm:col-span-2 sm:row-span-2" : ""}`}
+            onClick={() => setLightbox(i)}
+            className="aspect-4/3 w-[88%] shrink-0 snap-center rounded-3xl object-cover"
           />
         ))}
       </div>
       {gallery.length > 1 ? (
         <p aria-live="polite" className="mt-2 text-center text-xs text-muted-foreground sm:hidden">{activeImage + 1} / {gallery.length}</p>
+      ) : null}
+
+      <div className="relative hidden sm:block">
+        <div className="grid h-[26rem] grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-3xl">
+          {heroGallery.map((url, i) => (
+            <button
+              key={url + i}
+              type="button"
+              onClick={() => setLightbox(i)}
+              className={`group relative overflow-hidden ${i === 0 ? "col-span-2 row-span-2" : ""}`}
+            >
+              <img
+                src={url}
+                alt={p.name}
+                loading={i === 0 ? "eager" : "lazy"}
+                className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </button>
+          ))}
+        </div>
+        {gallery.length > 1 ? (
+          <button
+            type="button"
+            onClick={() => setLightbox(0)}
+            className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border border-border bg-card/95 px-4 py-2 text-sm font-semibold shadow-card backdrop-blur transition-colors hover:border-brand hover:text-brand"
+          >
+            <Images className="size-4" /> {t("property.allPhotos")} ({gallery.length})
+          </button>
+        ) : null}
+      </div>
+
+      {lightbox !== null ? (
+        <div className="fixed inset-0 z-100 flex flex-col bg-foreground/95 p-4">
+          <div className="flex items-center justify-between text-background">
+            <span className="text-sm">{lightbox + 1} / {gallery.length}</span>
+            <button type="button" aria-label={t("property.closeGallery")} onClick={() => setLightbox(null)} className="rounded-full p-2 hover:bg-background/15">
+              <X className="size-6" />
+            </button>
+          </div>
+          <div className="relative flex min-h-0 flex-1 items-center justify-center">
+            <img src={gallery[lightbox]} alt={p.name} className="max-h-full max-w-full rounded-2xl object-contain" />
+            {gallery.length > 1 ? (
+              <>
+                <button
+                  type="button"
+                  aria-label="Previous"
+                  onClick={() => setLightbox((n) => ((n ?? 0) - 1 + gallery.length) % gallery.length)}
+                  className="absolute left-0 rounded-full bg-card/90 p-3 shadow-card"
+                >
+                  <ChevronLeft className="size-5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next"
+                  onClick={() => setLightbox((n) => ((n ?? 0) + 1) % gallery.length)}
+                  className="absolute right-0 rounded-full bg-card/90 p-3 shadow-card"
+                >
+                  <ChevronRight className="size-5" />
+                </button>
+              </>
+            ) : null}
+          </div>
+          <div className="scrollbar-none mt-3 flex gap-2 overflow-x-auto">
+            {gallery.map((url, i) => (
+              <button key={url + i} type="button" onClick={() => setLightbox(i)} className={`size-16 shrink-0 overflow-hidden rounded-xl border-2 ${i === lightbox ? "border-brand" : "border-transparent opacity-70"}`}>
+                <img src={url} alt="" className="size-full object-cover" />
+              </button>
+            ))}
+          </div>
+        </div>
       ) : null}
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_22rem]">
