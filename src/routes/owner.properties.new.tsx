@@ -37,6 +37,7 @@ function NewPropertyPage() {
   const [photos, setPhotos] = useState<{ url: string; path: string }[]>([]);
   const [mainPhoto, setMainPhoto] = useState<string>("");
   const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
@@ -56,7 +57,25 @@ function NewPropertyPage() {
     contact_instagram: "",
   });
 
-  const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const set = (k: keyof typeof form, v: string) => {
+    setForm((f) => ({ ...f, [k]: v }));
+    setErrors((e) => {
+      if (!e[k]) return e;
+      const next = { ...e };
+      delete next[k];
+      return next;
+    });
+  };
+
+  function validate() {
+    const e: Record<string, string> = {};
+    if (!form.name.trim()) e['name'] = t("form.errName");
+    if (!form.property_type) e['property_type'] = t("form.errType");
+    if (!form.city_code) e['city_code'] = t("form.errCity");
+    if (!form.price_per_night || Number(form.price_per_night) <= 0) e['price_per_night'] = t("form.errPrice");
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  }
 
   async function uploadFiles(files: FileList | null) {
     if (!files?.length || !user) return;
@@ -100,7 +119,7 @@ function NewPropertyPage() {
 
   async function save(status: "DRAFT" | "PENDING_REVIEW") {
     if (!user) return;
-    if (!form.name.trim() || !form.property_type || !form.city_code || !form.price_per_night) {
+    if (!validate()) {
       toast.error(t("form.required"));
       return;
     }
@@ -133,10 +152,14 @@ function NewPropertyPage() {
         .select("id")
         .single();
       if (error) throw error;
-      if (amenities.length && data) {
+      const uniqueAmenities = Array.from(new Set(amenities));
+      if (uniqueAmenities.length && data) {
         const { error: amenitiesError } = await supabase
           .from("property_amenities")
-          .insert(amenities.map((code) => ({ property_id: data.id, amenity_code: code })));
+          .upsert(
+            uniqueAmenities.map((code) => ({ property_id: data.id, amenity_code: code })),
+            { onConflict: "property_id,amenity_code", ignoreDuplicates: true },
+          );
         if (amenitiesError) throw amenitiesError;
       }
       if (photos.length && data) {
