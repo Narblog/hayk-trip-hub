@@ -255,7 +255,10 @@ function EditPropertyPage() {
   async function toggleVisibility() {
     if (!property) return;
     const { error } = await supabase.from("properties").update({ is_active: !property.is_active }).eq("id", property.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     await queryClient.invalidateQueries({ queryKey: ["owner-property-edit", id] });
     await queryClient.invalidateQueries({ queryKey: ["owner-properties"] });
     await detail.refetch();
@@ -267,7 +270,10 @@ function EditPropertyPage() {
       .from("properties")
       .update({ status: "PENDING_REVIEW", submitted_at: new Date().toISOString() })
       .eq("id", property.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success(t("form.submitted"));
     await detail.refetch();
     await queryClient.invalidateQueries({ queryKey: ["owner-properties"] });
@@ -278,7 +284,10 @@ function EditPropertyPage() {
     if (!window.confirm(t("owner.deleteConfirm"))) return;
     const paths = photos.map((p) => p.path).filter((p): p is string => !!p);
     const { error } = await supabase.from("properties").delete().eq("id", property.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     if (paths.length) await supabase.storage.from("property-images").remove(paths);
     await queryClient.invalidateQueries({ queryKey: ["owner-properties"] });
     toast.success(t("owner.deleted"));
