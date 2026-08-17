@@ -208,6 +208,9 @@ function NewPropertyPage() {
   const section = "rounded-2xl border border-border bg-card p-5 space-y-4";
   const selectCls =
     "h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const errCls = "border-destructive focus-visible:ring-destructive";
+  const FieldError = ({ id }: { id: string }) =>
+    errors[id] ? <p className="text-xs font-medium text-destructive">{errors[id]}</p> : null;
 
   return (
     <div className="container-page max-w-3xl py-10">
@@ -225,16 +228,23 @@ function NewPropertyPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="name">{t("form.name")} *</Label>
-              <Input id="name" value={form.name} onChange={(e) => set("name", e.target.value)} required />
+              <Input
+                id="name"
+                value={form.name}
+                onChange={(e) => set("name", e.target.value)}
+                aria-invalid={!!errors['name']}
+                className={errors['name'] ? errCls : undefined}
+              />
+              <FieldError id="name" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="type">{t("form.type")} *</Label>
               <select
                 id="type"
-                className={selectCls}
+                className={`${selectCls} ${errors['property_type'] ? errCls : ""}`}
+                aria-invalid={!!errors['property_type']}
                 value={form.property_type}
                 onChange={(e) => set("property_type", e.target.value)}
-                required
               >
                 <option value="">{t("form.select")}</option>
                 {(ref?.types ?? []).map((ty) => (
@@ -243,6 +253,7 @@ function NewPropertyPage() {
                   </option>
                 ))}
               </select>
+              <FieldError id="property_type" />
             </div>
           </div>
           <div className="space-y-1.5">
@@ -341,10 +352,10 @@ function NewPropertyPage() {
               <Label htmlFor="city">{t("form.city")} *</Label>
               <select
                 id="city"
-                className={selectCls}
+                className={`${selectCls} ${errors['city_code'] ? errCls : ""}`}
+                aria-invalid={!!errors['city_code']}
                 value={form.city_code}
                 onChange={(e) => set("city_code", e.target.value)}
-                required
               >
                 <option value="">{t("form.select")}</option>
                 {cities.map((c) => (
@@ -353,6 +364,7 @@ function NewPropertyPage() {
                   </option>
                 ))}
               </select>
+              <FieldError id="city_code" />
             </div>
           </div>
           <div className="space-y-1.5">
@@ -379,14 +391,22 @@ function NewPropertyPage() {
                   min={key === "price_per_night" ? 0 : 0}
                   value={form[key]}
                   onChange={(e) => set(key, e.target.value)}
+                  aria-invalid={!!errors[key]}
+                  className={errors[key] ? errCls : undefined}
                 />
+                <FieldError id={key} />
               </div>
             ))}
           </div>
         </div>
 
         <div className={section}>
-          <h2 className="font-display text-lg font-semibold">{t("form.amenities")}</h2>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-display text-lg font-semibold">{t("form.amenities")}</h2>
+            <p className="text-xs text-muted-foreground">
+              {t("form.amenitiesHint")} · {amenities.length} {t("form.amenitiesSelected")}
+            </p>
+          </div>
           <div className="grid gap-2 sm:grid-cols-3">
             {(ref?.amenities ?? []).map((a) => (
               <button
@@ -395,7 +415,9 @@ function NewPropertyPage() {
                 aria-pressed={amenities.includes(a.code)}
                 onClick={() =>
                   setAmenities((prev) =>
-                    prev.includes(a.code) ? prev.filter((c) => c !== a.code) : [...prev, a.code],
+                    prev.includes(a.code)
+                      ? prev.filter((c) => c !== a.code)
+                      : Array.from(new Set([...prev, a.code])),
                   )
                 }
                 className={`flex items-center gap-3 rounded-2xl border p-3 text-left text-sm transition-colors ${
