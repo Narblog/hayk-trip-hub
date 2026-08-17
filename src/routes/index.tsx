@@ -52,14 +52,16 @@ function Home() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-border/70">
-        <img
-          src={heroImage}
-          alt="Armenian mountain landscape at sunrise"
-          className="absolute inset-0 size-full object-cover"
-        />
-        <div className="hero-fade absolute inset-0" />
-        <div className="container-page relative pb-16 pt-24 text-center md:pb-24 md:pt-32">
+      <section className="relative z-30 border-b border-border/70">
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={heroImage}
+            alt="Armenian mountain landscape at sunrise"
+            className="size-full object-cover"
+          />
+          <div className="hero-fade absolute inset-0" />
+        </div>
+        <div className="container-page relative z-10 pb-16 pt-24 text-center md:pb-24 md:pt-32">
           <p className="eyebrow text-background/80">{t("home.staysEyebrow")}</p>
           <h1 className="mx-auto mt-4 max-w-4xl font-display text-4xl leading-[1.1] text-background md:text-6xl">
             {t("hero.l1")}
@@ -75,7 +77,7 @@ function Home() {
         </div>
       </section>
 
-      <div className="container-page pb-8">
+      <div className="container-page relative z-0 pb-8">
         <section className="mt-16 grid gap-6 md:grid-cols-3">
           {[
             { icon: ShieldCheck, title: t("home.trust1"), sub: t("home.trust1sub") },
