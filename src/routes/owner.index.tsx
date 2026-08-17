@@ -100,6 +100,11 @@ function OwnerDashboard() {
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     <StatusBadge status={p.status} />
+                    <Button asChild size="sm">
+                      <Link to="/owner/properties/$id/edit" params={{ id: p.id }}>
+                        {t("owner.edit")}
+                      </Link>
+                    </Button>
                     <Button asChild variant="outline" size="sm">
                       <Link to="/owner/properties/$id/calendar" params={{ id: p.id }}>
                         {t("owner.openCalendar")}
