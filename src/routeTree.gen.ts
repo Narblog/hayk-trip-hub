@@ -24,6 +24,7 @@ import { Route as PropertySlugRouteImport } from './routes/property.$slug'
 import { Route as TourSlugRouteImport } from './routes/tour.$slug'
 import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.properties.new'
 import { Route as OwnerPropertiesIdCalendarRouteImport } from './routes/owner.properties.$id.calendar'
+import { Route as OwnerPropertiesIdEditRouteImport } from './routes/owner.properties.$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -101,6 +102,11 @@ const OwnerPropertiesIdCalendarRoute =
     path: '/owner/properties/$id/calendar',
     getParentRoute: () => rootRouteImport,
   } as any)
+const OwnerPropertiesIdEditRoute = OwnerPropertiesIdEditRouteImport.update({
+  id: '/owner/properties/$id/edit',
+  path: '/owner/properties/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/owner/': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
+  '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -135,6 +142,7 @@ export interface FileRoutesByTo {
   '/owner': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
+  '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/owner/': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
+  '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/owner/'
     | '/owner/properties/new'
     | '/owner/properties/$id/calendar'
+    | '/owner/properties/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/owner'
     | '/owner/properties/new'
     | '/owner/properties/$id/calendar'
+    | '/owner/properties/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/owner/'
     | '/owner/properties/new'
     | '/owner/properties/$id/calendar'
+    | '/owner/properties/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   OwnerIndexRoute: typeof OwnerIndexRoute
   OwnerPropertiesNewRoute: typeof OwnerPropertiesNewRoute
   OwnerPropertiesIdCalendarRoute: typeof OwnerPropertiesIdCalendarRoute
+  OwnerPropertiesIdEditRoute: typeof OwnerPropertiesIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -333,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerPropertiesIdCalendarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/properties/$id/edit': {
+      id: '/owner/properties/$id/edit'
+      path: '/owner/properties/$id/edit'
+      fullPath: '/owner/properties/$id/edit'
+      preLoaderRoute: typeof OwnerPropertiesIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -352,6 +372,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerIndexRoute: OwnerIndexRoute,
   OwnerPropertiesNewRoute: OwnerPropertiesNewRoute,
   OwnerPropertiesIdCalendarRoute: OwnerPropertiesIdCalendarRoute,
+  OwnerPropertiesIdEditRoute: OwnerPropertiesIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
