@@ -37,6 +37,7 @@ function NewPropertyPage() {
   const [photos, setPhotos] = useState<{ url: string; path: string }[]>([]);
   const [mainPhoto, setMainPhoto] = useState<string>("");
   const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
@@ -56,7 +57,25 @@ function NewPropertyPage() {
     contact_instagram: "",
   });
 
-  const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+  const set = (k: keyof typeof form, v: string) => {
+    setForm((f) => ({ ...f, [k]: v }));
+    setErrors((e) => {
+      if (!e[k]) return e;
+      const next = { ...e };
+      delete next[k];
+      return next;
+    });
+  };
+
+  function validate() {
+    const e: Record<string, string> = {};
+    if (!form.name.trim()) e['name'] = t("form.errName");
+    if (!form.property_type) e['property_type'] = t("form.errType");
+    if (!form.city_code) e['city_code'] = t("form.errCity");
+    if (!form.price_per_night || Number(form.price_per_night) <= 0) e['price_per_night'] = t("form.errPrice");
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  }
 
   async function uploadFiles(files: FileList | null) {
     if (!files?.length || !user) return;
@@ -100,7 +119,7 @@ function NewPropertyPage() {
 
   async function save(status: "DRAFT" | "PENDING_REVIEW") {
     if (!user) return;
-    if (!form.name.trim() || !form.property_type || !form.city_code || !form.price_per_night) {
+    if (!validate()) {
       toast.error(t("form.required"));
       return;
     }
@@ -133,10 +152,14 @@ function NewPropertyPage() {
         .select("id")
         .single();
       if (error) throw error;
-      if (amenities.length && data) {
+      const uniqueAmenities = Array.from(new Set(amenities));
+      if (uniqueAmenities.length && data) {
         const { error: amenitiesError } = await supabase
           .from("property_amenities")
-          .insert(amenities.map((code) => ({ property_id: data.id, amenity_code: code })));
+          .upsert(
+            uniqueAmenities.map((code) => ({ property_id: data.id, amenity_code: code })),
+            { onConflict: "property_id,amenity_code", ignoreDuplicates: true },
+          );
         if (amenitiesError) throw amenitiesError;
       }
       if (photos.length && data) {
@@ -185,6 +208,9 @@ function NewPropertyPage() {
   const section = "rounded-2xl border border-border bg-card p-5 space-y-4";
   const selectCls =
     "h-10 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  const errCls = "border-destructive focus-visible:ring-destructive";
+  const FieldError = ({ id }: { id: string }) =>
+    errors[id] ? <p className="text-xs font-medium text-destructive">{errors[id]}</p> : null;
 
   return (
     <div className="container-page max-w-3xl py-10">
@@ -202,16 +228,23 @@ function NewPropertyPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="name">{t("form.name")} *</Label>
-              <Input id="name" value={form.name} onChange={(e) => set("name", e.target.value)} required />
+              <Input
+                id="name"
+                value={form.name}
+                onChange={(e) => set("name", e.target.value)}
+                aria-invalid={!!errors['name']}
+                className={errors['name'] ? errCls : undefined}
+              />
+              <FieldError id="name" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="type">{t("form.type")} *</Label>
               <select
                 id="type"
-                className={selectCls}
+                className={`${selectCls} ${errors['property_type'] ? errCls : ""}`}
+                aria-invalid={!!errors['property_type']}
                 value={form.property_type}
                 onChange={(e) => set("property_type", e.target.value)}
-                required
               >
                 <option value="">{t("form.select")}</option>
                 {(ref?.types ?? []).map((ty) => (
@@ -220,6 +253,7 @@ function NewPropertyPage() {
                   </option>
                 ))}
               </select>
+              <FieldError id="property_type" />
             </div>
           </div>
           <div className="space-y-1.5">
@@ -318,10 +352,10 @@ function NewPropertyPage() {
               <Label htmlFor="city">{t("form.city")} *</Label>
               <select
                 id="city"
-                className={selectCls}
+                className={`${selectCls} ${errors['city_code'] ? errCls : ""}`}
+                aria-invalid={!!errors['city_code']}
                 value={form.city_code}
                 onChange={(e) => set("city_code", e.target.value)}
-                required
               >
                 <option value="">{t("form.select")}</option>
                 {cities.map((c) => (
@@ -330,6 +364,7 @@ function NewPropertyPage() {
                   </option>
                 ))}
               </select>
+              <FieldError id="city_code" />
             </div>
           </div>
           <div className="space-y-1.5">
@@ -356,14 +391,22 @@ function NewPropertyPage() {
                   min={key === "price_per_night" ? 0 : 0}
                   value={form[key]}
                   onChange={(e) => set(key, e.target.value)}
+                  aria-invalid={!!errors[key]}
+                  className={errors[key] ? errCls : undefined}
                 />
+                <FieldError id={key} />
               </div>
             ))}
           </div>
         </div>
 
         <div className={section}>
-          <h2 className="font-display text-lg font-semibold">{t("form.amenities")}</h2>
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 className="font-display text-lg font-semibold">{t("form.amenities")}</h2>
+            <p className="text-xs text-muted-foreground">
+              {t("form.amenitiesHint")} · {amenities.length} {t("form.amenitiesSelected")}
+            </p>
+          </div>
           <div className="grid gap-2 sm:grid-cols-3">
             {(ref?.amenities ?? []).map((a) => (
               <button
@@ -372,7 +415,9 @@ function NewPropertyPage() {
                 aria-pressed={amenities.includes(a.code)}
                 onClick={() =>
                   setAmenities((prev) =>
-                    prev.includes(a.code) ? prev.filter((c) => c !== a.code) : [...prev, a.code],
+                    prev.includes(a.code)
+                      ? prev.filter((c) => c !== a.code)
+                      : Array.from(new Set([...prev, a.code])),
                   )
                 }
                 className={`flex items-center gap-3 rounded-2xl border p-3 text-left text-sm transition-colors ${
