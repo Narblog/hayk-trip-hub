@@ -18,6 +18,7 @@ import { Route as ToursRouteImport } from './routes/tours'
 import { Route as AccountIndexRouteImport } from './routes/account.index'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
 import { Route as TourSlugRouteImport } from './routes/tour.$slug'
@@ -69,6 +70,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCitiesRoute = AdminCitiesRouteImport.update({
+  id: '/admin/cities',
+  path: '/admin/cities',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerIndexRoute = OwnerIndexRouteImport.update({
   id: '/owner/',
   path: '/owner/',
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
+  '/admin/cities': typeof AdminCitiesRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
   '/account/': typeof AccountIndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
+  '/admin/cities': typeof AdminCitiesRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
   '/account': typeof AccountIndexRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
+  '/admin/cities': typeof AdminCitiesRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
   '/account/': typeof AccountIndexRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/tours'
     | '/account/notifications'
+    | '/admin/cities'
     | '/property/$slug'
     | '/tour/$slug'
     | '/account/'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/tours'
     | '/account/notifications'
+    | '/admin/cities'
     | '/property/$slug'
     | '/tour/$slug'
     | '/account'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/tours'
     | '/account/notifications'
+    | '/admin/cities'
     | '/property/$slug'
     | '/tour/$slug'
     | '/account/'
@@ -204,6 +216,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   ToursRoute: typeof ToursRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
+  AdminCitiesRoute: typeof AdminCitiesRoute
   PropertySlugRoute: typeof PropertySlugRoute
   TourSlugRoute: typeof TourSlugRoute
   AccountIndexRoute: typeof AccountIndexRoute
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/cities': {
+      id: '/admin/cities'
+      path: '/admin/cities'
+      fullPath: '/admin/cities'
+      preLoaderRoute: typeof AdminCitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/': {
       id: '/owner/'
       path: '/owner'
@@ -324,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   ToursRoute: ToursRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
+  AdminCitiesRoute: AdminCitiesRoute,
   PropertySlugRoute: PropertySlugRoute,
   TourSlugRoute: TourSlugRoute,
   AccountIndexRoute: AccountIndexRoute,
