@@ -74,27 +74,27 @@
 :root {
   --radius: 1.4rem;
   /* Paper / ink / forest / apricot — Hyur editorial system */
-  --background: oklch(0.955 0.014 85);
-  --foreground: oklch(0.235 0.012 70);
-  --surface: oklch(0.932 0.018 85);
+  --background: oklch(0.973 0.004 95);
+  --foreground: oklch(0.225 0.011 165);
+  --surface: oklch(0.933 0.008 95);
   --surface-foreground: oklch(0.235 0.012 70);
-  --card: oklch(0.972 0.011 85);
+  --card: oklch(0.988 0.003 95);
   --card-foreground: oklch(0.235 0.012 70);
-  --popover: oklch(0.972 0.011 85);
+  --popover: oklch(0.988 0.003 95);
   --popover-foreground: oklch(0.235 0.012 70);
-  --primary: oklch(0.3 0.045 165);
+  --primary: oklch(0.33 0.04 168);
   --primary-foreground: oklch(0.968 0.012 85);
-  --brand: oklch(0.635 0.163 42);
+  --brand: oklch(0.665 0.135 48);
   --brand-foreground: oklch(0.985 0.008 85);
-  --brand-soft: color-mix(in oklab, oklch(0.635 0.163 42) 14%, oklch(0.955 0.014 85));
-  --highland: oklch(0.3 0.045 165);
+  --brand-soft: color-mix(in oklab, oklch(0.665 0.135 48) 14%, oklch(0.973 0.004 95));
+  --highland: oklch(0.33 0.04 168);
   --highland-foreground: oklch(0.968 0.012 85);
   --gold: oklch(0.762 0.13 72);
-  --secondary: oklch(0.932 0.018 85);
+  --secondary: oklch(0.933 0.008 95);
   --secondary-foreground: oklch(0.235 0.012 70);
-  --muted: oklch(0.932 0.018 85);
-  --muted-foreground: color-mix(in oklab, oklch(0.235 0.012 70) 62%, transparent);
-  --accent: color-mix(in oklab, oklch(0.635 0.163 42) 12%, oklch(0.955 0.014 85));
+  --muted: oklch(0.933 0.008 95);
+  --muted-foreground: color-mix(in oklab, oklch(0.225 0.011 165) 62%, transparent);
+  --accent: color-mix(in oklab, oklch(0.665 0.135 48) 12%, oklch(0.973 0.004 95));
   --accent-foreground: oklch(0.44 0.13 42);
   --destructive: oklch(0.535 0.176 27);
   --destructive-foreground: oklch(0.98 0.008 85);
@@ -102,22 +102,22 @@
   --success-foreground: oklch(0.968 0.012 85);
   --warning: oklch(0.72 0.13 72);
   --warning-foreground: oklch(0.235 0.012 70);
-  --border: color-mix(in oklab, oklch(0.235 0.012 70) 13%, transparent);
-  --input: color-mix(in oklab, oklch(0.235 0.012 70) 16%, transparent);
-  --ring: oklch(0.635 0.163 42);
-  --chart-1: oklch(0.635 0.163 42);
-  --chart-2: oklch(0.3 0.045 165);
+  --border: color-mix(in oklab, oklch(0.225 0.011 165) 12%, transparent);
+  --input: color-mix(in oklab, oklch(0.225 0.011 165) 15%, transparent);
+  --ring: oklch(0.665 0.135 48);
+  --chart-1: oklch(0.665 0.135 48);
+  --chart-2: oklch(0.33 0.04 168);
   --chart-3: oklch(0.762 0.13 72);
   --chart-4: oklch(0.5 0.014 70);
   --chart-5: oklch(0.58 0.11 25);
-  --sidebar: oklch(0.3 0.045 165);
-  --sidebar-foreground: oklch(0.955 0.014 85);
-  --sidebar-primary: oklch(0.635 0.163 42);
+  --sidebar: oklch(0.33 0.04 168);
+  --sidebar-foreground: oklch(0.973 0.004 95);
+  --sidebar-primary: oklch(0.665 0.135 48);
   --sidebar-primary-foreground: oklch(0.985 0.008 85);
-  --sidebar-accent: color-mix(in oklab, oklch(0.955 0.014 85) 12%, transparent);
-  --sidebar-accent-foreground: oklch(0.955 0.014 85);
-  --sidebar-border: color-mix(in oklab, oklch(0.955 0.014 85) 16%, transparent);
-  --sidebar-ring: oklch(0.635 0.163 42);
+  --sidebar-accent: color-mix(in oklab, oklch(0.973 0.004 95) 12%, transparent);
+  --sidebar-accent-foreground: oklch(0.973 0.004 95);
+  --sidebar-border: color-mix(in oklab, oklch(0.973 0.004 95) 16%, transparent);
+  --sidebar-ring: oklch(0.665 0.135 48);
 }
 
 .dark {
@@ -226,8 +226,8 @@
 @utility hero-fade {
   background-image: linear-gradient(
     to bottom,
-    color-mix(in oklab, oklch(0.235 0.012 70) 34%, transparent) 0%,
-    color-mix(in oklab, oklch(0.235 0.012 70) 16%, transparent) 40%,
+    color-mix(in oklab, oklch(0.2 0.02 168) 38%, transparent) 0%,
+    color-mix(in oklab, oklch(0.2 0.02 168) 18%, transparent) 40%,
     color-mix(in oklab, var(--color-background) 45%, transparent) 78%,
     var(--color-background) 100%
   );
