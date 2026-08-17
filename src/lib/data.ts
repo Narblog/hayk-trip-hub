@@ -104,6 +104,24 @@ export const refDataQuery = () =>
   });
 
 // ---------- property detail ----------
+export const maxGuestsQuery = () =>
+  queryOptions({
+    queryKey: ["max-guests"],
+    staleTime: 1000 * 60 * 30,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("properties")
+        .select("max_guests")
+        .eq("status", "APPROVED")
+        .eq("is_active", true)
+        .order("max_guests", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return Math.max(1, Number(data?.max_guests ?? 0) || 1);
+    },
+  });
+
 export const propertyQuery = (slug: string) =>
   queryOptions({
     queryKey: ["property", slug],
