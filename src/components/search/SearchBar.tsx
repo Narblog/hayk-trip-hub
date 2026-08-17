@@ -7,6 +7,54 @@ import { maxGuestsQuery, refDataQuery } from "@/lib/data";
 import { addDaysISO, todayISO } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
+function DateField({
+  icon,
+  label,
+  placeholder,
+  value,
+  min,
+  onChange,
+  fieldClass,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  placeholder: string;
+  value: string;
+  min: string;
+  onChange: (value: string) => void;
+  fieldClass: string;
+}) {
+  const [focused, setFocused] = useState(false);
+  const empty = !value;
+  const showPlaceholder = empty && !focused;
+  return (
+    <label className={fieldClass}>
+      {icon}
+      <span className="sr-only">{label}</span>
+      <div className="relative flex min-w-0 flex-1">
+        <input
+          type="date"
+          min={min}
+          value={value}
+          placeholder={placeholder}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          onChange={(e) => onChange(e.target.value)}
+          className={`w-full bg-transparent text-base outline-none md:text-sm ${
+            showPlaceholder ? "text-transparent" : ""
+          }`}
+          aria-label={label}
+        />
+        {showPlaceholder ? (
+          <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-base text-muted-foreground md:text-sm">
+            {placeholder}
+          </span>
+        ) : null}
+      </div>
+    </label>
+  );
+}
+
 export type SearchBarValues = {
   destination: string;
   checkIn: string;
@@ -153,7 +201,7 @@ export function SearchBar({
               }
             }}
             placeholder={t("search.wherePlaceholder")}
-            className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm"
           />
           {open && suggestions.length > 0 ? (
             <div className="absolute left-0 top-[calc(100%+0.5rem)] z-[60] w-full max-w-full overflow-hidden rounded-2xl border border-border bg-card shadow-lift md:min-w-[18rem] md:max-w-[min(24rem,90vw)]">
@@ -184,41 +232,34 @@ export function SearchBar({
           ) : null}
         </div>
 
-        <label className={fieldClass}>
-          <CalendarDays className="size-4 shrink-0 text-brand" />
-          <span className="sr-only">{t("search.checkIn")}</span>
-          <input
-            type="date"
-            min={today}
-            value={values.checkIn}
-            onChange={(e) => {
-              const checkIn = e.target.value >= today ? e.target.value : "";
-              setValues((v) => ({
-                ...v,
-                checkIn,
-                checkOut: v.checkOut && checkIn && v.checkOut > checkIn ? v.checkOut : "",
-              }));
-            }}
-            className="w-full bg-transparent text-sm outline-none"
-            aria-label={t("search.checkIn")}
-          />
-        </label>
+        <DateField
+          icon={<CalendarDays className="size-4 shrink-0 text-brand" />}
+          label={t("search.checkIn")}
+          placeholder={t("search.checkInPlaceholder")}
+          value={values.checkIn}
+          min={today}
+          onChange={(checkIn) =>
+            setValues((v) => ({
+              ...v,
+              checkIn: checkIn >= today ? checkIn : "",
+              checkOut: v.checkOut && checkIn && v.checkOut > checkIn ? v.checkOut : "",
+            }))
+          }
+          fieldClass={fieldClass}
+        />
 
-        <label className={fieldClass}>
-          <CalendarDays className="size-4 shrink-0 text-brand" />
-          <span className="sr-only">{t("search.checkOut")}</span>
-          <input
-            type="date"
-            min={values.checkIn ? addDaysISO(values.checkIn, 1) : addDaysISO(today, 1)}
-            value={values.checkOut}
-            onChange={(e) => {
-              const minimum = values.checkIn ? addDaysISO(values.checkIn, 1) : addDaysISO(today, 1);
-              setValues((v) => ({ ...v, checkOut: e.target.value >= minimum ? e.target.value : "" }));
-            }}
-            className="w-full bg-transparent text-sm outline-none"
-            aria-label={t("search.checkOut")}
-          />
-        </label>
+        <DateField
+          icon={<CalendarDays className="size-4 shrink-0 text-brand" />}
+          label={t("search.checkOut")}
+          placeholder={t("search.checkOutPlaceholder")}
+          value={values.checkOut}
+          min={values.checkIn ? addDaysISO(values.checkIn, 1) : addDaysISO(today, 1)}
+          onChange={(checkOut) => {
+            const minimum = values.checkIn ? addDaysISO(values.checkIn, 1) : addDaysISO(today, 1);
+            setValues((v) => ({ ...v, checkOut: checkOut >= minimum ? checkOut : "" }));
+          }}
+          fieldClass={fieldClass}
+        />
 
         <label className={`${fieldClass} md:max-w-[9.5rem]`}>
           <Users className="size-4 shrink-0 text-brand" />
@@ -231,7 +272,7 @@ export function SearchBar({
             onChange={(e) =>
               setValues((v) => ({ ...v, guests: Math.min(guestCap, Math.max(1, Number(e.target.value) || 1)) }))
             }
-            className="w-full bg-transparent text-sm outline-none"
+            className="w-full bg-transparent text-base outline-none md:text-sm"
             aria-label={t("search.guests")}
             title={`max ${guestCap}`}
           />
