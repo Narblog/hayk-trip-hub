@@ -40,26 +40,40 @@ export function SearchBar({
   const [highlight, setHighlight] = useState(0);
   const boxRef = useRef<HTMLDivElement>(null);
 
-  type Suggestion = { key: string; label: string; sub: string };
+  type Suggestion = { key: string; label: string; sub: string; popular: boolean };
   const allPlaces = useMemo<Suggestion[]>(() => {
     const cities = (ref?.cities ?? []).map((c) => ({
       key: `c:${c.code}`,
       label: localized(c, "name"),
       sub: [c.name_en, c.name_hy, c.name_ru, c.code].join(" "),
+      popular: Boolean((c as { is_popular?: boolean }).is_popular),
     }));
     const regions = (ref?.regions ?? []).map((r) => ({
       key: `r:${r.code}`,
       label: localized(r, "name"),
       sub: [r.name_en, r.name_hy, r.name_ru, r.code].join(" "),
+      popular: false,
     }));
     return [...cities, ...regions];
   }, [ref, localized]);
 
   const suggestions = useMemo(() => {
     const q = values.destination.trim().toLowerCase();
-    if (!q) return allPlaces.slice(0, 8);
-    return allPlaces.filter((p) => p.sub.toLowerCase().includes(q) || p.label.toLowerCase().includes(q)).slice(0, 8);
+    if (!q) {
+      const popular = allPlaces.filter((p) => p.popular);
+      return (popular.length ? popular : allPlaces).slice(0, 6);
+    }
+    const matches = allPlaces.filter(
+      (p) => p.sub.toLowerCase().includes(q) || p.label.toLowerCase().includes(q),
+    );
+    const rank = (p: Suggestion) => {
+      const starts = p.label.toLowerCase().startsWith(q) || p.sub.toLowerCase().split(" ").some((w) => w.startsWith(q));
+      return (p.popular ? 0 : 2) + (starts ? 0 : 1);
+    };
+    return [...matches].sort((a, b) => rank(a) - rank(b) || a.label.localeCompare(b.label)).slice(0, 8);
   }, [allPlaces, values.destination]);
+
+  const listHeading = values.destination.trim() ? t("search.matches") : t("search.popular");
 
   useEffect(() => {
     function onDown(e: MouseEvent) {
@@ -142,23 +156,31 @@ export function SearchBar({
             className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           {open && suggestions.length > 0 ? (
-            <ul className="absolute left-0 top-[calc(100%+0.5rem)] z-50 max-h-72 w-full min-w-[16rem] overflow-auto rounded-2xl border border-border bg-card p-1.5 shadow-card">
+            <div className="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-full min-w-[18rem] overflow-hidden rounded-2xl border border-border bg-card shadow-lift">
+              <p className="eyebrow px-4 pb-1 pt-3 text-muted-foreground">{listHeading}</p>
+              <ul className="scrollbar-none max-h-72 overflow-auto p-1.5">
               {suggestions.map((s, i) => (
                 <li key={s.key}>
                   <button
                     type="button"
                     onMouseEnter={() => setHighlight(i)}
                     onClick={() => pick(s)}
-                    className={`flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm ${
+                    className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${
                       i === highlight ? "bg-surface" : ""
                     }`}
                   >
                     <MapPin className="size-3.5 shrink-0 text-brand" />
                     <span className="truncate">{s.label}</span>
+                    {s.popular && !values.destination.trim() ? (
+                      <span className="ml-auto rounded-full bg-brand-soft px-2 py-0.5 text-[0.625rem] text-accent-foreground">
+                        ★
+                      </span>
+                    ) : null}
                   </button>
                 </li>
               ))}
-            </ul>
+              </ul>
+            </div>
           ) : null}
         </div>
 
