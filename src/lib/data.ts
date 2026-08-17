@@ -473,3 +473,59 @@ export async function adminUpdateProperty(
     target_id: propertyId,
   });
 }
+
+// ---------- admin: cities ----------
+export type CityInput = {
+  code: string;
+  region_code: string;
+  name_hy: string;
+  name_en: string;
+  name_ru: string;
+  is_popular?: boolean;
+  sort_order?: number;
+};
+
+export const adminCitiesQuery = () =>
+  queryOptions({
+    queryKey: ["admin-cities"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("cities")
+        .select("*")
+        .order("sort_order")
+        .order("name_hy");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+export async function adminUpsertCity(adminId: string, city: CityInput) {
+  const payload = {
+    ...city,
+    code: city.code.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-"),
+    is_popular: !!city.is_popular,
+    sort_order: Number(city.sort_order ?? 100),
+  };
+  const { error } = await supabase.from("cities").upsert(payload, { onConflict: "code" });
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "city.upserted",
+    target_type: "city",
+    target_id: null,
+    notes: payload.code,
+  });
+  return payload;
+}
+
+export async function adminDeleteCity(adminId: string, code: string) {
+  const { error } = await supabase.from("cities").delete().eq("code", code);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "city.deleted",
+    target_type: "city",
+    target_id: null,
+    notes: code,
+  });
+}
