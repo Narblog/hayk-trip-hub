@@ -67,7 +67,7 @@ function Home() {
             {t("hero.l1")}
             <br />
             {t("hero.l2a")}
-            <span className="text-brand">{t("hero.hl")}</span>
+            <span className="text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]">{t("hero.hl")}</span>
             {t("hero.l2b")}
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg text-background/85">{t("hero.subtitle")}</p>
@@ -119,7 +119,6 @@ function Home() {
         ) : (
           <>
             <Row
-              eyebrow={t("home.staysEyebrow")}
               title={t("home.staysTitle")}
               items={(data?.recommended ?? []) as PropertyCardData[]}
             />
