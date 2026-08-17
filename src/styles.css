@@ -179,6 +179,31 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Prevent iOS/Android auto-zoom on focus: inputs must be >= 16px on small screens */
+  @media (max-width: 767px) {
+    input,
+    select,
+    textarea,
+    button {
+      font-size: 16px;
+    }
+    input[type="date"] {
+      min-height: 2.75rem;
+      appearance: none;
+    }
+  }
+
+  img, video, canvas, svg {
+    max-width: 100%;
+  }
+
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
     font-optical-sizing: auto;
