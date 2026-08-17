@@ -993,18 +993,10 @@ export type Database = {
         Args: { p_check_in: string; p_check_out: string; p_property_id: string }
         Returns: boolean
       }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
       increment_property_view: {
         Args: { p_property_id: string }
         Returns: undefined
       }
-      is_admin: { Args: never; Returns: boolean }
       search_properties: {
         Args: {
           p_amenities?: string[]
