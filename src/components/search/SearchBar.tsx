@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays, MapPin, Search, Users } from "lucide-react";
+import { CalendarDays, MapPin, Minus, Plus, Search, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { maxGuestsQuery, refDataQuery } from "@/lib/data";
@@ -261,23 +261,32 @@ export function SearchBar({
           fieldClass={fieldClass}
         />
 
-        <label className={`${fieldClass} md:max-w-[9.5rem]`}>
+        <div className={`${fieldClass} md:max-w-[12rem]`}>
           <Users className="size-4 shrink-0 text-brand" />
-          <span className="sr-only">{t("search.guests")}</span>
-          <input
-            type="number"
-            min={1}
-            max={guestCap}
-            value={values.guests}
-            onChange={(e) =>
-              setValues((v) => ({ ...v, guests: Math.min(guestCap, Math.max(1, Number(e.target.value) || 1)) }))
-            }
-            className="w-full bg-transparent text-base outline-none md:text-sm"
-            aria-label={t("search.guests")}
-            title={`max ${guestCap}`}
-          />
-          <span className="hidden text-xs text-muted-foreground sm:inline">{t("search.guests")}</span>
-        </label>
+          <span className="min-w-0 flex-1 truncate text-base md:text-sm">
+            {values.guests} <span className="text-muted-foreground">{t("search.guests")}</span>
+          </span>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <button
+              type="button"
+              aria-label="-"
+              disabled={values.guests <= 1}
+              onClick={() => setValues((v) => ({ ...v, guests: Math.max(1, v.guests - 1) }))}
+              className="flex size-8 items-center justify-center rounded-full border border-border text-base leading-none transition-colors hover:bg-surface disabled:opacity-40"
+            >
+              <Minus className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="+"
+              disabled={values.guests >= guestCap}
+              onClick={() => setValues((v) => ({ ...v, guests: Math.min(guestCap, v.guests + 1) }))}
+              className="flex size-8 items-center justify-center rounded-full border border-border text-base leading-none transition-colors hover:bg-surface disabled:opacity-40"
+            >
+              <Plus className="size-4" />
+            </button>
+          </div>
+        </div>
 
         <div className="p-1 md:pl-2">
           <Button type="submit" size="lg" className="w-full rounded-xl md:w-auto md:rounded-full">
