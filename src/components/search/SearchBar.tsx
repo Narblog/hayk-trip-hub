@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarDays, MapPin, Search, Users } from "lucide-react";
+import { CalendarDays, MapPin, Minus, Plus, Search, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { maxGuestsQuery, refDataQuery } from "@/lib/data";
