@@ -529,3 +529,45 @@ export async function adminDeleteCity(adminId: string, code: string) {
     notes: code,
   });
 }
+
+// ---------- tours ----------
+export type TourListItem = {
+  id: string;
+  name: string;
+  slug: string;
+  category: string;
+  city_code: string | null;
+  region_code: string | null;
+  location: string | null;
+  description: string | null;
+  meeting_point: string | null;
+  duration_hours: number;
+  currency: string;
+  price: number;
+  max_participants: number;
+  contact_phone: string | null;
+  contact_whatsapp: string | null;
+  contact_instagram: string | null;
+  main_image_url: string | null;
+  rating: number;
+  review_count: number;
+  view_count: number;
+};
+
+export const toursListQuery = () =>
+  queryOptions({
+    queryKey: ["tours-list"],
+    staleTime: 1000 * 60 * 5,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("tours")
+        .select(
+          "id,name,slug,category,city_code,region_code,location,description,meeting_point,duration_hours,currency,price,max_participants,contact_phone,contact_whatsapp,contact_instagram,main_image_url,rating,review_count,view_count",
+        )
+        .eq("status", "APPROVED")
+        .order("rating", { ascending: false, nullsFirst: false })
+        .limit(50);
+      if (error) throw error;
+      return (data ?? []) as TourListItem[];
+    },
+  });
