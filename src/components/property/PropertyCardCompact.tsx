@@ -39,7 +39,7 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
             <h3 className="mt-0.5 line-clamp-2 font-display text-base leading-snug">{p.name}</h3>
           </Link>
         </div>
-        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
           {p.review_count > 0 ? (
             <span className="flex items-center gap-1 font-semibold text-foreground">
               <Star className="size-3 fill-gold text-gold" />
@@ -49,11 +49,11 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
           <span className="flex items-center gap-1">
             <Users className="size-3.5" /> {p.max_guests}
           </span>
-          <span className="ml-auto font-display text-base text-brand">
-            {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
-            <span className="ml-1 text-[11px] font-normal text-muted-foreground">/ {t("card.perNight")}</span>
-          </span>
         </div>
+        <p className="mt-1.5 font-display text-base text-brand">
+          {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
+          <span className="ml-1 text-[11px] font-normal text-muted-foreground">/ {t("card.perNight")}</span>
+        </p>
       </div>
 
       <FavoriteButton propertyId={p.id} className="absolute right-2 top-2" />
