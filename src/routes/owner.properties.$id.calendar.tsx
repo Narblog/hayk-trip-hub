@@ -12,9 +12,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/owner/properties/$id/calendar")({
   head: () => ({
     meta: [
-      { title: "Availability calendar — Hyur Armenia" },
+      { title: "Availability calendar — StayLand Armenia" },
       { name: "description", content: "Block and free dates for your Armenian property so travellers always see real availability." },
-      { property: "og:title", content: "Availability calendar — Hyur" },
+      { property: "og:title", content: "Availability calendar — StayLand" },
       { property: "og:description", content: "Keep your Armenian listing's availability up to date." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

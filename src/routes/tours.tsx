@@ -11,7 +11,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/tours")({
   head: () => ({
     meta: [
-      { title: "Tours and experiences in Armenia — Hyur" },
+      { title: "Tours and experiences in Armenia — StayLand" },
       {
         name: "description",
         content: "Day trips, hikes, wine routes and cultural experiences hosted by local Armenian guides.",

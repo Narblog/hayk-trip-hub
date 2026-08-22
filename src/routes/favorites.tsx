@@ -10,9 +10,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/favorites")({
   head: () => ({
     meta: [
-      { title: "Saved stays — Hyur Armenia" },
+      { title: "Saved stays — StayLand Armenia" },
       { name: "description", content: "Your saved Armenian hotels, guesthouses, cabins and villas in one place." },
-      { property: "og:title", content: "Saved stays — Hyur" },
+      { property: "og:title", content: "Saved stays — StayLand" },
       { property: "og:description", content: "Your shortlist of Armenian stays." },
     ],
   }),

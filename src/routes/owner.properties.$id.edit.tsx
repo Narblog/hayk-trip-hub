@@ -18,9 +18,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/owner/properties/$id/edit")({
   head: () => ({
     meta: [
-      { title: "Edit your listing — Hyur Armenia" },
+      { title: "Edit your listing — StayLand Armenia" },
       { name: "description", content: "Update your Armenian stay: photos, price, amenities, location and contact details." },
-      { property: "og:title", content: "Edit your listing — Hyur" },
+      { property: "og:title", content: "Edit your listing — StayLand" },
       { property: "og:description", content: "Keep your Armenian listing accurate and up to date." },
     ],
   }),

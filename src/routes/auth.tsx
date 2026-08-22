@@ -21,10 +21,10 @@ export const Route = createFileRoute("/auth")({
   validateSearch: zodValidator(schema),
   head: () => ({
     meta: [
-      { title: "Sign in — Hyur Armenia" },
-      { name: "description", content: "Sign in or create a Hyur account to save stays, manage listings and contact Armenian hosts." },
-      { property: "og:title", content: "Sign in — Hyur Armenia" },
-      { property: "og:description", content: "Access your Hyur travel account." },
+      { title: "Sign in — StayLand Armenia" },
+      { name: "description", content: "Sign in or create a StayLand account to save stays, manage listings and contact Armenian hosts." },
+      { property: "og:title", content: "Sign in — StayLand Armenia" },
+      { property: "og:description", content: "Access your StayLand travel account." },
     ],
   }),
   component: AuthPage,

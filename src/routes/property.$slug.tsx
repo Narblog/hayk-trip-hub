@@ -14,9 +14,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/property/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — stay in Armenia | Hyur` },
+      { title: `${params.slug.replace(/-/g, " ")} — stay in Armenia | StayLand` },
       { name: "description", content: "Photos, amenities, availability and host contact details for this Armenian stay." },
-      { property: "og:title", content: "Stay in Armenia — Hyur" },
+      { property: "og:title", content: "Stay in Armenia — StayLand" },
       { property: "og:description", content: "Photos, amenities and availability for this Armenian stay." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

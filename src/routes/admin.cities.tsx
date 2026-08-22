@@ -14,10 +14,10 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/admin/cities")({
   head: () => ({
     meta: [
-      { title: "Cities — Hyur Armenia admin" },
+      { title: "Cities — StayLand Armenia admin" },
       { name: "description", content: "Add and update Armenian cities available to hosts when listing a stay." },
-      { property: "og:title", content: "Cities — Hyur admin" },
-      { property: "og:description", content: "Manage the city list used across Hyur Armenia listings." },
+      { property: "og:title", content: "Cities — StayLand admin" },
+      { property: "og:description", content: "Manage the city list used across StayLand Armenia listings." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

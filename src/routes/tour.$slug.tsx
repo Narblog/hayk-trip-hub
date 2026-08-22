@@ -12,12 +12,12 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/tour/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — Armenian tour | Hyur` },
+      { title: `${params.slug.replace(/-/g, " ")} — Armenian tour | StayLand` },
       {
         name: "description",
         content: "Tour details, duration, meeting point and pricing for this Armenian experience.",
       },
-      { property: "og:title", content: "Armenian tour experience — Hyur" },
+      { property: "og:title", content: "Armenian tour experience — StayLand" },
       { property: "og:description", content: "Tour details, duration and pricing." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

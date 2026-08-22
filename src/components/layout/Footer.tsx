@@ -41,7 +41,7 @@ export function Footer() {
       </div>
       <div className="border-t border-border/70">
         <div className="container-page flex flex-wrap items-center justify-between gap-2 py-5 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} Hyur — {t("footer.rights")}</span>
+          <span>© {new Date().getFullYear()} StayLand — {t("footer.rights")}</span>
           <span className="eyebrow">{t("footer.madeIn")}</span>
         </div>
       </div>

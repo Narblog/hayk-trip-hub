@@ -8,10 +8,10 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/account/")({
   head: () => ({
     meta: [
-      { title: "My account — Hyur Armenia" },
-      { name: "description", content: "Manage your Hyur profile, saved stays and notifications." },
-      { property: "og:title", content: "My account — Hyur" },
-      { property: "og:description", content: "Manage your Hyur travel profile." },
+      { title: "My account — StayLand Armenia" },
+      { name: "description", content: "Manage your StayLand profile, saved stays and notifications." },
+      { property: "og:title", content: "My account — StayLand" },
+      { property: "og:description", content: "Manage your StayLand travel profile." },
     ],
   }),
   component: AccountPage,

@@ -11,9 +11,9 @@ import heroImage from "@/assets/hero-armenia.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hyur — Stays, tours and experiences in Armenia" },
+      { title: "StayLand — Stays, tours and experiences in Armenia" },
       { name: "description", content: "Find Armenian hotels, guesthouses, mountain cabins, villas and apartments, plus tours led by local guides." },
-      { property: "og:title", content: "Hyur — Stays and tours in Armenia" },
+      { property: "og:title", content: "StayLand — Stays and tours in Armenia" },
       { property: "og:description", content: "Armenian hospitality, listed by the people who host it." },
     ],
   }),
