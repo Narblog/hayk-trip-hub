@@ -13,10 +13,10 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/owner/")({
   head: () => ({
     meta: [
-      { title: "Owner dashboard — Hyur Armenia" },
+      { title: "Owner dashboard — StayLand Armenia" },
       { name: "description", content: "Manage your Armenian property listings, availability and traveller enquiries." },
-      { property: "og:title", content: "Owner dashboard — Hyur" },
-      { property: "og:description", content: "Manage your Armenian listings on Hyur." },
+      { property: "og:title", content: "Owner dashboard — StayLand" },
+      { property: "og:description", content: "Manage your Armenian listings on StayLand." },
     ],
   }),
   component: OwnerDashboard,

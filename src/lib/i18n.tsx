@@ -10,7 +10,7 @@ export const LANGS: { code: Lang; label: string; short: string }[] = [
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  "brand.name": "Hyur",
+  "brand.name": "StayLand",
   "brand.tagline": "Stay in Armenia",
   "nav.stays": "Stays",
   "nav.tours": "Tours",
@@ -290,7 +290,7 @@ const en: Dict = {
   "footer.explore": "Explore",
   "footer.hosts": "For hosts",
   "footer.company": "Company",
-  "about.title": "About Hyur",
+  "about.title": "About StayLand",
   "cal.title": "Availability calendar",
   "cal.subtitle": "Block the dates your place is taken. Travellers see it instantly.",
   "cal.blocked": "Booked",
@@ -602,7 +602,7 @@ const hy: Dict = {
   "footer.explore": "Ուսումնասիրել",
   "footer.hosts": "Հյուրընկալողներին",
   "footer.company": "Ընկերություն",
-  "about.title": "Hyur-ի մասին",
+  "about.title": "StayLand-ի մասին",
   "cal.title": "\u0536\u0562\u0561\u0572\u057e\u0561\u056e\u0578\u0582\u0569\u0575\u0561\u0576 \u0585\u0580\u0561\u0581\u0578\u0582\u0575\u0581",
   "cal.subtitle": "\u0553\u0561\u056f\u056b\u0580 \u0561\u0575\u0576 \u0585\u0580\u0565\u0580\u0568, \u0565\u0580\u0562 \u057f\u0565\u0572\u0568 \u0566\u0562\u0561\u0572\u057e\u0561\u056e \u0567\u0589 \u0531\u0575\u0581\u0565\u056c\u0578\u0582\u0576\u0565\u0580\u0568 \u057f\u0565\u057d\u0576\u0578\u0582\u0574 \u0565\u0576 \u0561\u0576\u0574\u056b\u057b\u0561\u057a\u0565\u057d\u0589",
   "cal.blocked": "\u0536\u0562\u0561\u0572\u057e\u0561\u056e \u0567",
@@ -914,7 +914,7 @@ const ru: Dict = {
   "footer.explore": "Смотреть",
   "footer.hosts": "Хозяевам",
   "footer.company": "Компания",
-  "about.title": "О Hyur",
+  "about.title": "О StayLand",
   "cal.title": "\u041a\u0430\u043b\u0435\u043d\u0434\u0430\u0440\u044c \u0437\u0430\u043d\u044f\u0442\u043e\u0441\u0442\u0438",
   "cal.subtitle": "\u0417\u0430\u043a\u0440\u043e\u0439\u0442\u0435 \u0434\u0430\u0442\u044b, \u043a\u043e\u0433\u0434\u0430 \u0436\u0438\u043b\u044c\u0451 \u0437\u0430\u043d\u044f\u0442\u043e. \u0413\u043e\u0441\u0442\u0438 \u0432\u0438\u0434\u044f\u0442 \u044d\u0442\u043e \u0441\u0440\u0430\u0437\u0443.",
   "cal.blocked": "\u0417\u0430\u043d\u044f\u0442\u043e",
@@ -960,14 +960,14 @@ const extraEn: Dict = {
   "home.viewAll": "View all",
   "property.backToAll": "Back to all stays",
   "property.contactOwner": "Contact the owner",
-  "property.directNote": "Hyur takes no commission. You speak with the owner directly and agree the details together.",
+  "property.directNote": "StayLand takes no commission. You speak with the owner directly and agree the details together.",
   "property.similar": "Similar stays",
   "property.host": "Host",
   "property.gallery": "Gallery",
   "owner.loginTitle": "Sign in to manage your listings",
-  "owner.loginSub": "Log in or create a Hyur host account to add properties, edit details and keep your calendar current.",
-  "owner.offer": "Listing a property on Hyur costs 2,000 AMD — no commission on your bookings.",
-  "about.lead": "Hyur is an Armenian travel directory built on trust: verified listings, real availability and a direct line to the person who hosts you.",
+  "owner.loginSub": "Log in or create a StayLand host account to add properties, edit details and keep your calendar current.",
+  "owner.offer": "Listing a property on StayLand costs 2,000 AMD — no commission on your bookings.",
+  "about.lead": "StayLand is an Armenian travel directory built on trust: verified listings, real availability and a direct line to the person who hosts you.",
   "about.p1Title": "Verified listings",
   "about.p1": "Every property is reviewed by our team before it appears publicly.",
   "about.p2Title": "Real availability",
@@ -1012,14 +1012,14 @@ const extraHy: Dict = {
   "home.viewAll": "Դիտել բոլորը",
   "property.backToAll": "Բոլոր կացարանները",
   "property.contactOwner": "Կապվել տանտիրոջ հետ",
-  "property.directNote": "Hyur-ը միջնորդավճար չի վերցնում։ Դուք ուղիղ շփվում եք տանտիրոջ հետ և պայմանավորվում միասին։",
+  "property.directNote": "StayLand-ը միջնորդավճար չի վերցնում։ Դուք ուղիղ շփվում եք տանտիրոջ հետ և պայմանավորվում միասին։",
   "property.similar": "Նմանատիպ կացարաններ",
   "property.host": "Տանտեր",
   "property.gallery": "Պատկերասրահ",
   "owner.loginTitle": "Մուտք գործեք՝ ձեր հայտարարությունները կառավարելու համար",
   "owner.loginSub": "Մուտք գործեք կամ ստեղծեք տանտիրոջ հաշիվ՝ գույք ավելացնելու, խմբագրելու և օրացույցը թարմ պահելու համար։",
-  "owner.offer": "Hyur-ում գույք ավելացնելը արժե 2 000 ֏՝ առանց միջնորդավճարի։",
-  "about.lead": "Hyur-ը հայկական ճամփորդական տեղեկատու է՝ հիմնված վստահության վրա՝ ստուգված հայտարարություններ, իրական զբաղվածություն և ուղիղ կապ տանտիրոջ հետ։",
+  "owner.offer": "StayLand-ում գույք ավելացնելը արժե 2 000 ֏՝ առանց միջնորդավճարի։",
+  "about.lead": "StayLand-ը հայկական ճամփորդական տեղեկատու է՝ հիմնված վստահության վրա՝ ստուգված հայտարարություններ, իրական զբաղվածություն և ուղիղ կապ տանտիրոջ հետ։",
   "about.p1Title": "Ստուգված հայտարարություններ",
   "about.p1": "Յուրաքանչյուր գույք ստուգվում է մեր թիմի կողմից՝ նախքան հրապարակվելը։",
   "about.p2Title": "Իրական զբաղվածություն",
@@ -1064,14 +1064,14 @@ const extraRu: Dict = {
   "home.viewAll": "Смотреть все",
   "property.backToAll": "Все варианты",
   "property.contactOwner": "Связаться с хозяином",
-  "property.directNote": "Hyur не берёт комиссию. Вы общаетесь с хозяином напрямую и договариваетесь сами.",
+  "property.directNote": "StayLand не берёт комиссию. Вы общаетесь с хозяином напрямую и договариваетесь сами.",
   "property.similar": "Похожие варианты",
   "property.host": "Хозяин",
   "property.gallery": "Галерея",
   "owner.loginTitle": "Войдите, чтобы управлять объявлениями",
   "owner.loginSub": "Войдите или создайте аккаунт хозяина, чтобы добавлять объекты, редактировать их и вести календарь.",
-  "owner.offer": "Размещение объекта на Hyur стоит 2 000 драм — без комиссии с бронирований.",
-  "about.lead": "Hyur — армянский travel-справочник, построенный на доверии: проверенные объявления, реальная доступность и прямая связь с хозяином.",
+  "owner.offer": "Размещение объекта на StayLand стоит 2 000 драм — без комиссии с бронирований.",
+  "about.lead": "StayLand — армянский travel-справочник, построенный на доверии: проверенные объявления, реальная доступность и прямая связь с хозяином.",
   "about.p1Title": "Проверенные объявления",
   "about.p1": "Каждый объект проверяется нашей командой перед публикацией.",
   "about.p2Title": "Реальная доступность",
@@ -1104,10 +1104,58 @@ const extraRu: Dict = {
   "form.photosHint": "\u041c\u0435\u043d\u044f\u0439\u0442\u0435 \u043f\u043e\u0440\u044f\u0434\u043e\u043a \u0441\u0442\u0440\u0435\u043b\u043a\u0430\u043c\u0438. \u0413\u043b\u0430\u0432\u043d\u043e\u0435 \u0444\u043e\u0442\u043e \u043f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u0435\u0442\u0441\u044f \u0432 \u043a\u0430\u0440\u0442\u043e\u0447\u043a\u0430\u0445 \u0438 \u043f\u043e\u0438\u0441\u043a\u0435.",
 };
 
+
+/* ---- StayLand rebrand copy ---- */
+const brandEn: Dict = {
+  "brand.name": "StayLand",
+  "brand.tagline": "Stays in Armenia",
+  "nav.destinations": "Destinations",
+  "nav.toursExperiences": "Tours & Experiences",
+  "hero.l1": "Find your perfect stay",
+  "hero.l2a": "in ",
+  "hero.hl": "Armenia",
+  "hero.l2b": "",
+  "hero.subtitle": "Discover guesthouses, cabins and unforgettable experiences across Armenia.",
+  "dest.eyebrow": "Explore Armenia",
+  "dest.title": "Destinations",
+  "dest.subtitle": "Pick a town or region and see every stay available there.",
+  "dest.stays": "stays",
+  "dest.stayOne": "stay",
+  "footer.desc": "StayLand is an Armenian marketplace for guesthouses, cabins, vacation homes and experiences. Contact owners directly \u2014 no booking commission.",
+};
+
+const brandHy: Dict = {
+  "brand.name": "StayLand",
+  "brand.tagline": "\u0540\u0561\u0576\u0563\u056b\u057d\u057f \u0540\u0561\u0575\u0561\u057d\u057f\u0561\u0576\u0578\u0582\u0574",
+  "nav.destinations": "\u0548\u0582\u0572\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580",
+  "nav.toursExperiences": "\u054f\u0578\u0582\u0580\u0565\u0580 \u0587 \u0583\u0578\u0580\u0571\u0561\u057c\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580",
+  "hero.subtitle": "\u0540\u0561\u0575\u057f\u0576\u0561\u0562\u0565\u0580 \u0570\u0575\u0578\u0582\u0580\u0561\u057f\u0576\u0565\u0580, \u057f\u0576\u0561\u056f\u0576\u0565\u0580 \u0587 \u0561\u0576\u0574\u0578\u057c\u0561\u0576\u0561\u056c\u056b \u0583\u0578\u0580\u0571\u0561\u057c\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580 \u0540\u0561\u0575\u0561\u057d\u057f\u0561\u0576\u0578\u0582\u0574\u0589",
+  "dest.eyebrow": "\u0532\u0561\u0581\u0561\u0570\u0561\u0575\u057f\u056b\u0580 \u0540\u0561\u0575\u0561\u057d\u057f\u0561\u0576\u0568",
+  "dest.title": "\u0548\u0582\u0572\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580",
+  "dest.subtitle": "\u0538\u0576\u057f\u0580\u056b\u0580 \u0584\u0561\u0572\u0561\u0584\u0568 \u0587 \u057f\u0565\u057d \u0562\u0578\u056c\u0578\u0580 \u0570\u0561\u057d\u0561\u0576\u0565\u056c\u056b \u056f\u0561\u0581\u0561\u0580\u0561\u0576\u0576\u0565\u0580\u0568\u0589",
+  "dest.stays": "\u056f\u0561\u0581\u0561\u0580\u0561\u0576",
+  "dest.stayOne": "\u056f\u0561\u0581\u0561\u0580\u0561\u0576",
+  "footer.desc": "StayLand\u0568 \u0570\u0561\u0575\u056f\u0561\u056f\u0561\u0576 \u0570\u0561\u0580\u0569\u0561\u056f \u0567\u055d \u0570\u0575\u0578\u0582\u0580\u0561\u057f\u0576\u0565\u0580, \u057f\u0576\u0561\u056f\u0576\u0565\u0580 \u0587 \u0583\u0578\u0580\u0571\u0561\u057c\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u0589 \u0548\u0582\u0572\u056b\u0572 \u056f\u0561\u057a \u057f\u0561\u0576\u057f\u056b\u0580\u0578\u057b \u0570\u0565\u057f\u055d \u0561\u057c\u0561\u0576\u0581 \u0574\u056b\u057b\u0576\u0578\u0580\u0564\u0561\u057e\u0573\u0561\u0580\u056b\u0589",
+};
+
+const brandRu: Dict = {
+  "brand.name": "StayLand",
+  "brand.tagline": "\u041e\u0442\u0434\u044b\u0445 \u0432 \u0410\u0440\u043c\u0435\u043d\u0438\u0438",
+  "nav.destinations": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
+  "nav.toursExperiences": "\u0422\u0443\u0440\u044b \u0438 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u044f",
+  "hero.subtitle": "\u0413\u043e\u0441\u0442\u0435\u0432\u044b\u0435 \u0434\u043e\u043c\u0430, \u0434\u043e\u043c\u0438\u043a\u0438 \u0438 \u044f\u0440\u043a\u0438\u0435 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u044f \u043f\u043e \u0432\u0441\u0435\u0439 \u0410\u0440\u043c\u0435\u043d\u0438\u0438.",
+  "dest.eyebrow": "\u0418\u0441\u0441\u043b\u0435\u0434\u0443\u0439\u0442\u0435 \u0410\u0440\u043c\u0435\u043d\u0438\u044e",
+  "dest.title": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
+  "dest.subtitle": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0433\u043e\u0440\u043e\u0434 \u0438 \u043f\u043e\u0441\u043c\u043e\u0442\u0440\u0438\u0442\u0435 \u0432\u0441\u0435 \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u044b \u0436\u0438\u043b\u044c\u044f.",
+  "dest.stays": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432",
+  "dest.stayOne": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442",
+  "footer.desc": "StayLand \u2014 \u0430\u0440\u043c\u044f\u043d\u0441\u043a\u0430\u044f \u043f\u043b\u043e\u0449\u0430\u0434\u043a\u0430 \u0433\u043e\u0441\u0442\u0435\u0432\u044b\u0445 \u0434\u043e\u043c\u043e\u0432, \u0434\u043e\u043c\u0438\u043a\u043e\u0432 \u0438 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u0439. \u041f\u0440\u044f\u043c\u043e\u0439 \u043a\u043e\u043d\u0442\u0430\u043a\u0442 \u0441 \u0445\u043e\u0437\u044f\u0438\u043d\u043e\u043c \u2014 \u0431\u0435\u0437 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438.",
+};
+
 const dicts: Record<Lang, Dict> = {
-  en: { ...en, ...extraEn },
-  hy: { ...hy, ...extraHy },
-  ru: { ...ru, ...extraRu },
+  en: { ...en, ...extraEn, ...brandEn },
+  hy: { ...hy, ...extraHy, ...brandHy },
+  ru: { ...ru, ...extraRu, ...brandRu },
 };
 const enAll: Dict = dicts.en;
 
@@ -1119,7 +1167,7 @@ type I18nValue = {
 };
 
 const I18nContext = createContext<I18nValue | null>(null);
-const STORAGE_KEY = "hyur.lang";
+const STORAGE_KEY = "stayland.lang";
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("hy");

@@ -22,9 +22,9 @@ export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(schema),
   head: () => ({
     meta: [
-      { title: "Search stays in Armenia — Hyur" },
+      { title: "Search stays in Armenia — StayLand" },
       { name: "description", content: "Search hotels, guesthouses, cabins, villas and apartments across Armenia by dates, guests and price." },
-      { property: "og:title", content: "Search stays in Armenia — Hyur" },
+      { property: "og:title", content: "Search stays in Armenia — StayLand" },
       { property: "og:description", content: "Find available stays across Armenia." },
     ],
   }),

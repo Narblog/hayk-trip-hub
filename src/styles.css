@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Hyur — Armenian travel marketplace design system.
+ * StayLand — Armenian travel marketplace design system.
  * Palette: warm stone / ink base, Armenian apricot accent, highland green.
  * All colors are oklch semantic tokens. Never hardcode colors in components.
  */
@@ -73,7 +73,7 @@
 
 :root {
   --radius: 1.4rem;
-  /* Paper / ink / forest / apricot — Hyur editorial system */
+  /* Paper / ink / forest / apricot — StayLand editorial system */
   --background: oklch(0.973 0.004 95);
   --foreground: oklch(0.225 0.011 165);
   --surface: oklch(0.933 0.008 95);

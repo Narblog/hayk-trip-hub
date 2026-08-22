@@ -9,10 +9,10 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/account/notifications")({
   head: () => ({
     meta: [
-      { title: "Notifications — Hyur Armenia" },
-      { name: "description", content: "Updates about your listings, reviews and saved stays on Hyur." },
-      { property: "og:title", content: "Notifications — Hyur" },
-      { property: "og:description", content: "Your Hyur account updates." },
+      { title: "Notifications — StayLand Armenia" },
+      { name: "description", content: "Updates about your listings, reviews and saved stays on StayLand." },
+      { property: "og:title", content: "Notifications — StayLand" },
+      { property: "og:description", content: "Your StayLand account updates." },
     ],
   }),
   component: NotificationsPage,

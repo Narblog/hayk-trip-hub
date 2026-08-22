@@ -30,9 +30,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
-      { title: "Admin — Hyur Armenia" },
-      { name: "description", content: "Moderate listings, owners and tours across the Hyur Armenia platform." },
-      { property: "og:title", content: "Admin — Hyur" },
+      { title: "Admin — StayLand Armenia" },
+      { name: "description", content: "Moderate listings, owners and tours across the StayLand Armenia platform." },
+      { property: "og:title", content: "Admin — StayLand" },
       { property: "og:description", content: "Platform moderation overview." },
     ],
   }),
