@@ -571,3 +571,44 @@ export const toursListQuery = () =>
       return (data ?? []) as TourListItem[];
     },
   });
+
+// ---------- destinations ----------
+export type DestinationItem = {
+  code: string;
+  name_en: string;
+  name_hy: string;
+  name_ru: string;
+  region_code: string;
+  image_url: string | null;
+  is_popular: boolean;
+  stays: number;
+};
+
+export const destinationsQuery = () =>
+  queryOptions({
+    queryKey: ["destinations"],
+    staleTime: 1000 * 60 * 5,
+    queryFn: async (): Promise<DestinationItem[]> => {
+      const [cities, props] = await Promise.all([
+        supabase.from("cities").select("code,name_en,name_hy,name_ru,region_code,image_url,is_popular,sort_order").order("sort_order"),
+        supabase.from("properties").select("city_code").eq("status", "APPROVED").eq("is_active", true),
+      ]);
+      if (cities.error) throw cities.error;
+      if (props.error) throw props.error;
+      const counts = new Map<string, number>();
+      for (const p of props.data ?? []) {
+        if (!p.city_code) continue;
+        counts.set(p.city_code, (counts.get(p.city_code) ?? 0) + 1);
+      }
+      return (cities.data ?? []).map((c) => ({
+        code: c.code,
+        name_en: c.name_en,
+        name_hy: c.name_hy,
+        name_ru: c.name_ru,
+        region_code: c.region_code,
+        image_url: c.image_url,
+        is_popular: c.is_popular,
+        stays: counts.get(c.code) ?? 0,
+      }));
+    },
+  });
