@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { InlineLoader } from "@/components/common/states";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
+import { LocationField } from "@/components/property/LocationField";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { refDataQuery } from "@/lib/data";
@@ -45,6 +46,7 @@ function EditPropertyPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [mainPhoto, setMainPhoto] = useState("");
   const [removedPaths, setRemovedPaths] = useState<string[]>([]);
+  const [coords, setCoords] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null });
   const [form, setForm] = useState({
     name: "",
     property_type: "",
@@ -104,6 +106,10 @@ function EditPropertyPage() {
     setPhotos(imgs.map((i) => ({ id: i.id, url: i.image_url, path: i.storage_path })));
     setMainPhoto(property.main_image_url ?? imgs.find((i) => i.is_cover)?.image_url ?? imgs[0]?.image_url ?? "");
     setAmenities(detail.data?.amenities ?? []);
+    setCoords({
+      lat: property.latitude == null ? null : Number(property.latitude),
+      lng: property.longitude == null ? null : Number(property.longitude),
+    });
   }, [property, detail.data]);
 
   const set = (k: keyof typeof form, v: string) => {
@@ -197,6 +203,8 @@ function EditPropertyPage() {
           city_code: form.city_code,
           region_code: form.region_code || city?.region_code || null,
           address: form.address || null,
+          latitude: coords.lat,
+          longitude: coords.lng,
           price_per_night: Number(form.price_per_night),
           max_guests: Number(form.max_guests) || 1,
           bedrooms: Number(form.bedrooms) || 0,
@@ -486,6 +494,7 @@ function EditPropertyPage() {
             <Label htmlFor="address">{t("form.address")}</Label>
             <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
           </div>
+          <LocationField lat={coords.lat} lng={coords.lng} onChange={(lat, lng) => setCoords({ lat, lng })} />
         </div>
 
         <div className={section}>

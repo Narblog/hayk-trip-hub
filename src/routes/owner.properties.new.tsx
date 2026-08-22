@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { InlineLoader } from "@/components/common/states";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
+import { LocationField } from "@/components/property/LocationField";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { refDataQuery } from "@/lib/data";
@@ -39,6 +40,7 @@ function NewPropertyPage() {
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const fileRef = useRef<HTMLInputElement>(null);
+  const [coords, setCoords] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null });
   const [form, setForm] = useState({
     name: "",
     property_type: "",
@@ -137,6 +139,8 @@ function NewPropertyPage() {
           city_code: form.city_code,
           region_code: form.region_code || city?.region_code || null,
           address: form.address || null,
+          latitude: coords.lat,
+          longitude: coords.lng,
           price_per_night: Number(form.price_per_night),
           max_guests: Number(form.max_guests) || 1,
           bedrooms: Number(form.bedrooms) || 0,
@@ -371,6 +375,7 @@ function NewPropertyPage() {
             <Label htmlFor="address">{t("form.address")}</Label>
             <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
           </div>
+          <LocationField lat={coords.lat} lng={coords.lng} onChange={(lat, lng) => setCoords({ lat, lng })} />
         </div>
 
         <div className={section}>
