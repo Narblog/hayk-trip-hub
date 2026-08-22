@@ -104,6 +104,10 @@ function EditPropertyPage() {
     setPhotos(imgs.map((i) => ({ id: i.id, url: i.image_url, path: i.storage_path })));
     setMainPhoto(property.main_image_url ?? imgs.find((i) => i.is_cover)?.image_url ?? imgs[0]?.image_url ?? "");
     setAmenities(detail.data?.amenities ?? []);
+    setCoords({
+      lat: property.latitude == null ? null : Number(property.latitude),
+      lng: property.longitude == null ? null : Number(property.longitude),
+    });
   }, [property, detail.data]);
 
   const set = (k: keyof typeof form, v: string) => {
