@@ -35,11 +35,11 @@ function SectionHead({
   to,
   linkLabel,
 }: {
-  eyebrow?: string;
+  eyebrow?: string | undefined;
   title: string;
-  sub?: string;
-  to?: "/search" | "/tours" | "/destinations";
-  linkLabel?: string;
+  sub?: string | undefined;
+  to?: "/search" | "/tours" | "/destinations" | undefined;
+  linkLabel?: string | undefined;
 }) {
   return (
     <div className="flex items-end justify-between gap-4">
@@ -67,8 +67,8 @@ function Row({
   items,
 }: {
   title: string;
-  eyebrow?: string;
-  sub?: string;
+  eyebrow?: string | undefined;
+  sub?: string | undefined;
   items: PropertyCardData[];
 }) {
   const { t } = useI18n();
