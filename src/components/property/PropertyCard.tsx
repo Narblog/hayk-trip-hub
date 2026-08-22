@@ -20,6 +20,7 @@ export type PropertyCardData = {
   review_count: number;
   main_image_url: string | null;
   amenity_codes?: string[];
+  is_featured?: boolean;
 };
 
 export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData; showAvailable?: boolean }) {
