@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ShieldCheck, PhoneCall, CalendarCheck, Clock, MapPin, Star, ArrowRight } from "lucide-react";
+import { ShieldCheck, PhoneCall, CalendarCheck, Clock, MapPin, Star, ArrowRight, Compass } from "lucide-react";
 import { CardGridSkeleton } from "@/components/common/states";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { SearchBar } from "@/components/search/SearchBar";
-import { AmenityIcon } from "@/components/property/AmenityIcon";
 import { destinationsQuery, homeQuery, refDataQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
@@ -199,7 +198,7 @@ function Home() {
                 to="/tours"
                 className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-sm font-medium shadow-card transition-colors hover:border-brand hover:text-brand"
               >
-                <AmenityIcon icon={cat.icon} className="size-4" />
+                <Compass className="size-4 text-brand" />
                 {localized(cat, "name")}
               </Link>
             ))}
