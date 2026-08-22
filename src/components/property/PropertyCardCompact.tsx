@@ -14,7 +14,7 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
   const type = ref?.types.find((x) => x.code === p.property_type);
 
   return (
-    <article className="group relative flex gap-3 overflow-hidden rounded-2xl border border-border/70 bg-card p-2.5 shadow-card transition-colors hover:border-brand/50">
+    <article className="group relative flex shrink-0 gap-3 overflow-hidden rounded-2xl border border-border/70 bg-card p-2.5 shadow-card transition-colors hover:border-brand/50">
       <Link
         to="/property/$slug"
         params={{ slug: p.slug }}
