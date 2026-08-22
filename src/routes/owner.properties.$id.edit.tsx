@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { InlineLoader } from "@/components/common/states";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
+import { LocationField } from "@/components/property/LocationField";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { refDataQuery } from "@/lib/data";
