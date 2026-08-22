@@ -24,6 +24,7 @@ import { Route as OwnerIndexRouteImport } from './routes/owner.index'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
 import { Route as TourSlugRouteImport } from './routes/tour.$slug'
 import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.properties.new'
+import { Route as OwnerToursNewRouteImport } from './routes/owner.tours.new'
 import { Route as OwnerPropertiesIdCalendarRouteImport } from './routes/owner.properties.$id.calendar'
 import { Route as OwnerPropertiesIdEditRouteImport } from './routes/owner.properties.$id.edit'
 
@@ -102,6 +103,11 @@ const OwnerPropertiesNewRoute = OwnerPropertiesNewRouteImport.update({
   path: '/owner/properties/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerToursNewRoute = OwnerToursNewRouteImport.update({
+  id: '/owner/tours/new',
+  path: '/owner/tours/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerPropertiesIdCalendarRoute =
   OwnerPropertiesIdCalendarRouteImport.update({
     id: '/owner/properties/$id/calendar',
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/owner/': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
+  '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
 }
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/owner': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
+  '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
 }
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/owner/': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
+  '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
 }
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/owner/'
     | '/owner/properties/new'
+    | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
   fileRoutesByTo: FileRoutesByTo
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/owner'
     | '/owner/properties/new'
+    | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
   id:
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/owner/'
     | '/owner/properties/new'
+    | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
   fileRoutesById: FileRoutesById
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   OwnerIndexRoute: typeof OwnerIndexRoute
   OwnerPropertiesNewRoute: typeof OwnerPropertiesNewRoute
+  OwnerToursNewRoute: typeof OwnerToursNewRoute
   OwnerPropertiesIdCalendarRoute: typeof OwnerPropertiesIdCalendarRoute
   OwnerPropertiesIdEditRoute: typeof OwnerPropertiesIdEditRoute
 }
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerPropertiesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/tours/new': {
+      id: '/owner/tours/new'
+      path: '/owner/tours/new'
+      fullPath: '/owner/tours/new'
+      preLoaderRoute: typeof OwnerToursNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/properties/$id/calendar': {
       id: '/owner/properties/$id/calendar'
       path: '/owner/properties/$id/calendar'
@@ -392,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   OwnerIndexRoute: OwnerIndexRoute,
   OwnerPropertiesNewRoute: OwnerPropertiesNewRoute,
+  OwnerToursNewRoute: OwnerToursNewRoute,
   OwnerPropertiesIdCalendarRoute: OwnerPropertiesIdCalendarRoute,
   OwnerPropertiesIdEditRoute: OwnerPropertiesIdEditRoute,
 }
