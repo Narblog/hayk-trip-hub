@@ -151,16 +151,21 @@ export const availabilityQuery = (propertyId: string | undefined) =>
   });
 
 // ---------- home page collections ----------
-async function collection(filter: { type?: string; types?: string[]; featured?: boolean }, limit = 8) {
+async function collection(
+  filter: { type?: string; types?: string[]; featured?: boolean; recent?: boolean },
+  limit = 8,
+) {
   let q = supabase
     .from("properties")
-    .select("id,name,slug,property_type,city_code,region_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url,is_demo")
+    .select("id,name,slug,property_type,city_code,region_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url,is_demo,is_featured")
     .eq("status", "APPROVED")
     .eq("is_active", true)
     .limit(limit);
   if (filter.types) q = q.in("property_type", filter.types);
   if (filter.featured) q = q.eq("is_featured", true);
-  const { data, error } = await q.order("rating", { ascending: false });
+  const { data, error } = filter.recent
+    ? await q.order("created_at", { ascending: false })
+    : await q.order("rating", { ascending: false });
   if (error) throw error;
   return data ?? [];
 }
