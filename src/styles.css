@@ -257,3 +257,26 @@
     var(--color-background) 100%
   );
 }
+
+.map-price-pin {
+  display: inline-block;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--foreground);
+  box-shadow: 0 4px 12px oklch(0 0 0 / 18%);
+}
+.leaflet-marker-icon:hover .map-price-pin {
+  background: var(--brand);
+  color: var(--brand-foreground);
+  border-color: var(--brand);
+}
+.leaflet-container {
+  font: inherit;
+  background: var(--surface);
+}

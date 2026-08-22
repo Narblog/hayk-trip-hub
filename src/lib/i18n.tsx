@@ -1107,6 +1107,14 @@ const extraRu: Dict = {
 
 /* ---- StayLand rebrand copy ---- */
 const brandEn: Dict = {
+  "search.viewList": "List",
+  "search.viewMap": "Map",
+  "filters.price": "Price per night",
+  "filters.type": "Property type",
+  "filters.bedrooms": "Bedrooms",
+  "filters.rating": "Rating",
+  "filters.amenities": "Amenities",
+  "filters.any": "Any",
   "card.featured": "Featured",
   "home.exploreArmenia": "Explore Armenia",
   "home.exploreArmeniaSub": "Browse stays by destination across the country.",
@@ -1141,6 +1149,14 @@ const brandEn: Dict = {
 };
 
 const brandHy: Dict = {
+  "search.viewList": "Ցանկ",
+  "search.viewMap": "Քարտեզ",
+  "filters.price": "Գինը մեկ գիշերվա",
+  "filters.type": "Գույքի տեսակ",
+  "filters.bedrooms": "Ննջասենյակներ",
+  "filters.rating": "Վարկանիշ",
+  "filters.amenities": "Հարմարություններ",
+  "filters.any": "Ցանկացած",
   "card.featured": "Ընտրված",
   "home.exploreArmenia": "Բացահայտիր Հայաստանը",
   "home.exploreArmeniaSub": "Դիտիր կացարանները ըստ ուղղությունների։",
@@ -1171,6 +1187,14 @@ const brandHy: Dict = {
 };
 
 const brandRu: Dict = {
+  "search.viewList": "Список",
+  "search.viewMap": "Карта",
+  "filters.price": "Цена за ночь",
+  "filters.type": "Тип жилья",
+  "filters.bedrooms": "Спальни",
+  "filters.rating": "Рейтинг",
+  "filters.amenities": "Удобства",
+  "filters.any": "Любой",
   "card.featured": "Рекомендуем",
   "home.exploreArmenia": "Исследуйте Армению",
   "home.exploreArmeniaSub": "Смотрите жильё по направлениям по всей стране.",
