@@ -619,3 +619,57 @@ export const destinationsQuery = () =>
       }));
     },
   });
+
+// ---------- tours: owner + admin ----------
+export const ownerToursQuery = (userId: string | null) =>
+  queryOptions({
+    queryKey: ["owner-tours", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("tours")
+        .select("*")
+        .eq("owner_id", userId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+export const adminToursQuery = (status: string) =>
+  queryOptions({
+    queryKey: ["admin-tours", status],
+    queryFn: async () => {
+      let q = supabase.from("tours").select("*").order("created_at", { ascending: false }).limit(200);
+      if (status !== "ALL") q = q.eq("status", status as ListingStatus);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+export async function adminSetTourStatus(adminId: string, tourId: string, status: ListingStatus, note?: string) {
+  const { error } = await supabase
+    .from("tours")
+    .update({ status, admin_note: note ?? null })
+    .eq("id", tourId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: `tour.${status.toLowerCase()}`,
+    target_type: "tour",
+    target_id: tourId,
+    notes: note ?? null,
+  });
+}
+
+export async function adminDeleteTour(adminId: string, tourId: string) {
+  const { error } = await supabase.from("tours").delete().eq("id", tourId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "tour.deleted",
+    target_type: "tour",
+    target_id: tourId,
+  });
+}
