@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { Skeleton } from "@/components/ui/skeleton";
 import { CardGridSkeleton, EmptyState, ErrorState } from "@/components/common/states";
 import { PropertyCard } from "@/components/property/PropertyCard";
+import { PropertyCardCompact } from "@/components/property/PropertyCardCompact";
 import { SearchBar } from "@/components/search/SearchBar";
 import { FilterPanel, PRICE_MAX, PRICE_MIN, type FilterValues } from "@/components/search/FilterPanel";
 import { searchQuery } from "@/lib/data";
@@ -224,9 +225,9 @@ function SearchPage() {
                   </Suspense>
                 </ClientOnly>
               </div>
-              <div className="flex max-h-[70vh] flex-col gap-4 overflow-y-auto pr-1">
+              <div className="flex max-h-[70vh] flex-col gap-3 overflow-y-auto pr-1">
                 {data!.items.map((p) => (
-                  <PropertyCard key={p.id} p={p} showAvailable={!!s["checkIn"] && !!s["checkOut"]} />
+                  <PropertyCardCompact key={p.id} p={p} />
                 ))}
               </div>
             </div>
