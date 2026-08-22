@@ -139,6 +139,8 @@ function NewPropertyPage() {
           city_code: form.city_code,
           region_code: form.region_code || city?.region_code || null,
           address: form.address || null,
+          latitude: coords.lat,
+          longitude: coords.lng,
           price_per_night: Number(form.price_per_night),
           max_guests: Number(form.max_guests) || 1,
           bedrooms: Number(form.bedrooms) || 0,
