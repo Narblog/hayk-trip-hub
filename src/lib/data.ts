@@ -194,6 +194,7 @@ export const homeQuery = () =>
         guesthouses,
         cabins,
         hotels,
+        recent,
         tours: tours.data ?? [],
         cities: cities.data ?? [],
       };
