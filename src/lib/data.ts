@@ -174,11 +174,12 @@ export const homeQuery = () =>
   queryOptions({
     queryKey: ["home"],
     queryFn: async () => {
-      const [recommended, guesthouses, cabins, hotels, tours, cities] = await Promise.all([
+      const [recommended, guesthouses, cabins, hotels, recent, tours, cities] = await Promise.all([
         collection({ featured: true }),
         collection({ types: ["guesthouse"] }),
         collection({ types: ["cabin", "glamping", "cottage"] }),
         collection({ types: ["hotel", "resort"] }),
+        collection({ recent: true }, 4),
         supabase
           .from("tours")
           .select("id,name,slug,category,city_code,price,currency,duration_hours,main_image_url,rating,review_count")
