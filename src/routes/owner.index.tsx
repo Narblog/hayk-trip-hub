@@ -68,8 +68,12 @@ function OwnerDashboard() {
     <div className="container-page py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-3xl font-semibold">{t("owner.dashboard")}</h1>
-        <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
+          <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
+        </div>
       </div>
+
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
