@@ -371,6 +371,7 @@ function NewPropertyPage() {
             <Label htmlFor="address">{t("form.address")}</Label>
             <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
           </div>
+          <LocationField lat={coords.lat} lng={coords.lng} onChange={(lat, lng) => setCoords({ lat, lng })} />
         </div>
 
         <div className={section}>
