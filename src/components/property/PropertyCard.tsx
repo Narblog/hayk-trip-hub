@@ -20,6 +20,7 @@ export type PropertyCardData = {
   review_count: number;
   main_image_url: string | null;
   amenity_codes?: string[];
+  is_featured?: boolean;
 };
 
 export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData; showAvailable?: boolean }) {
@@ -56,11 +57,18 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
             </p>
             <h3 className="mt-1 line-clamp-2 font-display text-xl leading-snug text-background">{p.name}</h3>
           </div>
-          {showAvailable ? (
-            <span className="absolute right-3 top-3 rounded-full bg-success px-2.5 py-1 text-[11px] font-semibold text-success-foreground">
-              {t("card.available")}
-            </span>
-          ) : null}
+          <div className="absolute left-3 top-12 flex flex-col items-start gap-1.5">
+            {p.is_featured ? (
+              <span className="rounded-full bg-brand px-2.5 py-1 text-[11px] font-semibold text-brand-foreground shadow-card">
+                {t("card.featured")}
+              </span>
+            ) : null}
+            {showAvailable ? (
+              <span className="rounded-full bg-success px-2.5 py-1 text-[11px] font-semibold text-success-foreground">
+                {t("card.available")}
+              </span>
+            ) : null}
+          </div>
         </div>
       </Link>
       <FavoriteButton propertyId={p.id} className="absolute right-3 top-3" />

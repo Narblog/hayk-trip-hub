@@ -151,16 +151,21 @@ export const availabilityQuery = (propertyId: string | undefined) =>
   });
 
 // ---------- home page collections ----------
-async function collection(filter: { type?: string; types?: string[]; featured?: boolean }, limit = 8) {
+async function collection(
+  filter: { type?: string; types?: string[]; featured?: boolean; recent?: boolean },
+  limit = 8,
+) {
   let q = supabase
     .from("properties")
-    .select("id,name,slug,property_type,city_code,region_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url,is_demo")
+    .select("id,name,slug,property_type,city_code,region_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url,is_demo,is_featured")
     .eq("status", "APPROVED")
     .eq("is_active", true)
     .limit(limit);
   if (filter.types) q = q.in("property_type", filter.types);
   if (filter.featured) q = q.eq("is_featured", true);
-  const { data, error } = await q.order("rating", { ascending: false });
+  const { data, error } = filter.recent
+    ? await q.order("created_at", { ascending: false })
+    : await q.order("rating", { ascending: false });
   if (error) throw error;
   return data ?? [];
 }
@@ -169,11 +174,12 @@ export const homeQuery = () =>
   queryOptions({
     queryKey: ["home"],
     queryFn: async () => {
-      const [recommended, guesthouses, cabins, hotels, tours, cities] = await Promise.all([
+      const [recommended, guesthouses, cabins, hotels, recent, tours, cities] = await Promise.all([
         collection({ featured: true }),
         collection({ types: ["guesthouse"] }),
         collection({ types: ["cabin", "glamping", "cottage"] }),
         collection({ types: ["hotel", "resort"] }),
+        collection({ recent: true }, 4),
         supabase
           .from("tours")
           .select("id,name,slug,category,city_code,price,currency,duration_hours,main_image_url,rating,review_count")
@@ -188,6 +194,7 @@ export const homeQuery = () =>
         guesthouses,
         cabins,
         hotels,
+        recent,
         tours: tours.data ?? [],
         cities: cities.data ?? [],
       };
