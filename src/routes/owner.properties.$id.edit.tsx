@@ -45,6 +45,7 @@ function EditPropertyPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [mainPhoto, setMainPhoto] = useState("");
   const [removedPaths, setRemovedPaths] = useState<string[]>([]);
+  const [coords, setCoords] = useState<{ lat: number | null; lng: number | null }>({ lat: null, lng: null });
   const [form, setForm] = useState({
     name: "",
     property_type: "",
