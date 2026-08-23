@@ -18,9 +18,12 @@ import { EmptyState } from "@/components/common/states";
 import { useAuth } from "@/lib/auth";
 import {
   adminDeleteProperty,
+  adminDeleteTour,
   adminPropertiesQuery,
   adminSetStatus,
+  adminSetTourStatus,
   adminStatsQuery,
+  adminToursQuery,
   adminUpdateProperty,
   type ListingStatus,
 } from "@/lib/data";
@@ -45,15 +48,39 @@ function AdminPage() {
   const qc = useQueryClient();
   const [tab, setTab] = useState<string>("PENDING_REVIEW");
   const [editing, setEditing] = useState<any | null>(null);
+  const [section, setSection] = useState<"properties" | "tours">("properties");
   const { data } = useQuery({ ...adminStatsQuery(), enabled: isAdmin });
-  const list = useQuery({ ...adminPropertiesQuery(tab), enabled: isAdmin });
+  const list = useQuery({ ...adminPropertiesQuery(tab), enabled: isAdmin && section === "properties" });
+  const tourList = useQuery({ ...adminToursQuery(tab), enabled: isAdmin && section === "tours" });
 
   const refresh = () => {
     void qc.invalidateQueries({ queryKey: ["admin-properties"] });
+    void qc.invalidateQueries({ queryKey: ["admin-tours"] });
+    void qc.invalidateQueries({ queryKey: ["owner-tours"] });
+    void qc.invalidateQueries({ queryKey: ["tours-list"] });
     void qc.invalidateQueries({ queryKey: ["admin-stats"] });
     void qc.invalidateQueries({ queryKey: ["search"] });
     void qc.invalidateQueries({ queryKey: ["collection"] });
   };
+
+  const setTourStatus = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: ListingStatus }) =>
+      adminSetTourStatus(user!.id, id, status),
+    onSuccess: () => {
+      toast.success(t("common.save"));
+      refresh();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const removeTour = useMutation({
+    mutationFn: (id: string) => adminDeleteTour(user!.id, id),
+    onSuccess: () => {
+      toast.success(t("common.delete"));
+      refresh();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const setStatus = useMutation({
     mutationFn: ({ id, status }: { id: string; status: ListingStatus }) =>
@@ -110,7 +137,25 @@ function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-10 flex flex-wrap gap-2">
+      <div className="mt-10 flex flex-wrap gap-2 border-b border-border pb-3">
+        {([
+          ["properties", t("tourForm.tabProperties")],
+          ["tours", t("tourForm.tabTours")],
+        ] as const).map(([k, label]) => (
+          <button
+            key={k}
+            type="button"
+            onClick={() => setSection(k)}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+              section === k ? "bg-brand text-brand-foreground" : "hover:bg-surface"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
         {[
           ["PENDING_REVIEW", t("admin.pending")],
           ["APPROVED", t("admin.approved")],
@@ -132,6 +177,71 @@ function AdminPage() {
         ))}
       </div>
 
+      {section === "tours" ? (
+        <div className="mt-5 space-y-3">
+          {tourList.isPending ? (
+            <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+          ) : (tourList.data?.length ?? 0) === 0 ? (
+            <EmptyState title={t("tourForm.noTours")} />
+          ) : (
+            tourList.data!.map((tr: any) => (
+              <div
+                key={tr.id}
+                className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-4"
+              >
+                <div className="min-w-[220px] flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-display text-lg font-semibold">{tr.name}</p>
+                    <StatusBadge status={tr.status} />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {tr.city_code ?? tr.location ?? "—"} ·{" "}
+                    {formatPrice(Number(tr.price), tr.currency ?? "AMD", lang)}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button asChild size="sm" variant="ghost">
+                    <Link to="/tour/$slug" params={{ slug: tr.slug }}>
+                      {t("admin.review")}
+                    </Link>
+                  </Button>
+                  {tr.status !== "APPROVED" ? (
+                    <Button size="sm" onClick={() => setTourStatus.mutate({ id: tr.id, status: "APPROVED" })}>
+                      {t("admin.approve")}
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setTourStatus.mutate({ id: tr.id, status: "SUSPENDED" })}
+                    >
+                      {t("admin.suspend")}
+                    </Button>
+                  )}
+                  {tr.status !== "REJECTED" ? (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setTourStatus.mutate({ id: tr.id, status: "REJECTED" })}
+                    >
+                      {t("admin.reject")}
+                    </Button>
+                  ) : null}
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => {
+                      if (confirm(`${t("common.delete")}: ${tr.name}?`)) removeTour.mutate(tr.id);
+                    }}
+                  >
+                    {t("common.delete")}
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      ) : (
       <div className="mt-5 space-y-3">
         {list.isPending ? (
           <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
@@ -200,6 +310,7 @@ function AdminPage() {
           ))
         )}
       </div>
+      )}
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent>

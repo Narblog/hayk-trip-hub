@@ -6,7 +6,13 @@ import { InlineLoader } from "@/components/common/states";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-import { becomeOwner, ownerPropertiesQuery, ownerStatsQuery, ownerStatusHistoryQuery } from "@/lib/data";
+import {
+  becomeOwner,
+  ownerPropertiesQuery,
+  ownerStatsQuery,
+  ownerStatusHistoryQuery,
+  ownerToursQuery,
+} from "@/lib/data";
 import { formatDate } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -30,6 +36,7 @@ function OwnerDashboard() {
   const { data: stats } = useQuery(ownerStatsQuery(user?.id ?? null));
   const { data: props, isPending } = useQuery(ownerPropertiesQuery(user?.id ?? null));
   const { data: history = [] } = useQuery(ownerStatusHistoryQuery((props ?? []).map((p) => p.id)));
+  const { data: tours = [], isPending: toursPending } = useQuery(ownerToursQuery(user?.id ?? null));
 
   if (!user)
     return (
@@ -143,6 +150,51 @@ function OwnerDashboard() {
                         ))}
                     </ol>
                   )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="mt-10">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-display text-xl font-semibold">{t("tourForm.myTours")}</h2>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/owner/tours/new">{t("tourForm.new")}</Link>
+          </Button>
+        </div>
+        {toursPending ? (
+          <InlineLoader />
+        ) : tours.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">{t("tourForm.noTours")}</p>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {tours.map((tr) => (
+              <li
+                key={tr.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{tr.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {tr.city_code ?? tr.location ?? "—"} · {formatDate(tr.created_at)}
+                  </p>
+                  {tr.admin_note ? (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {t("owner.historyNote")}: {tr.admin_note}
+                    </p>
+                  ) : null}
+                </div>
+                <div className="flex shrink-0 items-center gap-2">
+                  <StatusBadge status={tr.status} />
+                  {tr.status === "APPROVED" ? (
+                    <Button asChild size="sm" variant="outline">
+                      <Link to="/tour/$slug" params={{ slug: tr.slug }}>
+                        {t("admin.review")}
+                      </Link>
+                    </Button>
+                  ) : null}
                 </div>
               </li>
             ))}
