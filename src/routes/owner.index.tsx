@@ -6,7 +6,13 @@ import { InlineLoader } from "@/components/common/states";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-import { becomeOwner, ownerPropertiesQuery, ownerStatsQuery, ownerStatusHistoryQuery } from "@/lib/data";
+import {
+  becomeOwner,
+  ownerPropertiesQuery,
+  ownerStatsQuery,
+  ownerStatusHistoryQuery,
+  ownerToursQuery,
+} from "@/lib/data";
 import { formatDate } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -30,6 +36,7 @@ function OwnerDashboard() {
   const { data: stats } = useQuery(ownerStatsQuery(user?.id ?? null));
   const { data: props, isPending } = useQuery(ownerPropertiesQuery(user?.id ?? null));
   const { data: history = [] } = useQuery(ownerStatusHistoryQuery((props ?? []).map((p) => p.id)));
+  const { data: tours = [], isPending: toursPending } = useQuery(ownerToursQuery(user?.id ?? null));
 
   if (!user)
     return (
