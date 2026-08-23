@@ -18,9 +18,12 @@ import { EmptyState } from "@/components/common/states";
 import { useAuth } from "@/lib/auth";
 import {
   adminDeleteProperty,
+  adminDeleteTour,
   adminPropertiesQuery,
   adminSetStatus,
+  adminSetTourStatus,
   adminStatsQuery,
+  adminToursQuery,
   adminUpdateProperty,
   type ListingStatus,
 } from "@/lib/data";
