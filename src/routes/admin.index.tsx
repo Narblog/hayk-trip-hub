@@ -137,7 +137,25 @@ function AdminPage() {
         ))}
       </div>
 
-      <div className="mt-10 flex flex-wrap gap-2">
+      <div className="mt-10 flex flex-wrap gap-2 border-b border-border pb-3">
+        {([
+          ["properties", t("tourForm.tabProperties")],
+          ["tours", t("tourForm.tabTours")],
+        ] as const).map(([k, label]) => (
+          <button
+            key={k}
+            type="button"
+            onClick={() => setSection(k)}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+              section === k ? "bg-brand text-brand-foreground" : "hover:bg-surface"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
         {[
           ["PENDING_REVIEW", t("admin.pending")],
           ["APPROVED", t("admin.approved")],
