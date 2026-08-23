@@ -490,7 +490,9 @@ export type CityInput = {
   name_ru: string;
   is_popular?: boolean;
   sort_order?: number;
+  image_url?: string | null;
 };
+
 
 export const adminCitiesQuery = () =>
   queryOptions({
