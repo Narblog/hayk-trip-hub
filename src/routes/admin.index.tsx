@@ -310,6 +310,7 @@ function AdminPage() {
           ))
         )}
       </div>
+      )}
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent>
