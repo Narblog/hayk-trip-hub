@@ -261,6 +261,7 @@ function AdminCitiesPage() {
                       name_ru: c.name_ru,
                       is_popular: !!c.is_popular,
                       sort_order: c.sort_order ?? 100,
+                      image_url: c.image_url ?? null,
                     })
                   }
                 >
