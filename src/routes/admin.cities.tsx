@@ -223,6 +223,18 @@ function AdminCitiesPage() {
               key={c.code}
               className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-4"
             >
+              {c.image_url ? (
+                <img
+                  src={c.image_url}
+                  alt={localized(c, "name")}
+                  loading="lazy"
+                  className="size-14 shrink-0 rounded-xl object-cover"
+                />
+              ) : (
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-surface text-muted-foreground">
+                  <ImagePlus className="size-5" />
+                </div>
+              )}
               <div className="min-w-[220px] flex-1">
                 <p className="font-display text-lg font-semibold">
                   {localized(c, "name")}{" "}
