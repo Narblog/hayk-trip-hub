@@ -129,7 +129,7 @@ function Home() {
               to="/destinations"
               linkLabel={t("home.seeAll")}
             />
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [&>a]:w-[72%] [&>a]:shrink-0 [&>a]:snap-start sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4 sm:[&>a]:w-auto">
               {topDestinations.map((c) => (
                 <Link
                   key={c.code}
