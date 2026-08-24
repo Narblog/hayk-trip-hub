@@ -162,6 +162,41 @@ function AdminCitiesPage() {
             <Input id="c-ru" value={form.name_ru} onChange={(e) => setForm({ ...form, name_ru: e.target.value })} />
           </div>
         </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <div className="relative size-24 shrink-0 overflow-hidden rounded-xl border border-border bg-surface">
+            {form.image_url ? (
+              <>
+                <img src={form.image_url} alt="" className="size-full object-cover" />
+                <button
+                  type="button"
+                  aria-label={t("common.delete")}
+                  onClick={() => setForm({ ...form, image_url: null })}
+                  className="absolute right-1 top-1 rounded-full bg-card/90 p-1"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </>
+            ) : (
+              <div className="flex size-full items-center justify-center text-muted-foreground">
+                <ImagePlus className="size-6" />
+              </div>
+            )}
+          </div>
+          <div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => void uploadImage(e.target.files?.[0])}
+            />
+            <Button variant="outline" size="sm" disabled={uploading} onClick={() => fileRef.current?.click()}>
+              {uploading ? t("common.loading") : t("form.uploadPhotos")}
+            </Button>
+          </div>
+        </div>
+
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3 rounded-xl border border-border px-3 py-2">
             <Label htmlFor="c-pop">{t("admin.cityPopular")}</Label>
