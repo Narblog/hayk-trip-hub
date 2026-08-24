@@ -511,6 +511,41 @@ export type Database = {
           },
         ]
       }
+      property_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          property_id: string
+          user_id: string | null
+          visitor_token: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          property_id: string
+          user_id?: string | null
+          visitor_token: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          property_id?: string
+          user_id?: string | null
+          visitor_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_events_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_images: {
         Row: {
           created_at: string
@@ -713,6 +748,7 @@ export type Database = {
           property_id: string
           rating: number
           status: Database["public"]["Enums"]["review_status"]
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -722,6 +758,7 @@ export type Database = {
           property_id: string
           rating: number
           status?: Database["public"]["Enums"]["review_status"]
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -731,6 +768,7 @@ export type Database = {
           property_id?: string
           rating?: number
           status?: Database["public"]["Enums"]["review_status"]
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
@@ -997,6 +1035,45 @@ export type Database = {
         Args: { p_property_id: string }
         Returns: undefined
       }
+      property_analytics_daily: {
+        Args: { p_from?: string; p_owner_id?: string; p_property_id?: string }
+        Returns: {
+          contacts: number
+          day: string
+          views: number
+        }[]
+      }
+      property_analytics_overview: {
+        Args: { p_from?: string; p_owner_id?: string; p_property_id?: string }
+        Returns: {
+          avg_rating: number
+          contact_clicks: number
+          instagram_clicks: number
+          is_active: boolean
+          owner_id: string
+          phone_clicks: number
+          property_id: string
+          property_name: string
+          review_count: number
+          slug: string
+          status: Database["public"]["Enums"]["listing_status"]
+          total_views: number
+          unique_contacted: number
+          unique_visitors: number
+          whatsapp_clicks: number
+        }[]
+      }
+      property_reviews: {
+        Args: { p_property_id: string }
+        Returns: {
+          comment: string
+          created_at: string
+          display_name: string
+          id: string
+          rating: number
+          user_id: string
+        }[]
+      }
       search_properties: {
         Args: {
           p_amenities?: string[]
@@ -1035,6 +1112,14 @@ export type Database = {
           slug: string
           total_count: number
         }[]
+      }
+      track_property_event: {
+        Args: {
+          p_event_type: string
+          p_property_id: string
+          p_visitor_token: string
+        }
+        Returns: boolean
       }
     }
     Enums: {
