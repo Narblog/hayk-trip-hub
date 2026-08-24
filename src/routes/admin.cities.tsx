@@ -35,6 +35,7 @@ const empty: CityInput = {
   name_ru: "",
   is_popular: false,
   sort_order: 100,
+  image_url: null,
 };
 
 function AdminCitiesPage() {
@@ -42,6 +43,31 @@ function AdminCitiesPage() {
   const { isAdmin, user } = useAuth();
   const qc = useQueryClient();
   const [form, setForm] = useState<CityInput>(empty);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function uploadImage(file: File | undefined) {
+    if (!file || !user) return;
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop() ?? "jpg";
+      const path = `cities/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("property-images")
+        .upload(path, file, { cacheControl: "3600", upsert: false });
+      if (error) throw error;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("property-images")
+        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+      if (signErr || !signed) throw signErr ?? new Error("sign failed");
+      setForm((f) => ({ ...f, image_url: signed.signedUrl }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
   const { data: ref } = useQuery(refDataQuery());
   const cities = useQuery({ ...adminCitiesQuery(), enabled: isAdmin });
 
