@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
+import { ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { EmptyState } from "@/components/common/states";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { adminCitiesQuery, adminDeleteCity, adminUpsertCity, refDataQuery, type CityInput } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
@@ -33,6 +35,7 @@ const empty: CityInput = {
   name_ru: "",
   is_popular: false,
   sort_order: 100,
+  image_url: null,
 };
 
 function AdminCitiesPage() {
@@ -40,6 +43,31 @@ function AdminCitiesPage() {
   const { isAdmin, user } = useAuth();
   const qc = useQueryClient();
   const [form, setForm] = useState<CityInput>(empty);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function uploadImage(file: File | undefined) {
+    if (!file || !user) return;
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop() ?? "jpg";
+      const path = `cities/${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("property-images")
+        .upload(path, file, { cacheControl: "3600", upsert: false });
+      if (error) throw error;
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("property-images")
+        .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+      if (signErr || !signed) throw signErr ?? new Error("sign failed");
+      setForm((f) => ({ ...f, image_url: signed.signedUrl }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
   const { data: ref } = useQuery(refDataQuery());
   const cities = useQuery({ ...adminCitiesQuery(), enabled: isAdmin });
 
@@ -134,6 +162,41 @@ function AdminCitiesPage() {
             <Input id="c-ru" value={form.name_ru} onChange={(e) => setForm({ ...form, name_ru: e.target.value })} />
           </div>
         </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-4">
+          <div className="relative size-24 shrink-0 overflow-hidden rounded-xl border border-border bg-surface">
+            {form.image_url ? (
+              <>
+                <img src={form.image_url} alt="" className="size-full object-cover" />
+                <button
+                  type="button"
+                  aria-label={t("common.delete")}
+                  onClick={() => setForm({ ...form, image_url: null })}
+                  className="absolute right-1 top-1 rounded-full bg-card/90 p-1"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </>
+            ) : (
+              <div className="flex size-full items-center justify-center text-muted-foreground">
+                <ImagePlus className="size-6" />
+              </div>
+            )}
+          </div>
+          <div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => void uploadImage(e.target.files?.[0])}
+            />
+            <Button variant="outline" size="sm" disabled={uploading} onClick={() => fileRef.current?.click()}>
+              {uploading ? t("common.loading") : t("form.uploadPhotos")}
+            </Button>
+          </div>
+        </div>
+
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3 rounded-xl border border-border px-3 py-2">
             <Label htmlFor="c-pop">{t("admin.cityPopular")}</Label>
@@ -160,6 +223,18 @@ function AdminCitiesPage() {
               key={c.code}
               className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card p-4"
             >
+              {c.image_url ? (
+                <img
+                  src={c.image_url}
+                  alt={localized(c, "name")}
+                  loading="lazy"
+                  className="size-14 shrink-0 rounded-xl object-cover"
+                />
+              ) : (
+                <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-surface text-muted-foreground">
+                  <ImagePlus className="size-5" />
+                </div>
+              )}
               <div className="min-w-[220px] flex-1">
                 <p className="font-display text-lg font-semibold">
                   {localized(c, "name")}{" "}
@@ -186,6 +261,7 @@ function AdminCitiesPage() {
                       name_ru: c.name_ru,
                       is_popular: !!c.is_popular,
                       sort_order: c.sort_order ?? 100,
+                      image_url: c.image_url ?? null,
                     })
                   }
                 >
