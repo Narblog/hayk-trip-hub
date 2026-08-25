@@ -325,7 +325,6 @@ const en: Dict = {
   "form.removePhoto": "Remove",
   "form.uploadError": "Upload failed",
   "owner.becameHost": "Your account is now a host account.",
-};
   "reviews.title": "Reviews",
   "reviews.none": "No reviews yet. Be the first to share your stay.",
   "reviews.write": "Write a review",
@@ -359,6 +358,7 @@ const en: Dict = {
   "analytics.rating": "Rating",
   "analytics.byProperty": "By property",
   "analytics.platform": "Platform analytics",
+};
 
 const hy: Dict = {
   "brand.tagline": "Հանգիստ Հայաստանում",
@@ -675,7 +675,6 @@ const hy: Dict = {
   "form.removePhoto": "Հեռացնել",
   "form.uploadError": "Չհաջողվեց բեռնել",
   "owner.becameHost": "Ձեր հաշիվն այժմ տանտիրոջ հաշիվ է։",
-};
   "reviews.title": "Կարծիքներ",
   "reviews.none": "Դեռ կարծիքներ չկան։ Եղեք առաջինը։",
   "reviews.write": "Գրել կարծիք",
@@ -709,6 +708,7 @@ const hy: Dict = {
   "analytics.rating": "Վարկանիշ",
   "analytics.byProperty": "Ըստ կացարանի",
   "analytics.platform": "Հարթակի վերլուծություն",
+};
 
 const ru: Dict = {
   "brand.tagline": "Отдых в Армении",
@@ -1025,7 +1025,6 @@ const ru: Dict = {
   "form.removePhoto": "Удалить",
   "form.uploadError": "Ошибка загрузки",
   "owner.becameHost": "Ваш аккаунт теперь аккаунт хозяина.",
-};
   "reviews.title": "Отзывы",
   "reviews.none": "Отзывов пока нет. Будьте первым.",
   "reviews.write": "Написать отзыв",
@@ -1059,6 +1058,7 @@ const ru: Dict = {
   "analytics.rating": "Рейтинг",
   "analytics.byProperty": "По объектам",
   "analytics.platform": "Аналитика платформы",
+};
 
 /* ---- editorial redesign copy ---- */
 const extraEn: Dict = {
