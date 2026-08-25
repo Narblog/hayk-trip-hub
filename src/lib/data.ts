@@ -675,3 +675,145 @@ export async function adminDeleteTour(adminId: string, tourId: string) {
     target_id: tourId,
   });
 }
+
+// ---------- reviews ----------
+export type PropertyReview = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  user_id: string;
+  display_name: string;
+};
+
+export const propertyReviewsQuery = (propertyId: string | undefined) =>
+  queryOptions({
+    queryKey: ["property-reviews", propertyId],
+    enabled: !!propertyId,
+    queryFn: async () => {
+      const rpc = (supabase.rpc as unknown as (
+        fn: "property_reviews",
+        params: Record<string, unknown>,
+      ) => Promise<{ data: unknown; error: { message: string } | null }>).bind(supabase);
+      const { data, error } = await rpc("property_reviews", { p_property_id: propertyId });
+      if (error) throw error;
+      return (data ?? []) as PropertyReview[];
+    },
+  });
+
+export const myReviewQuery = (propertyId: string | undefined, userId: string | null) =>
+  queryOptions({
+    queryKey: ["my-review", propertyId, userId],
+    enabled: !!propertyId && !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reviews")
+        .select("id,rating,comment,status")
+        .eq("property_id", propertyId!)
+        .eq("user_id", userId!)
+        .maybeSingle();
+      if (error) throw error;
+      return data ?? null;
+    },
+  });
+
+export async function saveReview(input: {
+  id?: string;
+  propertyId: string;
+  userId: string;
+  rating: number;
+  comment: string;
+}) {
+  const payload = { rating: input.rating, comment: input.comment.trim() || null };
+  if (input.id) {
+    const { error } = await supabase.from("reviews").update(payload).eq("id", input.id);
+    if (error) throw error;
+    return;
+  }
+  const { error } = await supabase.from("reviews").insert({
+    property_id: input.propertyId,
+    user_id: input.userId,
+    status: "APPROVED",
+    ...payload,
+  });
+  if (error) throw error;
+}
+
+export async function deleteReview(id: string) {
+  const { error } = await supabase.from("reviews").delete().eq("id", id);
+  if (error) throw error;
+}
+
+// ---------- analytics ----------
+export type AnalyticsOverviewRow = {
+  property_id: string;
+  property_name: string;
+  slug: string;
+  status: ListingStatus;
+  is_active: boolean;
+  owner_id: string | null;
+  unique_visitors: number;
+  total_views: number;
+  contact_clicks: number;
+  phone_clicks: number;
+  whatsapp_clicks: number;
+  instagram_clicks: number;
+  unique_contacted: number;
+  avg_rating: number;
+  review_count: number;
+};
+
+export type AnalyticsDailyRow = { day: string; views: number; contacts: number };
+
+function sinceIso(days: number | null): string | null {
+  if (!days) return null;
+  return new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+}
+
+export const analyticsOverviewQuery = (opts: {
+  days: number | null;
+  propertyId?: string | null;
+  ownerId?: string | null;
+  enabled?: boolean;
+}) =>
+  queryOptions({
+    queryKey: ["analytics-overview", opts.days, opts.propertyId ?? null, opts.ownerId ?? null],
+    enabled: opts.enabled !== false,
+    queryFn: async () => {
+      const rpc = (supabase.rpc as unknown as (
+        fn: "property_analytics_overview",
+        params: Record<string, unknown>,
+      ) => Promise<{ data: unknown; error: { message: string } | null }>).bind(supabase);
+      const { data, error } = await rpc("property_analytics_overview", {
+        p_from: sinceIso(opts.days),
+        p_property_id: opts.propertyId ?? null,
+        p_owner_id: opts.ownerId ?? null,
+      });
+      if (error) throw error;
+      return (data ?? []) as AnalyticsOverviewRow[];
+    },
+  });
+
+export const analyticsDailyQuery = (opts: {
+  days: number | null;
+  propertyId?: string | null;
+  ownerId?: string | null;
+  enabled?: boolean;
+}) =>
+  queryOptions({
+    queryKey: ["analytics-daily", opts.days, opts.propertyId ?? null, opts.ownerId ?? null],
+    enabled: opts.enabled !== false,
+    queryFn: async () => {
+      const rpc = (supabase.rpc as unknown as (
+        fn: "property_analytics_daily",
+        params: Record<string, unknown>,
+      ) => Promise<{ data: unknown; error: { message: string } | null }>).bind(supabase);
+      const { data, error } = await rpc("property_analytics_daily", {
+        p_from: sinceIso(opts.days),
+        p_property_id: opts.propertyId ?? null,
+        p_owner_id: opts.ownerId ?? null,
+      });
+      if (error) throw error;
+      return (data ?? []) as AnalyticsDailyRow[];
+    },
+  });
