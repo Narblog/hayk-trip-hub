@@ -250,7 +250,12 @@ function PropertyPage() {
               <AvailabilityCalendar propertyId={p.id} />
             </div>
           </section>
+
+          <div id="reviews" className="scroll-mt-24">
+            <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
+          </div>
         </div>
+
 
         <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
           <p className="font-display text-2xl font-semibold">
