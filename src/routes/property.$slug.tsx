@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, MessageCircle, Phone, Star, Users, X } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
+import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
+import { trackPropertyEvent } from "@/lib/analytics";
 import { propertyQuery, refDataQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
