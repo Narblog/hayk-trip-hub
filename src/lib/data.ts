@@ -718,7 +718,7 @@ export const myReviewQuery = (propertyId: string | undefined, userId: string | n
   });
 
 export async function saveReview(input: {
-  id?: string;
+  id?: string | undefined;
   propertyId: string;
   userId: string;
   rating: number;
