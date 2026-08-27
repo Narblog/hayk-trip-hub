@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
+import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { InlineLoader } from "@/components/common/states";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
@@ -156,6 +157,11 @@ function OwnerDashboard() {
           </ul>
         )}
       </div>
+
+      <AnalyticsPanel
+        ownerId={user.id}
+        properties={(props ?? []).map((p) => ({ id: p.id, name: p.name }))}
+      />
 
       <div className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-3">

@@ -44,13 +44,17 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
             />
           ) : null}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-foreground/55 to-transparent" />
-          {p.review_count > 0 ? (
-            <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-card/90 px-2.5 py-1 text-xs font-semibold backdrop-blur">
-              <Star className="size-3 fill-gold text-gold" />
-              {Number(p.rating).toFixed(1)}
-              <span className="font-normal text-muted-foreground">({p.review_count})</span>
-            </span>
-          ) : null}
+          <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-card/90 px-2.5 py-1 text-xs font-semibold backdrop-blur">
+            {p.review_count > 0 ? (
+              <>
+                <Star className="size-3 fill-gold text-gold" />
+                {Number(p.rating).toFixed(1)}
+                <span className="font-normal text-muted-foreground">({p.review_count})</span>
+              </>
+            ) : (
+              <span className="font-normal text-muted-foreground">{t("reviews.new")}</span>
+            )}
+          </span>
           <div className="absolute inset-x-0 bottom-0 p-4">
             <p className="eyebrow text-background/85">
               {localized(city, "name") || p.city_code} · {localized(type, "name") || p.property_type}

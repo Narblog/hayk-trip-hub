@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { EmptyState } from "@/components/common/states";
 import { useAuth } from "@/lib/auth";
@@ -311,6 +312,8 @@ function AdminPage() {
         )}
       </div>
       )}
+
+      <AnalyticsPanel title={t("analytics.platform")} />
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent>

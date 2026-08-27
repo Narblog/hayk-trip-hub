@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, MessageCircle, Phone, Star, Users, X } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
+import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
+import { trackPropertyEvent } from "@/lib/analytics";
 import { propertyQuery, refDataQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
@@ -35,6 +37,11 @@ function PropertyPage() {
   const [activeImage, setActiveImage] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const propertyId = (data as { id?: string } | null | undefined)?.id ?? null;
+
+  useEffect(() => {
+    if (propertyId) void trackPropertyEvent(propertyId, "property_view");
+  }, [propertyId]);
 
   if (isPending) return <InlineLoader />;
   if (!data)
@@ -53,7 +60,7 @@ function PropertyPage() {
     price_per_night: number; currency: string; max_guests: number; bedrooms: number;
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
-    contact_instagram: string | null; house_rules: string | null;
+    contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
   };
@@ -198,9 +205,15 @@ function PropertyPage() {
             <span className="flex items-center gap-1.5"><Users className="size-4" /> {p.max_guests} {t("card.guests")}</span>
             <span className="flex items-center gap-1.5"><BedDouble className="size-4" /> {p.bedrooms} {t("card.bedrooms")}</span>
             <span className="flex items-center gap-1.5"><Bath className="size-4" /> {p.bathrooms} {t("property.bathrooms")}</span>
-            {p.review_count > 0 ? (
-              <span className="flex items-center gap-1.5"><Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count})</span>
-            ) : null}
+            <a href="#reviews" className="flex items-center gap-1.5 hover:text-brand">
+              {p.review_count > 0 ? (
+                <>
+                  <Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count})
+                </>
+              ) : (
+                <span className="text-muted-foreground">{t("reviews.new")}</span>
+              )}
+            </a>
           </div>
 
           <section className="mt-8">
@@ -237,7 +250,12 @@ function PropertyPage() {
               <AvailabilityCalendar propertyId={p.id} />
             </div>
           </section>
+
+          <div id="reviews" className="scroll-mt-24">
+            <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
+          </div>
         </div>
+
 
         <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
           <p className="font-display text-2xl font-semibold">
@@ -247,7 +265,7 @@ function PropertyPage() {
           <div className="mt-5 space-y-2">
             {p.contact_phone ? (
               <Button asChild className="h-auto w-full justify-start py-3">
-                <a href={`tel:${p.contact_phone}`}>
+                <a href={`tel:${p.contact_phone}`} onClick={() => void trackPropertyEvent(p.id, "phone_click")}>
                   <Phone className="size-5 shrink-0" />
                   <span className="min-w-0 text-left"><span className="block text-xs opacity-75">{t("property.call")}</span><span className="block truncate">{p.contact_phone}</span></span>
                 </a>
@@ -255,7 +273,7 @@ function PropertyPage() {
             ) : null}
             {whatsappNumber ? (
               <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer">
+                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "whatsapp_click")}>
                   <MessageCircle className="size-5 shrink-0" />
                   <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.whatsapp")}</span><span className="block truncate">{p.contact_whatsapp}</span></span>
                 </a>
@@ -263,7 +281,7 @@ function PropertyPage() {
             ) : null}
             {instagramHandle ? (
               <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer">
+                <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "instagram_click")}>
                   <Instagram className="size-5 shrink-0" />
                   <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.instagram")}</span><span className="block truncate">@{instagramHandle}</span></span>
                 </a>
