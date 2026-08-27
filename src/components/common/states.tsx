@@ -38,7 +38,13 @@ export function InlineLoader({ label }: { label?: string }) {
   );
 }
 
-export function ErrorState({ message, onRetry }: { message?: string; onRetry?: () => void }) {
+export function ErrorState({
+  message,
+  onRetry,
+}: {
+  message?: string | undefined;
+  onRetry?: (() => void) | undefined;
+}) {
   const { t } = useI18n();
   return (
     <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card px-6 py-14 text-center">
