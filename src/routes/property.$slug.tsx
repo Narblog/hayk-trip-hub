@@ -37,6 +37,11 @@ function PropertyPage() {
   const [activeImage, setActiveImage] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const propertyId = (data as { id?: string } | null | undefined)?.id ?? null;
+
+  useEffect(() => {
+    if (propertyId) void trackPropertyEvent(propertyId, "property_view");
+  }, [propertyId]);
 
   if (isPending) return <InlineLoader />;
   if (!data)
