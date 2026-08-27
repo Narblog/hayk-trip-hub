@@ -313,7 +313,7 @@ function AdminPage() {
       </div>
       )}
 
-      <AnalyticsPanel title={t("analytics.platformTitle")} />
+      <AnalyticsPanel title={t("analytics.platform")} />
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent>
