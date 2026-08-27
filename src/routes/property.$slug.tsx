@@ -205,9 +205,15 @@ function PropertyPage() {
             <span className="flex items-center gap-1.5"><Users className="size-4" /> {p.max_guests} {t("card.guests")}</span>
             <span className="flex items-center gap-1.5"><BedDouble className="size-4" /> {p.bedrooms} {t("card.bedrooms")}</span>
             <span className="flex items-center gap-1.5"><Bath className="size-4" /> {p.bathrooms} {t("property.bathrooms")}</span>
-            {p.review_count > 0 ? (
-              <span className="flex items-center gap-1.5"><Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count})</span>
-            ) : null}
+            <a href="#reviews" className="flex items-center gap-1.5 hover:text-brand">
+              {p.review_count > 0 ? (
+                <>
+                  <Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count})
+                </>
+              ) : (
+                <span className="text-muted-foreground">{t("reviews.new")}</span>
+              )}
+            </a>
           </div>
 
           <section className="mt-8">
