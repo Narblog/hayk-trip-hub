@@ -60,7 +60,7 @@ function PropertyPage() {
     price_per_night: number; currency: string; max_guests: number; bedrooms: number;
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
-    contact_instagram: string | null; house_rules: string | null;
+    contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
   };
@@ -260,7 +260,7 @@ function PropertyPage() {
           <div className="mt-5 space-y-2">
             {p.contact_phone ? (
               <Button asChild className="h-auto w-full justify-start py-3">
-                <a href={`tel:${p.contact_phone}`}>
+                <a href={`tel:${p.contact_phone}`} onClick={() => void trackPropertyEvent(p.id, "phone_click")}>
                   <Phone className="size-5 shrink-0" />
                   <span className="min-w-0 text-left"><span className="block text-xs opacity-75">{t("property.call")}</span><span className="block truncate">{p.contact_phone}</span></span>
                 </a>
@@ -268,7 +268,7 @@ function PropertyPage() {
             ) : null}
             {whatsappNumber ? (
               <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer">
+                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "whatsapp_click")}>
                   <MessageCircle className="size-5 shrink-0" />
                   <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.whatsapp")}</span><span className="block truncate">{p.contact_whatsapp}</span></span>
                 </a>
@@ -276,7 +276,7 @@ function PropertyPage() {
             ) : null}
             {instagramHandle ? (
               <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer">
+                <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "instagram_click")}>
                   <Instagram className="size-5 shrink-0" />
                   <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.instagram")}</span><span className="block truncate">@{instagramHandle}</span></span>
                 </a>
