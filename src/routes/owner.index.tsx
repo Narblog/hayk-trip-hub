@@ -158,6 +158,11 @@ function OwnerDashboard() {
         )}
       </div>
 
+      <AnalyticsPanel
+        ownerId={user.id}
+        properties={(props ?? []).map((p) => ({ id: p.id, name: p.name }))}
+      />
+
       <div className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="font-display text-xl font-semibold">{t("tourForm.myTours")}</h2>
