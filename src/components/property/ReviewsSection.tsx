@@ -176,8 +176,15 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
                 {t("reviews.submit")}
               </Button>
               {mine ? (
-                <Button variant="outline" onClick={remove}>
-                  <Trash2 className="size-4" /> {t("reviews.delete")}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setEditing(false);
+                    setRating(5);
+                    setComment("");
+                  }}
+                >
+                  {t("common.cancel")}
                 </Button>
               ) : null}
             </div>
