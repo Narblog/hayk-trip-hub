@@ -31,13 +31,13 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    if (mine) {
-      setRating(mine.rating);
-      setComment(mine.comment ?? "");
-    }
-  }, [mine]);
+    setEditing(false);
+    setRating(5);
+    setComment("");
+  }, [mine?.id, user?.id]);
 
   const isOwnProperty = !!user && !!ownerId && user.id === ownerId;
   const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
@@ -50,6 +50,9 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
       await queryClient.invalidateQueries({ queryKey: ["property-reviews", propertyId] });
       await queryClient.invalidateQueries({ queryKey: ["my-review", propertyId] });
       await queryClient.invalidateQueries({ queryKey: ["property", propertyId] });
+      setEditing(false);
+      setRating(5);
+      setComment("");
       toast.success(t("reviews.saved"));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
@@ -120,6 +123,29 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
           </div>
         ) : isOwnProperty ? (
           <p className="text-sm text-muted-foreground">{t("reviews.ownerCannot")}</p>
+        ) : mine && !editing ? (
+          <div className="space-y-3">
+            <p className="font-display text-lg">{t("reviews.yourReview")}</p>
+            <Stars value={mine.rating} />
+            {mine.comment ? (
+              <p className="whitespace-pre-line text-sm text-muted-foreground">{mine.comment}</p>
+            ) : null}
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setRating(mine.rating);
+                  setComment(mine.comment ?? "");
+                  setEditing(true);
+                }}
+              >
+                {t("reviews.edit")}
+              </Button>
+              <Button variant="outline" onClick={remove}>
+                <Trash2 className="size-4" /> {t("reviews.delete")}
+              </Button>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3">
             <p className="font-display text-lg">{mine ? t("reviews.edit") : t("reviews.write")}</p>
@@ -150,8 +176,15 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
                 {t("reviews.submit")}
               </Button>
               {mine ? (
-                <Button variant="outline" onClick={remove}>
-                  <Trash2 className="size-4" /> {t("reviews.delete")}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setEditing(false);
+                    setRating(5);
+                    setComment("");
+                  }}
+                >
+                  {t("common.cancel")}
                 </Button>
               ) : null}
             </div>

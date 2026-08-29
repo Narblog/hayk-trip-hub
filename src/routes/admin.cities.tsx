@@ -51,7 +51,7 @@ function AdminCitiesPage() {
     setUploading(true);
     try {
       const ext = file.name.split(".").pop() ?? "jpg";
-      const path = `cities/${crypto.randomUUID()}.${ext}`;
+      const path = `${user.id}/cities/${crypto.randomUUID()}.${ext}`;
       const { error } = await supabase.storage
         .from("property-images")
         .upload(path, file, { cacheControl: "3600", upsert: false });
