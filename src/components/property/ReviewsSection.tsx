@@ -123,6 +123,29 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
           </div>
         ) : isOwnProperty ? (
           <p className="text-sm text-muted-foreground">{t("reviews.ownerCannot")}</p>
+        ) : mine && !editing ? (
+          <div className="space-y-3">
+            <p className="font-display text-lg">{t("reviews.yourReview")}</p>
+            <Stars value={mine.rating} />
+            {mine.comment ? (
+              <p className="whitespace-pre-line text-sm text-muted-foreground">{mine.comment}</p>
+            ) : null}
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setRating(mine.rating);
+                  setComment(mine.comment ?? "");
+                  setEditing(true);
+                }}
+              >
+                {t("reviews.edit")}
+              </Button>
+              <Button variant="outline" onClick={remove}>
+                <Trash2 className="size-4" /> {t("reviews.delete")}
+              </Button>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3">
             <p className="font-display text-lg">{mine ? t("reviews.edit") : t("reviews.write")}</p>
