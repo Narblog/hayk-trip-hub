@@ -31,13 +31,13 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    if (mine) {
-      setRating(mine.rating);
-      setComment(mine.comment ?? "");
-    }
-  }, [mine]);
+    setEditing(false);
+    setRating(5);
+    setComment("");
+  }, [mine?.id, user?.id]);
 
   const isOwnProperty = !!user && !!ownerId && user.id === ownerId;
   const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
