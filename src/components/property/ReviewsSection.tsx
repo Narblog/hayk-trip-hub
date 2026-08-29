@@ -50,6 +50,9 @@ export function ReviewsSection({ propertyId, ownerId }: { propertyId: string; ow
       await queryClient.invalidateQueries({ queryKey: ["property-reviews", propertyId] });
       await queryClient.invalidateQueries({ queryKey: ["my-review", propertyId] });
       await queryClient.invalidateQueries({ queryKey: ["property", propertyId] });
+      setEditing(false);
+      setRating(5);
+      setComment("");
       toast.success(t("reviews.saved"));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
