@@ -1453,8 +1453,15 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
+const fallbackI18n: I18nValue = {
+  lang: "hy",
+  setLang: () => {},
+  t: (key: string) => dicts.hy[key] ?? enAll[key] ?? key,
+  localized: <T extends Record<string, unknown>>(row: T | null | undefined, base: string) =>
+    row ? ((row[`${base}_hy`] as string) ?? (row[`${base}_en`] as string) ?? "") : "",
+};
+
 export function useI18n() {
   const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error("useI18n must be used inside I18nProvider");
-  return ctx;
+  return ctx ?? fallbackI18n;
 }
