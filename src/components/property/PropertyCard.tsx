@@ -92,6 +92,7 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
 
         <div className="flex items-end justify-between border-t border-border/70 pt-3">
           <p className="text-sm">
+            <span className="mr-1 text-xs text-muted-foreground">{t("card.from")}</span>
             <span className="font-display text-xl text-brand">
               {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
             </span>

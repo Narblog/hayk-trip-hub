@@ -115,6 +115,21 @@ function Home() {
           <div className="mx-auto mt-10 max-w-4xl text-left">
             <SearchBar />
           </div>
+          <ul className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-2.5">
+            {[
+              { icon: ShieldCheck, label: t("home.trust1") },
+              { icon: PhoneCall, label: t("home.trust2") },
+              { icon: CalendarCheck, label: t("home.trust3") },
+            ].map(({ icon: Icon, label }) => (
+              <li
+                key={label}
+                className="flex items-center gap-2 rounded-full border border-background/25 bg-background/10 px-4 py-2 text-xs font-medium text-background backdrop-blur-md"
+              >
+                <Icon className="size-3.5 text-gold" />
+                {label}
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
