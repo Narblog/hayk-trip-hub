@@ -96,8 +96,36 @@ function PropertyPage() {
     setActiveImage(closestIndex);
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    name: p.name,
+    description: p.description ?? undefined,
+    image: gallery.slice(0, 5),
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "AM",
+      addressLocality: localized(ref?.cities.find((c) => c.code === p.city_code), "name") || p.city_code || undefined,
+      streetAddress: p.address ?? undefined,
+    },
+    telephone: p.contact_phone ?? undefined,
+    priceRange: formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang),
+    ...(p.review_count > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(p.rating).toFixed(1),
+            reviewCount: p.review_count,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="container-page py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div
         ref={galleryRef}
         onScroll={updateActiveImage}
