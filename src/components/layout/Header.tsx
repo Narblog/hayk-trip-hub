@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bell, Heart, LayoutDashboard, LogOut, Menu, Shield, User as UserIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -24,8 +24,16 @@ export function Header() {
   const { t } = useI18n();
   const { user, isOwner, isAdmin, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const transparent = pathname === "/";
+  const transparent = pathname === "/" && !scrolled;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const { data: profile } = useQuery(profileQuery(user?.id ?? null));
   const { data: notifications = [] } = useQuery(notificationsQuery(user?.id ?? null));
@@ -39,8 +47,10 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b transition-colors ${
-        transparent ? "border-transparent bg-background/70" : "border-border/70 bg-background/85"
+      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+        transparent
+          ? "border-transparent bg-background/40"
+          : "border-border/70 bg-background/90 shadow-card"
       } backdrop-blur-xl`}
     >
       <div className="container-page flex h-20 items-center justify-between gap-4">
