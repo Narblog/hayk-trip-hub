@@ -13,8 +13,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         const staticPaths = ["/", "/search", "/tours", "/destinations", "/about"];
 
         const [{ data: properties }, { data: tours }] = await Promise.all([
-          supabase.from("properties").select("slug,updated_at").eq("status", "approved").limit(2000),
-          supabase.from("tours").select("slug,updated_at").eq("status", "approved").limit(2000),
+          supabase.from("properties").select("slug,updated_at").eq("status", "APPROVED").limit(2000),
+          supabase.from("tours").select("slug,updated_at").eq("status", "APPROVED").limit(2000),
         ]);
 
         const body =
