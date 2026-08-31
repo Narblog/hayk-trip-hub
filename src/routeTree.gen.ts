@@ -14,6 +14,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DestinationsRouteImport } from './routes/destinations'
 import { Route as FavoritesRouteImport } from './routes/favorites'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -53,6 +54,11 @@ const DestinationsRoute = DestinationsRouteImport.update({
 const FavoritesRoute = FavoritesRouteImport.update({
   id: '/favorites',
   path: '/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
+  '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
+  '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
+  '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/destinations'
     | '/favorites'
+    | '/privacy'
     | '/search'
     | '/sitemap.xml'
     | '/terms'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/destinations'
     | '/favorites'
+    | '/privacy'
     | '/search'
     | '/sitemap.xml'
     | '/terms'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/destinations'
     | '/favorites'
+    | '/privacy'
     | '/search'
     | '/sitemap.xml'
     | '/terms'
@@ -274,6 +286,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DestinationsRoute: typeof DestinationsRoute
   FavoritesRoute: typeof FavoritesRoute
+  PrivacyRoute: typeof PrivacyRoute
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
@@ -326,6 +339,13 @@ declare module '@tanstack/react-router' {
       path: '/favorites'
       fullPath: '/favorites'
       preLoaderRoute: typeof FavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -442,6 +462,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DestinationsRoute: DestinationsRoute,
   FavoritesRoute: FavoritesRoute,
+  PrivacyRoute: PrivacyRoute,
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
