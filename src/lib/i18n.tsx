@@ -1411,10 +1411,161 @@ const tourFormRu: Dict = {
   "tourForm.tabTours": "Туры",
 };
 
+const legalEn: Dict = {
+  "nav.terms": "Terms of use",
+  "nav.privacy": "Privacy policy",
+  "nav.help": "Help & contact",
+  "footer.legal": "Legal",
+  "legal.updated": "Last updated: August 2026",
+  "terms.title": "Terms of use",
+  "terms.intro":
+    "StayLand is a listing platform. We connect travellers with Armenian hosts and tour operators; bookings and payments happen directly between you and the host.",
+  "terms.s1": "Using the platform",
+  "terms.s1b":
+    "You may browse listings freely. Creating a listing, leaving a review or saving favourites requires an account with accurate information.",
+  "terms.s2": "Listings and hosts",
+  "terms.s2b":
+    "Hosts are responsible for the accuracy of their listings, prices, availability and for honouring agreed stays. We review submissions but do not own or operate any property.",
+  "terms.s3": "Reviews",
+  "terms.s3b":
+    "Reviews must describe a genuine experience. One review per property per account. We may hide reviews that are abusive, fake or unrelated to the stay.",
+  "terms.s4": "Payments",
+  "terms.s4b":
+    "StayLand charges no booking commission and does not process payments. Agree on payment terms directly with the host before travelling.",
+  "terms.s5": "Liability",
+  "terms.s5b":
+    "The platform is provided as is. StayLand is not a party to agreements between guests and hosts and is not liable for the stay itself.",
+  "privacy.title": "Privacy policy",
+  "privacy.intro": "We collect the minimum data needed to run the marketplace and never sell personal data.",
+  "privacy.s1": "What we collect",
+  "privacy.s1b":
+    "Account email and profile name, listings and reviews you publish, favourites, and anonymous usage events such as property views and contact clicks.",
+  "privacy.s2": "How we use it",
+  "privacy.s2b":
+    "To show listings, protect against spam, and give hosts aggregated statistics about their own properties. Analytics are anonymous — hosts never see who viewed a listing.",
+  "privacy.s3": "Sharing",
+  "privacy.s3b":
+    "When you tap a phone, WhatsApp or Instagram link you contact the host directly and their platform's own rules apply.",
+  "privacy.s4": "Your rights",
+  "privacy.s4b":
+    "You can edit or delete your reviews and listings at any time, and request deletion of your account by contacting us.",
+  "help.title": "Help & contact",
+  "help.intro": "Questions about a stay, a listing or your account? We answer within one business day.",
+  "help.guests": "For travellers",
+  "help.guestsB":
+    "Find a stay, open its page and contact the host directly by phone, WhatsApp or Instagram. There is no booking fee.",
+  "help.hosts": "For hosts",
+  "help.hostsB":
+    "Create a free listing, keep your availability calendar current, and track views and contact clicks in your dashboard.",
+  "help.email": "Email",
+  "help.reply": "Response time: within 24 hours",
+};
+
+const legalHy: Dict = {
+  "nav.terms": "Օգտագործման պայմաններ",
+  "nav.privacy": "Գաղտնիության քաղաքականություն",
+  "nav.help": "Օգնություն և կապ",
+  "footer.legal": "Իրավական",
+  "legal.updated": "Վերջին թարմացումը՝ օգոստոս 2026",
+  "terms.title": "Օգտագործման պայմաններ",
+  "terms.intro":
+    "StayLand-ը հայտարարությունների հարթակ է։ Մենք կապում ենք ճանապարհորդներին հայ տանտերերի և տուր-օպերատորների հետ. ամրագրումն ու վճարումը կատարվում են ուղիղ ձեր և տանտիրոջ միջև։",
+  "terms.s1": "Հարթակի օգտագործումը",
+  "terms.s1b":
+    "Հայտարարությունները կարող եք դիտել ազատ։ Հայտարարություն ավելացնելու, կարծիք թողնելու կամ ընտրյալներ պահելու համար անհրաժեշտ է ճշգրիտ տվյալներով հաշիվ։",
+  "terms.s2": "Հայտարարություններ և տանտերեր",
+  "terms.s2b":
+    "Տանտերերը պատասխանատու են իրենց տվյալների, գների, հասանելիության և պայմանավորվածությունների կատարման համար։ Մենք ստուգում ենք հայտերը, բայց չենք տնօրինում որևէ գույք։",
+  "terms.s3": "Կարծիքներ",
+  "terms.s3b":
+    "Կարծիքը պետք է նկարագրի իրական փորձառություն։ Մեկ հաշիվ՝ մեկ կարծիք յուրաքանչյուր օբյեկտի համար։ Վիրավորական, կեղծ կամ անկապ կարծիքները կարող են թաքցվել։",
+  "terms.s4": "Վճարումներ",
+  "terms.s4b":
+    "StayLand-ը միջնորդավճար չի գանձում և վճարումներ չի մշակում։ Վճարման պայմանները ճշտեք ուղիղ տանտիրոջ հետ մինչև ուղևորությունը։",
+  "terms.s5": "Պատասխանատվություն",
+  "terms.s5b":
+    "Հարթակը տրամադրվում է «ինչպես կա» սկզբունքով։ StayLand-ը կողմ չէ հյուրի և տանտիրոջ պայմանավորվածությանը և պատասխանատու չէ բուն հանգստի համար։",
+  "privacy.title": "Գաղտնիության քաղաքականություն",
+  "privacy.intro":
+    "Հավաքում ենք միայն հարթակի աշխատանքի համար անհրաժեշտ նվազագույն տվյալները և երբեք չենք վաճառում անձնական տվյալներ։",
+  "privacy.s1": "Ինչ ենք հավաքում",
+  "privacy.s1b":
+    "Հաշվի էլ. փոստը և անունը, ձեր հրապարակած հայտարարություններն ու կարծիքները, ընտրյալները, ինչպես նաև անանուն վիճակագրություն՝ դիտումներ և կապի սեղմումներ։",
+  "privacy.s2": "Ինչպես ենք օգտագործում",
+  "privacy.s2b":
+    "Հայտարարությունները ցուցադրելու, սպամից պաշտպանվելու և տանտերերին իրենց սեփական օբյեկտների ամփոփ վիճակագրությունը տալու համար։ Վիճակագրությունն անանուն է՝ տանտերը երբեք չի տեսնում, թե ով է դիտել։",
+  "privacy.s3": "Փոխանցում երրորդ կողմերին",
+  "privacy.s3b":
+    "Հեռախոսի, WhatsApp-ի կամ Instagram-ի հղումը սեղմելիս դուք կապվում եք ուղիղ տանտիրոջ հետ, և գործում են համապատասխան հարթակի կանոնները։",
+  "privacy.s4": "Ձեր իրավունքները",
+  "privacy.s4b":
+    "Կարող եք ցանկացած պահի խմբագրել կամ ջնջել ձեր կարծիքներն ու հայտարարությունները, իսկ հաշվի ջնջման համար՝ գրել մեզ։",
+  "help.title": "Օգնություն և կապ",
+  "help.intro": "Հարցեր հանգստի, հայտարարության կամ հաշվի վերաբերյալ։ Պատասխանում ենք մեկ աշխատանքային օրվա ընթացքում։",
+  "help.guests": "Ճանապարհորդներին",
+  "help.guestsB":
+    "Գտեք կացարանը, բացեք էջը և կապվեք տանտիրոջ հետ ուղիղ՝ հեռախոսով, WhatsApp-ով կամ Instagram-ով։ Ամրագրման վճար չկա։",
+  "help.hosts": "Տանտերերին",
+  "help.hostsB":
+    "Ստեղծեք անվճար հայտարարություն, թարմ պահեք օրացույցը և հետևեք դիտումներին ու կապի սեղմումներին ձեր վահանակում։",
+  "help.email": "Էլ. փոստ",
+  "help.reply": "Պատասխանի ժամկետ՝ մինչև 24 ժամ",
+};
+
+const legalRu: Dict = {
+  "nav.terms": "Условия использования",
+  "nav.privacy": "Политика конфиденциальности",
+  "nav.help": "Помощь и контакты",
+  "footer.legal": "Правовое",
+  "legal.updated": "Обновлено: август 2026",
+  "terms.title": "Условия использования",
+  "terms.intro":
+    "StayLand — площадка объявлений. Мы связываем путешественников с армянскими хозяевами и туроператорами; бронирование и оплата происходят напрямую между вами и хозяином.",
+  "terms.s1": "Использование площадки",
+  "terms.s1b":
+    "Просматривать объявления можно свободно. Для размещения объявления, отзыва или избранного нужен аккаунт с достоверными данными.",
+  "terms.s2": "Объявления и хозяева",
+  "terms.s2b":
+    "Хозяева отвечают за точность данных, цен, доступности и за выполнение договорённостей. Мы проверяем заявки, но не владеем объектами.",
+  "terms.s3": "Отзывы",
+  "terms.s3b":
+    "Отзыв должен описывать реальный опыт. Один отзыв на объект от аккаунта. Оскорбительные, фальшивые или нерелевантные отзывы могут быть скрыты.",
+  "terms.s4": "Оплата",
+  "terms.s4b":
+    "StayLand не берёт комиссию и не обрабатывает платежи. Условия оплаты согласуйте напрямую с хозяином до поездки.",
+  "terms.s5": "Ответственность",
+  "terms.s5b":
+    "Площадка предоставляется «как есть». StayLand не является стороной договорённостей между гостем и хозяином.",
+  "privacy.title": "Политика конфиденциальности",
+  "privacy.intro": "Мы собираем минимум данных для работы площадки и никогда не продаём персональные данные.",
+  "privacy.s1": "Что мы собираем",
+  "privacy.s1b":
+    "Email и имя профиля, ваши объявления и отзывы, избранное, а также анонимные события: просмотры и клики по контактам.",
+  "privacy.s2": "Как используем",
+  "privacy.s2b":
+    "Для показа объявлений, защиты от спама и предоставления хозяевам сводной статистики по их объектам. Статистика анонимна — хозяин не видит, кто смотрел.",
+  "privacy.s3": "Передача данных",
+  "privacy.s3b":
+    "Нажимая на телефон, WhatsApp или Instagram, вы связываетесь с хозяином напрямую, и действуют правила соответствующей платформы.",
+  "privacy.s4": "Ваши права",
+  "privacy.s4b":
+    "Вы можете в любой момент изменить или удалить свои отзывы и объявления, а для удаления аккаунта — написать нам.",
+  "help.title": "Помощь и контакты",
+  "help.intro": "Вопросы по жилью, объявлению или аккаунту? Отвечаем в течение одного рабочего дня.",
+  "help.guests": "Путешественникам",
+  "help.guestsB":
+    "Найдите жильё, откройте страницу и свяжитесь с хозяином напрямую по телефону, WhatsApp или Instagram. Без комиссии.",
+  "help.hosts": "Хозяевам",
+  "help.hostsB":
+    "Создайте бесплатное объявление, поддерживайте календарь и следите за просмотрами и кликами в панели.",
+  "help.email": "Эл. почта",
+  "help.reply": "Время ответа: до 24 часов",
+};
+
 const dicts: Record<Lang, Dict> = {
-  en: { ...en, ...extraEn, ...brandEn, ...tourFormEn },
-  hy: { ...hy, ...extraHy, ...brandHy, ...tourFormHy },
-  ru: { ...ru, ...extraRu, ...brandRu, ...tourFormRu },
+  en: { ...en, ...extraEn, ...brandEn, ...tourFormEn, ...legalEn },
+  hy: { ...hy, ...extraHy, ...brandHy, ...tourFormHy, ...legalHy },
+  ru: { ...ru, ...extraRu, ...brandRu, ...tourFormRu, ...legalRu },
 };
 const enAll: Dict = dicts.en;
 
