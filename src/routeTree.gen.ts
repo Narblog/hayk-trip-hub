@@ -14,8 +14,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DestinationsRouteImport } from './routes/destinations'
 import { Route as FavoritesRouteImport } from './routes/favorites'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToursRouteImport } from './routes/tours'
 import { Route as AccountIndexRouteImport } from './routes/account.index'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
@@ -54,6 +57,16 @@ const FavoritesRoute = FavoritesRouteImport.update({
   path: '/favorites',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -62,6 +75,11 @@ const SearchRoute = SearchRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ToursRoute = ToursRouteImport.update({
@@ -132,8 +150,11 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
+  '/help': typeof HelpRoute
+  '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
@@ -153,8 +174,11 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
+  '/help': typeof HelpRoute
+  '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
@@ -175,8 +199,11 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
+  '/help': typeof HelpRoute
+  '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
@@ -198,8 +225,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/destinations'
     | '/favorites'
+    | '/help'
+    | '/privacy'
     | '/search'
     | '/sitemap.xml'
+    | '/terms'
     | '/tours'
     | '/account/notifications'
     | '/admin/cities'
@@ -219,8 +249,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/destinations'
     | '/favorites'
+    | '/help'
+    | '/privacy'
     | '/search'
     | '/sitemap.xml'
+    | '/terms'
     | '/tours'
     | '/account/notifications'
     | '/admin/cities'
@@ -240,8 +273,11 @@ export interface FileRouteTypes {
     | '/auth'
     | '/destinations'
     | '/favorites'
+    | '/help'
+    | '/privacy'
     | '/search'
     | '/sitemap.xml'
+    | '/terms'
     | '/tours'
     | '/account/notifications'
     | '/admin/cities'
@@ -262,8 +298,11 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DestinationsRoute: typeof DestinationsRoute
   FavoritesRoute: typeof FavoritesRoute
+  HelpRoute: typeof HelpRoute
+  PrivacyRoute: typeof PrivacyRoute
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
   ToursRoute: typeof ToursRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
@@ -315,6 +354,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -327,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tours': {
@@ -422,8 +482,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DestinationsRoute: DestinationsRoute,
   FavoritesRoute: FavoritesRoute,
+  HelpRoute: HelpRoute,
+  PrivacyRoute: PrivacyRoute,
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
   ToursRoute: ToursRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,

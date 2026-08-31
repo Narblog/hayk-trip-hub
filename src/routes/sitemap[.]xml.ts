@@ -10,7 +10,7 @@ export const Route = createFileRoute("/sitemap.xml")({
     handlers: {
       GET: async ({ request }) => {
         const origin = new URL(request.url).origin;
-        const staticPaths = ["/", "/search", "/tours", "/destinations", "/about"];
+        const staticPaths = ["/", "/search", "/tours", "/destinations", "/about", "/help", "/terms", "/privacy"];
 
         const [{ data: properties }, { data: tours }] = await Promise.all([
           supabase.from("properties").select("slug,updated_at").eq("status", "APPROVED").limit(2000),
