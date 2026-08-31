@@ -26,7 +26,12 @@ export function Footer() {
     },
     {
       title: t("footer.company"),
-      links: [{ to: "/about" as const, label: t("nav.about") }],
+      links: [
+        { to: "/about" as const, label: t("nav.about") },
+        { to: "/help" as const, label: t("nav.help") },
+        { to: "/terms" as const, label: t("nav.terms") },
+        { to: "/privacy" as const, label: t("nav.privacy") },
+      ],
     },
   ];
 
