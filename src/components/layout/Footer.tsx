@@ -35,9 +35,15 @@ export function Footer() {
         { to: "/help" as const, label: t("nav.help") },
         { to: "/terms" as const, label: t("nav.terms") },
         { to: "/privacy" as const, label: t("nav.privacy") },
+        ...cmsPages.map((p) => ({
+          to: "/p/$slug" as const,
+          slug: p.slug,
+          label: localized(p, "title"),
+        })),
       ],
     },
   ];
+
 
   return (
     <footer className="mt-24 border-t border-border/70 bg-surface">
