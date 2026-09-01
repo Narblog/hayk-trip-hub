@@ -24,6 +24,7 @@ import { Route as AccountIndexRouteImport } from './routes/account.index'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
+import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
@@ -108,6 +109,11 @@ const AdminCitiesRoute = AdminCitiesRouteImport.update({
   path: '/admin/cities',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPagesRoute = AdminPagesRouteImport.update({
+  id: '/admin/pages',
+  path: '/admin/pages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerIndexRoute = OwnerIndexRouteImport.update({
   id: '/owner/',
   path: '/owner/',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
+  '/admin/pages': typeof AdminPagesRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByTo {
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
+  '/admin/pages': typeof AdminPagesRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
@@ -215,6 +223,7 @@ export interface FileRoutesById {
   '/tours': typeof ToursRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
+  '/admin/pages': typeof AdminPagesRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/tours'
     | '/account/notifications'
     | '/admin/cities'
+    | '/admin/pages'
     | '/p/$slug'
     | '/property/$slug'
     | '/tour/$slug'
@@ -267,6 +277,7 @@ export interface FileRouteTypes {
     | '/tours'
     | '/account/notifications'
     | '/admin/cities'
+    | '/admin/pages'
     | '/p/$slug'
     | '/property/$slug'
     | '/tour/$slug'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/tours'
     | '/account/notifications'
     | '/admin/cities'
+    | '/admin/pages'
     | '/p/$slug'
     | '/property/$slug'
     | '/tour/$slug'
@@ -318,6 +330,7 @@ export interface RootRouteChildren {
   ToursRoute: typeof ToursRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
+  AdminPagesRoute: typeof AdminPagesRoute
   PSlugRoute: typeof PSlugRoute
   PropertySlugRoute: typeof PropertySlugRoute
   TourSlugRoute: typeof TourSlugRoute
@@ -437,6 +450,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/pages': {
+      id: '/admin/pages'
+      path: '/admin/pages'
+      fullPath: '/admin/pages'
+      preLoaderRoute: typeof AdminPagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/': {
       id: '/owner/'
       path: '/owner'
@@ -510,6 +530,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToursRoute: ToursRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
+  AdminPagesRoute: AdminPagesRoute,
   PSlugRoute: PSlugRoute,
   PropertySlugRoute: PropertySlugRoute,
   TourSlugRoute: TourSlugRoute,
