@@ -817,3 +817,88 @@ export const analyticsDailyQuery = (opts: {
       return (data ?? []) as AnalyticsDailyRow[];
     },
   });
+
+// ---------- CMS pages ----------
+export type PageRow = {
+  id: string;
+  slug: string;
+  title_en: string;
+  title_hy: string;
+  title_ru: string;
+  content_en: string;
+  content_hy: string;
+  content_ru: string;
+  seo_description_en: string | null;
+  seo_description_hy: string | null;
+  seo_description_ru: string | null;
+  show_in_footer: boolean;
+  sort_order: number;
+  is_published: boolean;
+};
+
+export type PageInput = Omit<PageRow, "id"> & { id?: string | undefined };
+
+export const footerPagesQuery = () =>
+  queryOptions({
+    queryKey: ["footer-pages"],
+    queryFn: async (): Promise<PageRow[]> => {
+      const { data, error } = await supabase
+        .from("pages")
+        .select("*")
+        .eq("is_published", true)
+        .eq("show_in_footer", true)
+        .order("sort_order");
+      if (error) throw error;
+      return (data ?? []) as PageRow[];
+    },
+  });
+
+export const pageQuery = (slug: string) =>
+  queryOptions({
+    queryKey: ["page", slug],
+    queryFn: async (): Promise<PageRow | null> => {
+      const { data, error } = await supabase.from("pages").select("*").eq("slug", slug).maybeSingle();
+      if (error) throw error;
+      return (data ?? null) as PageRow | null;
+    },
+  });
+
+export const adminPagesQuery = () =>
+  queryOptions({
+    queryKey: ["admin-pages"],
+    queryFn: async (): Promise<PageRow[]> => {
+      const { data, error } = await supabase.from("pages").select("*").order("sort_order").order("slug");
+      if (error) throw error;
+      return (data ?? []) as PageRow[];
+    },
+  });
+
+export async function adminSavePage(adminId: string, page: PageInput) {
+  const payload = {
+    ...page,
+    slug: page.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-"),
+    sort_order: Number(page.sort_order ?? 100),
+  };
+  const { error } = await supabase.from("pages").upsert(payload, { onConflict: "slug" });
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: page.id ? "page.updated" : "page.created",
+    target_type: "page",
+    target_id: page.id ?? null,
+    notes: payload.slug,
+  });
+  return payload;
+}
+
+export async function adminDeletePage(adminId: string, id: string, slug: string) {
+  const { error } = await supabase.from("pages").delete().eq("id", id);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "page.deleted",
+    target_type: "page",
+    target_id: id,
+    notes: slug,
+  });
+}

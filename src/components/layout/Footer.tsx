@@ -1,11 +1,15 @@
 import { Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Instagram, Facebook, Send } from "lucide-react";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { footerPagesQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 
 export function Footer() {
-  const { t } = useI18n();
+  const { t, localized } = useI18n();
+  const { data: cmsPages = [] } = useQuery(footerPagesQuery());
+
 
   const columns = [
     {
@@ -31,9 +35,15 @@ export function Footer() {
         { to: "/help" as const, label: t("nav.help") },
         { to: "/terms" as const, label: t("nav.terms") },
         { to: "/privacy" as const, label: t("nav.privacy") },
+        ...cmsPages.map((p) => ({
+          to: "/p/$slug" as const,
+          slug: p.slug,
+          label: localized(p, "title"),
+        })),
       ],
     },
   ];
+
 
   return (
     <footer className="mt-24 border-t border-border/70 bg-surface">
@@ -63,9 +73,15 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {col.links.map((l) => (
                 <li key={l.to + l.label}>
-                  <Link to={l.to} className="hover:text-brand">
-                    {l.label}
-                  </Link>
+                  {"slug" in l ? (
+                    <Link to="/p/$slug" params={{ slug: l.slug }} className="hover:text-brand">
+                      {l.label}
+                    </Link>
+                  ) : (
+                    <Link to={l.to} className="hover:text-brand">
+                      {l.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

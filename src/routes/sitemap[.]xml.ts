@@ -12,10 +12,12 @@ export const Route = createFileRoute("/sitemap.xml")({
         const origin = new URL(request.url).origin;
         const staticPaths = ["/", "/search", "/tours", "/destinations", "/about", "/help", "/terms", "/privacy"];
 
-        const [{ data: properties }, { data: tours }] = await Promise.all([
+        const [{ data: properties }, { data: tours }, { data: pages }] = await Promise.all([
           supabase.from("properties").select("slug,updated_at").eq("status", "APPROVED").limit(2000),
           supabase.from("tours").select("slug,updated_at").eq("status", "APPROVED").limit(2000),
+          supabase.from("pages").select("slug,updated_at").eq("is_published", true).limit(500),
         ]);
+
 
         const body =
           `<?xml version="1.0" encoding="UTF-8"?>` +

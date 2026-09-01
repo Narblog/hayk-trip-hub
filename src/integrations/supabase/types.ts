@@ -270,6 +270,63 @@ export type Database = {
         }
         Relationships: []
       }
+      pages: {
+        Row: {
+          content_en: string
+          content_hy: string
+          content_ru: string
+          created_at: string
+          id: string
+          is_published: boolean
+          seo_description_en: string | null
+          seo_description_hy: string | null
+          seo_description_ru: string | null
+          show_in_footer: boolean
+          slug: string
+          sort_order: number
+          title_en: string
+          title_hy: string
+          title_ru: string
+          updated_at: string
+        }
+        Insert: {
+          content_en?: string
+          content_hy?: string
+          content_ru?: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          seo_description_en?: string | null
+          seo_description_hy?: string | null
+          seo_description_ru?: string | null
+          show_in_footer?: boolean
+          slug: string
+          sort_order?: number
+          title_en: string
+          title_hy: string
+          title_ru: string
+          updated_at?: string
+        }
+        Update: {
+          content_en?: string
+          content_hy?: string
+          content_ru?: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          seo_description_en?: string | null
+          seo_description_hy?: string | null
+          seo_description_ru?: string | null
+          show_in_footer?: boolean
+          slug?: string
+          sort_order?: number
+          title_en?: string
+          title_hy?: string
+          title_ru?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       platform_settings: {
         Row: {
           key: string
