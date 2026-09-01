@@ -73,9 +73,15 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {col.links.map((l) => (
                 <li key={l.to + l.label}>
-                  <Link to={l.to} className="hover:text-brand">
-                    {l.label}
-                  </Link>
+                  {"slug" in l ? (
+                    <Link to="/p/$slug" params={{ slug: l.slug }} className="hover:text-brand">
+                      {l.label}
+                    </Link>
+                  ) : (
+                    <Link to={l.to} className="hover:text-brand">
+                      {l.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
