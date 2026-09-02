@@ -80,9 +80,14 @@ function AdminPagesPage() {
     return <div className="container-page py-16 text-center text-muted-foreground">{t("error.title")}</div>;
 
   const submit = () => {
-    if (!form.slug.trim()) return toast.error(t("cms.errSlug"));
-    if (!form.title_hy.trim() || !form.title_en.trim() || !form.title_ru.trim())
-      return toast.error(t("cms.errTitle"));
+    if (!form.slug.trim()) {
+      toast.error(t("cms.errSlug"));
+      return;
+    }
+    if (!form.title_hy.trim() || !form.title_en.trim() || !form.title_ru.trim()) {
+      toast.error(t("cms.errTitle"));
+      return;
+    }
     save.mutate(form);
   };
 
