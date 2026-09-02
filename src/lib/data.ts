@@ -874,13 +874,27 @@ export const adminPagesQuery = () =>
   });
 
 export async function adminSavePage(adminId: string, page: PageInput) {
+  const { id, ...rest } = page;
   const payload = {
-    ...page,
+    ...rest,
     slug: page.slug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-"),
     sort_order: Number(page.sort_order ?? 100),
   };
-  const { error } = await supabase.from("pages").upsert(payload, { onConflict: "slug" });
-  if (error) throw error;
+  // Block slug reuse across pages: renaming an existing page to another page's
+  // slug, or creating a new page with an existing slug, must not overwrite.
+  const { data: clash } = await supabase
+    .from("pages")
+    .select("id")
+    .eq("slug", payload.slug)
+    .maybeSingle();
+  if (clash && clash.id !== id) throw new Error(`Slug "${payload.slug}" is already used by another page`);
+  if (id) {
+    const { error } = await supabase.from("pages").update(payload).eq("id", id);
+    if (error) throw error;
+  } else {
+    const { error } = await supabase.from("pages").insert(payload);
+    if (error) throw error;
+  }
   await supabase.from("admin_actions").insert({
     admin_id: adminId,
     action: page.id ? "page.updated" : "page.created",
