@@ -1062,6 +1062,13 @@ const ru: Dict = {
   "reviews.ownerCannot": "Нельзя оценивать собственное жильё",
   "reviews.basedOn": "на основе {n} отзывов",
   "reviews.new": "Новое · Пока нет оценок",
+  "related.tours": "Туры поблизости",
+  "related.toursSub": "Впечатления в этом регионе — для вашего отдыха",
+  "related.seeAllTours": "Все туры",
+  "admin.featured": "Избранное",
+  "admin.markFeatured": "Отметить как избранное",
+  "admin.unmarkFeatured": "Убрать из избранного",
+
   "analytics.title": "Аналитика",
   "analytics.7": "Последние 7 дней",
   "analytics.30": "Последние 30 дней",
