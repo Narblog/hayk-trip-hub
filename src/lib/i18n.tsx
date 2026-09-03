@@ -702,6 +702,13 @@ const hy: Dict = {
   "reviews.ownerCannot": "Չեք կարող գնահատել ձեր սեփական կացարանը",
   "reviews.basedOn": "{n} կարծիքի հիման վրա",
   "reviews.new": "Նոր · Դեռ գնահատական չկա",
+  "related.tours": "Տուրեր մոտակայքում",
+  "related.toursSub": "Այս մարզի փորձառությունները՝ ձեր հանգստի համար",
+  "related.seeAllTours": "Բոլոր տուրերը",
+  "admin.featured": "Ընտրված",
+  "admin.markFeatured": "Նշել որպես ընտրված",
+  "admin.unmarkFeatured": "Հանել ընտրվածներից",
+
   "analytics.title": "Վերլուծություն",
   "analytics.7": "Վերջին 7 օրը",
   "analytics.30": "Վերջին 30 օրը",
