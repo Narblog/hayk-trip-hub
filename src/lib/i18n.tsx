@@ -342,6 +342,13 @@ const en: Dict = {
   "reviews.ownerCannot": "You cannot review your own property",
   "reviews.basedOn": "based on {n} reviews",
   "reviews.new": "New · No ratings yet",
+  "related.tours": "Tours nearby",
+  "related.toursSub": "Experiences in this region, hand-picked for your stay",
+  "related.seeAllTours": "All tours",
+  "admin.featured": "Featured",
+  "admin.markFeatured": "Mark as featured",
+  "admin.unmarkFeatured": "Remove from featured",
+
   "analytics.title": "Analytics",
   "analytics.7": "Last 7 days",
   "analytics.30": "Last 30 days",
