@@ -581,6 +581,49 @@ export const toursListQuery = () =>
     },
   });
 
+// Related tours for a property: same region (or city), featured first.
+export const relatedToursQuery = (regionCode: string | null | undefined, cityCode: string | null | undefined) =>
+  queryOptions({
+    queryKey: ["related-tours", regionCode ?? null, cityCode ?? null],
+    enabled: !!(regionCode || cityCode),
+    staleTime: 1000 * 60 * 5,
+    queryFn: async () => {
+      const filters: string[] = [];
+      if (regionCode) filters.push(`region_code.eq.${regionCode}`);
+      if (cityCode) filters.push(`city_code.eq.${cityCode}`);
+      const { data, error } = await supabase
+        .from("tours")
+        .select(
+          "id,name,slug,category,city_code,region_code,location,duration_hours,currency,price,main_image_url,rating,review_count,is_featured",
+        )
+        .eq("status", "APPROVED")
+        .or(filters.join(","))
+        .order("is_featured", { ascending: false })
+        .order("rating", { ascending: false, nullsFirst: false })
+        .limit(3);
+      if (error) throw error;
+      return (data ?? []) as RelatedTour[];
+    },
+  });
+
+export type RelatedTour = {
+  id: string;
+  name: string;
+  slug: string;
+  category: string | null;
+  city_code: string | null;
+  region_code: string | null;
+  location: string | null;
+  duration_hours: number | null;
+  currency: string;
+  price: number;
+  main_image_url: string | null;
+  rating: number;
+  review_count: number;
+  is_featured: boolean;
+};
+
+
 // ---------- destinations ----------
 export type DestinationItem = {
   code: string;
