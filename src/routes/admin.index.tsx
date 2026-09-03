@@ -22,6 +22,7 @@ import {
   adminDeleteTour,
   adminPropertiesQuery,
   adminSetStatus,
+  adminSetTourFeatured,
   adminSetTourStatus,
   adminStatsQuery,
   adminToursQuery,
@@ -69,6 +70,17 @@ function AdminPage() {
       adminSetTourStatus(user!.id, id, status),
     onSuccess: () => {
       toast.success(t("common.save"));
+      refresh();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const setTourFeatured = useMutation({
+    mutationFn: ({ id, featured }: { id: string; featured: boolean }) =>
+      adminSetTourFeatured(user!.id, id, featured),
+    onSuccess: () => {
+      toast.success(t("common.save"));
+      void qc.invalidateQueries({ queryKey: ["related-tours"] });
       refresh();
     },
     onError: (e: Error) => toast.error(e.message),

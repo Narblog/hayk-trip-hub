@@ -1,0 +1,2 @@
+ALTER TABLE public.tours ADD COLUMN IF NOT EXISTS is_featured boolean NOT NULL DEFAULT false;
+CREATE INDEX IF NOT EXISTS tours_region_featured_idx ON public.tours (region_code, is_featured DESC, rating DESC);

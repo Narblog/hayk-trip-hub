@@ -950,6 +950,7 @@ export type Database = {
           duration_hours: number | null
           id: string
           is_demo: boolean
+          is_featured: boolean
           latitude: number | null
           location: string | null
           longitude: number | null
@@ -982,6 +983,7 @@ export type Database = {
           duration_hours?: number | null
           id?: string
           is_demo?: boolean
+          is_featured?: boolean
           latitude?: number | null
           location?: string | null
           longitude?: number | null
@@ -1014,6 +1016,7 @@ export type Database = {
           duration_hours?: number | null
           id?: string
           is_demo?: boolean
+          is_featured?: boolean
           latitude?: number | null
           location?: string | null
           longitude?: number | null
