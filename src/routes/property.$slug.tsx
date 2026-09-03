@@ -29,6 +29,70 @@ export const Route = createFileRoute("/property/$slug")({
 
 type Img = { id: string; image_url: string; is_cover: boolean | null; sort_order: number };
 
+function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cityCode: string | null }) {
+  const { t, lang, localized } = useI18n();
+  const { data: ref } = useQuery(refDataQuery());
+  const { data } = useQuery(relatedToursQuery(regionCode, cityCode));
+  const tours = data ?? [];
+  if (!tours.length) return null;
+
+  return (
+    <section className="mt-12">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 className="font-display text-xl font-semibold">{t("related.tours")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("related.toursSub")}</p>
+        </div>
+        <Link
+          to="/tours"
+          className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold transition-colors hover:border-brand hover:text-brand"
+        >
+          {t("related.seeAllTours")}
+        </Link>
+      </div>
+
+      <div className="scrollbar-none -mx-4 mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0">
+        {tours.map((tr) => (
+          <Link
+            key={tr.id}
+            to="/tour/$slug"
+            params={{ slug: tr.slug }}
+            className="group w-[82%] shrink-0 snap-start overflow-hidden rounded-3xl border border-border/70 bg-card shadow-card transition-all hover:-translate-y-1 hover:shadow-lift sm:w-auto"
+          >
+            <div className="relative aspect-16/10 overflow-hidden bg-surface">
+              {tr.main_image_url ? (
+                <img
+                  src={tr.main_image_url}
+                  alt={tr.name}
+                  loading="lazy"
+                  className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : null}
+              {tr.review_count > 0 ? (
+                <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-card/90 px-2.5 py-1 text-xs font-semibold backdrop-blur">
+                  <Star className="size-3 fill-gold text-gold" />
+                  {Number(tr.rating).toFixed(1)}
+                </span>
+              ) : null}
+            </div>
+            <div className="space-y-2 p-4">
+              <h3 className="line-clamp-1 font-display text-base font-semibold">{tr.name}</h3>
+              <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <MapPin className="size-3.5" />
+                {localized(ref?.cities.find((c) => c.code === tr.city_code), "name") || tr.location || tr.city_code}
+              </p>
+              <p className="font-display text-base text-brand">
+                {formatPrice(Number(tr.price), tr.currency ?? "AMD", lang)}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
 function PropertyPage() {
   const { slug } = Route.useParams();
   const { t, lang, localized } = useI18n();
