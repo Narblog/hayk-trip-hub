@@ -693,6 +693,17 @@ export const adminToursQuery = (status: string) =>
     },
   });
 
+export async function adminSetTourFeatured(adminId: string, tourId: string, isFeatured: boolean) {
+  const { error } = await supabase.from("tours").update({ is_featured: isFeatured }).eq("id", tourId);
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: isFeatured ? "tour.featured" : "tour.unfeatured",
+    target_type: "tour",
+    target_id: tourId,
+  });
+}
+
 export async function adminSetTourStatus(adminId: string, tourId: string, status: ListingStatus, note?: string) {
   const { error } = await supabase
     .from("tours")
