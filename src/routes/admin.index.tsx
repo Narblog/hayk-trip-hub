@@ -22,6 +22,7 @@ import {
   adminDeleteTour,
   adminPropertiesQuery,
   adminSetStatus,
+  adminSetTourFeatured,
   adminSetTourStatus,
   adminStatsQuery,
   adminToursQuery,
