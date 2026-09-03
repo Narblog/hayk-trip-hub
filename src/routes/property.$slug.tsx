@@ -282,7 +282,10 @@ function PropertyPage() {
           <div id="reviews" className="scroll-mt-24">
             <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
           </div>
+
+          <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} />
         </div>
+
 
 
         <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
