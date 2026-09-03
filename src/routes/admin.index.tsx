@@ -74,6 +74,17 @@ function AdminPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const setTourFeatured = useMutation({
+    mutationFn: ({ id, featured }: { id: string; featured: boolean }) =>
+      adminSetTourFeatured(user!.id, id, featured),
+    onSuccess: () => {
+      toast.success(t("common.save"));
+      void qc.invalidateQueries({ queryKey: ["related-tours"] });
+      refresh();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const removeTour = useMutation({
     mutationFn: (id: string) => adminDeleteTour(user!.id, id),
     onSuccess: () => {
