@@ -56,7 +56,7 @@ function PropertyPage() {
     );
 
   const p = data as unknown as {
-    id: string; name: string; description: string | null; city_code: string | null;
+    id: string; name: string; description: string | null; city_code: string | null; region_code: string | null;
     price_per_night: number; currency: string; max_guests: number; bedrooms: number;
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
