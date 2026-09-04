@@ -253,6 +253,15 @@ function AdminPage() {
                   ) : null}
                   <Button
                     size="sm"
+                    variant={tr.is_featured ? "secondary" : "outline"}
+                    onClick={() =>
+                      setTourFeatured.mutate({ id: tr.id, featured: !tr.is_featured })
+                    }
+                  >
+                    {tr.is_featured ? t("admin.unmarkFeatured") : t("admin.markFeatured")}
+                  </Button>
+                  <Button
+                    size="sm"
                     variant="destructive"
                     onClick={() => {
                       if (confirm(`${t("common.delete")}: ${tr.name}?`)) removeTour.mutate(tr.id);
