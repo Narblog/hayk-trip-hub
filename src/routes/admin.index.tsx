@@ -212,6 +212,11 @@ function AdminPage() {
                   <div className="flex items-center gap-2">
                     <p className="font-display text-lg font-semibold">{tr.name}</p>
                     <StatusBadge status={tr.status} />
+                    {tr.is_featured ? (
+                      <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-[11px] font-medium text-brand">
+                        {t("admin.featured")}
+                      </span>
+                    ) : null}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {tr.city_code ?? tr.location ?? "—"} ·{" "}
