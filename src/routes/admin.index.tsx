@@ -212,6 +212,11 @@ function AdminPage() {
                   <div className="flex items-center gap-2">
                     <p className="font-display text-lg font-semibold">{tr.name}</p>
                     <StatusBadge status={tr.status} />
+                    {tr.is_featured ? (
+                      <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-[11px] font-medium text-brand">
+                        {t("admin.featured")}
+                      </span>
+                    ) : null}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {tr.city_code ?? tr.location ?? "—"} ·{" "}
@@ -246,6 +251,15 @@ function AdminPage() {
                       {t("admin.reject")}
                     </Button>
                   ) : null}
+                  <Button
+                    size="sm"
+                    variant={tr.is_featured ? "secondary" : "outline"}
+                    onClick={() =>
+                      setTourFeatured.mutate({ id: tr.id, featured: !tr.is_featured })
+                    }
+                  >
+                    {tr.is_featured ? t("admin.unmarkFeatured") : t("admin.markFeatured")}
+                  </Button>
                   <Button
                     size="sm"
                     variant="destructive"
