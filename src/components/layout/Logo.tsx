@@ -7,7 +7,7 @@ export function Logo({ inverted = false }: { inverted?: boolean }) {
       <img
         src={logoAsset.url}
         alt="StayLand"
-        className={`h-9 w-auto transition-opacity group-hover:opacity-80 ${inverted ? "brightness-0 invert" : ""}`}
+        className={`h-9 w-auto bg-transparent transition-opacity group-hover:opacity-80 ${inverted ? "brightness-0 invert" : ""}`}
       />
     </Link>
   );
