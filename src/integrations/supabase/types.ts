@@ -119,6 +119,104 @@ export type Database = {
           },
         ]
       }
+      booking_requests: {
+        Row: {
+          adults: number
+          cancelled_at: string | null
+          check_in: string
+          check_out: string
+          children: number
+          confirmed_total_price: number | null
+          created_at: string
+          currency: string
+          customer_user_id: string | null
+          decline_reason: string | null
+          guest_email: string | null
+          guest_name: string
+          guest_phone: string
+          guest_token_hash: string | null
+          id: string
+          infants: number
+          message: string | null
+          nightly_price: number
+          nights: number
+          owner_id: string | null
+          price_change_note: string | null
+          property_id: string
+          reference: string
+          responded_at: string | null
+          status: Database["public"]["Enums"]["booking_status"]
+          total_price: number
+          updated_at: string
+        }
+        Insert: {
+          adults?: number
+          cancelled_at?: string | null
+          check_in: string
+          check_out: string
+          children?: number
+          confirmed_total_price?: number | null
+          created_at?: string
+          currency?: string
+          customer_user_id?: string | null
+          decline_reason?: string | null
+          guest_email?: string | null
+          guest_name: string
+          guest_phone: string
+          guest_token_hash?: string | null
+          id?: string
+          infants?: number
+          message?: string | null
+          nightly_price: number
+          nights: number
+          owner_id?: string | null
+          price_change_note?: string | null
+          property_id: string
+          reference: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price: number
+          updated_at?: string
+        }
+        Update: {
+          adults?: number
+          cancelled_at?: string | null
+          check_in?: string
+          check_out?: string
+          children?: number
+          confirmed_total_price?: number | null
+          created_at?: string
+          currency?: string
+          customer_user_id?: string | null
+          decline_reason?: string | null
+          guest_email?: string | null
+          guest_name?: string
+          guest_phone?: string
+          guest_token_hash?: string | null
+          id?: string
+          infants?: number
+          message?: string | null
+          nightly_price?: number
+          nights?: number
+          owner_id?: string | null
+          price_change_note?: string | null
+          property_id?: string
+          reference?: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_requests_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cities: {
         Row: {
           code: string
@@ -641,6 +739,91 @@ export type Database = {
           },
         ]
       }
+      property_pricing: {
+        Row: {
+          base_price: number | null
+          created_at: string
+          currency: string
+          extra_guest_price: number | null
+          fixed_price: number | null
+          id: string
+          included_guests: number
+          pricing_type: Database["public"]["Enums"]["pricing_type"]
+          property_id: string
+          updated_at: string
+        }
+        Insert: {
+          base_price?: number | null
+          created_at?: string
+          currency?: string
+          extra_guest_price?: number | null
+          fixed_price?: number | null
+          id?: string
+          included_guests?: number
+          pricing_type?: Database["public"]["Enums"]["pricing_type"]
+          property_id: string
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number | null
+          created_at?: string
+          currency?: string
+          extra_guest_price?: number | null
+          fixed_price?: number | null
+          id?: string
+          included_guests?: number
+          pricing_type?: Database["public"]["Enums"]["pricing_type"]
+          property_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_pricing_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_pricing_tiers: {
+        Row: {
+          created_at: string
+          id: string
+          max_guests: number
+          min_guests: number
+          price_per_night: number
+          property_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          max_guests: number
+          min_guests: number
+          price_per_night: number
+          property_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          max_guests?: number
+          min_guests?: number
+          price_per_night?: number
+          property_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_pricing_tiers_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_status_history: {
         Row: {
           changed_by: string | null
@@ -1087,9 +1270,64 @@ export type Database = {
     }
     Functions: {
       become_owner: { Args: never; Returns: undefined }
+      booking_by_token: {
+        Args: { p_booking_id: string; p_token: string }
+        Returns: {
+          adults: number
+          check_in: string
+          check_out: string
+          children: number
+          confirmed_total_price: number
+          created_at: string
+          currency: string
+          decline_reason: string
+          id: string
+          infants: number
+          nightly_price: number
+          nights: number
+          price_change_note: string
+          property_name: string
+          property_slug: string
+          reference: string
+          status: Database["public"]["Enums"]["booking_status"]
+          total_price: number
+        }[]
+      }
+      booking_dates_available: {
+        Args: {
+          p_check_in: string
+          p_check_out: string
+          p_exclude?: string
+          p_property_id: string
+        }
+        Returns: boolean
+      }
+      cancel_booking_request: {
+        Args: { p_booking_id: string; p_token?: string }
+        Returns: boolean
+      }
       check_property_availability: {
         Args: { p_check_in: string; p_check_out: string; p_property_id: string }
         Returns: boolean
+      }
+      create_booking_request: {
+        Args: {
+          p_adults: number
+          p_check_in: string
+          p_check_out: string
+          p_children: number
+          p_email: string
+          p_infants: number
+          p_message: string
+          p_name: string
+          p_phone: string
+          p_property_id: string
+        }
+        Returns: {
+          booking_id: string
+          guest_token: string
+          reference: string
+        }[]
       }
       increment_property_view: {
         Args: { p_property_id: string }
@@ -1133,6 +1371,24 @@ export type Database = {
           rating: number
           user_id: string
         }[]
+      }
+      quote_property_price: {
+        Args: { p_guests: number; p_property_id: string }
+        Returns: {
+          currency: string
+          has_price: boolean
+          nightly_price: number
+        }[]
+      }
+      respond_booking_request: {
+        Args: {
+          p_action: string
+          p_booking_id: string
+          p_confirmed_total?: number
+          p_note?: string
+          p_reason?: string
+        }
+        Returns: boolean
       }
       search_properties: {
         Args: {
@@ -1186,6 +1442,12 @@ export type Database = {
       account_status: "ACTIVE" | "SUSPENDED"
       app_role: "admin" | "owner" | "traveler"
       availability_status: "AVAILABLE" | "BLOCKED" | "RESERVED"
+      booking_status:
+        | "PENDING"
+        | "ACCEPTED"
+        | "DECLINED"
+        | "CANCELLED"
+        | "COMPLETED"
       contact_type: "PHONE" | "WHATSAPP" | "INSTAGRAM" | "EMAIL" | "TELEGRAM"
       listing_status:
         | "DRAFT"
@@ -1194,6 +1456,7 @@ export type Database = {
         | "REJECTED"
         | "SUSPENDED"
         | "CHANGES_REQUESTED"
+      pricing_type: "FIXED" | "TIERED" | "BASE_PLUS_GUEST"
       review_status: "PENDING" | "APPROVED" | "REJECTED"
     }
     CompositeTypes: {
@@ -1325,6 +1588,13 @@ export const Constants = {
       account_status: ["ACTIVE", "SUSPENDED"],
       app_role: ["admin", "owner", "traveler"],
       availability_status: ["AVAILABLE", "BLOCKED", "RESERVED"],
+      booking_status: [
+        "PENDING",
+        "ACCEPTED",
+        "DECLINED",
+        "CANCELLED",
+        "COMPLETED",
+      ],
       contact_type: ["PHONE", "WHATSAPP", "INSTAGRAM", "EMAIL", "TELEGRAM"],
       listing_status: [
         "DRAFT",
@@ -1334,6 +1604,7 @@ export const Constants = {
         "SUSPENDED",
         "CHANGES_REQUESTED",
       ],
+      pricing_type: ["FIXED", "TIERED", "BASE_PLUS_GUEST"],
       review_status: ["PENDING", "APPROVED", "REJECTED"],
     },
   },
