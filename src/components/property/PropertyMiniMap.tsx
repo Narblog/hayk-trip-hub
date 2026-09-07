@@ -15,9 +15,9 @@ export default function PropertyMiniMap({ lat, lng }: { lat: number; lng: number
     }).setView([lat, lng], 13);
 
     L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 18,
       },
     ).addTo(m);

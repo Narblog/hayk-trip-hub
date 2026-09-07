@@ -33,8 +33,8 @@ export default function SearchMap({
   useEffect(() => {
     if (!el.current || map.current) return;
     const m = L.map(el.current, { scrollWheelZoom: false, zoomControl: true }).setView(ARMENIA_CENTER, 7);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap contributors',
       maxZoom: 19,
     }).addTo(m);
     layer.current = L.layerGroup().addTo(m);
