@@ -13,7 +13,7 @@ import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackPropertyEvent } from "@/lib/analytics";
-import { propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
+import { propertyHostQuery, propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -553,7 +553,9 @@ function PropertyPage() {
           <section className="mt-5 border-t border-border pt-5">
             <div className="flex min-w-0 items-center gap-3">
               <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-surface">
-                {p.main_image_url ? (
+                {host?.avatar_url ? (
+                  <img src={host.avatar_url} alt={host.full_name} className="size-full object-cover" />
+                ) : p.main_image_url ? (
                   <img src={p.main_image_url} alt="" className="size-full object-cover" />
                 ) : (
                   <Users className="size-5 text-muted-foreground" />
@@ -561,7 +563,7 @@ function PropertyPage() {
               </div>
               <div className="min-w-0">
                 <p className="flex min-w-0 flex-wrap items-center gap-2 font-display text-base font-semibold">
-                  <span className="truncate">{t("property.hostedBy")} StayLand</span>
+                  <span className="truncate">{t("property.hostedBy")} {host?.full_name || "StayLand"}</span>
                   {p.review_count >= 5 && Number(p.rating) >= 4.5 ? (
                     <span className="shrink-0 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand">{t("property.superhost")}</span>
                   ) : null}
