@@ -1,7 +1,7 @@
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
+import { CarFront, ChevronLeft, ChevronRight, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
 import { toast } from "sonner";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
@@ -431,8 +431,14 @@ function PropertyPage() {
             <p className="mt-4 whitespace-pre-line leading-relaxed text-muted-foreground">{p.description}</p>
           ) : null}
 
+          <div aria-hidden="true" className="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 text-brand">
+            <span className="h-px bg-border" />
+            <CarFront className="size-5" strokeWidth={1.75} />
+            <span className="h-px bg-border" />
+          </div>
+
           {amenityList.length ? (
-            <section className="mt-8">
+            <section className="mt-4">
               <h2 className="font-display text-xl font-semibold">{t("property.amenities")}</h2>
               <div className="mt-4 flex flex-wrap gap-2.5">
                 {amenityList.map((a) => (
