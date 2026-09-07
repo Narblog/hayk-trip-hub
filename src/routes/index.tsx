@@ -161,7 +161,7 @@ function Home() {
               </span>
               <Link
                 to="/tours"
-                className="flex items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
               >
                 <CarFront className="size-4" />
                 {t("home.tabTours")}
@@ -170,7 +170,7 @@ function Home() {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
                   >
                     <Gift className="size-4" />
                     {t("home.tabPackages")}
