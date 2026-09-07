@@ -108,12 +108,12 @@ function Row({
 function Vibes() {
   const { t } = useI18n();
   const vibes = [
-    { img: vibeForest, label: t("vibe.forest") },
-    { img: vibeLake, label: t("vibe.lake") },
-    { img: vibeJacuzzi, label: t("vibe.jacuzzi") },
-    { img: vibeFamily, label: t("vibe.family") },
-    { img: vibeRomantic, label: t("vibe.romantic") },
-    { img: vibeMountain, label: t("vibe.mountain") },
+    { img: vibeForest, label: t("vibe.forest"), search: { guests: 2, page: 1, amenities: ["forest_view"] } as const },
+    { img: vibeLake, label: t("vibe.lake"), search: { guests: 2, page: 1, amenities: ["lake_view"] } as const },
+    { img: vibeJacuzzi, label: t("vibe.jacuzzi"), search: { guests: 2, page: 1, amenities: ["jacuzzi"] } as const },
+    { img: vibeFamily, label: t("vibe.family"), search: { guests: 2, page: 1 } as const },
+    { img: vibeRomantic, label: t("vibe.romantic"), search: { guests: 2, page: 1, amenities: ["fireplace"] } as const },
+    { img: vibeMountain, label: t("vibe.mountain"), search: { guests: 2, page: 1, amenities: ["mountain_view"] } as const },
   ];
   return (
     <section className="mt-14 md:mt-16">
@@ -123,7 +123,7 @@ function Vibes() {
           <Link
             key={v.label}
             to="/search"
-            search={{ guests: 2, page: 1 }}
+            search={v.search}
             className="group relative w-40 shrink-0 snap-start overflow-hidden rounded-2xl shadow-card transition-shadow hover:shadow-lift sm:w-auto"
           >
             <div className="relative aspect-[5/4] overflow-hidden">
