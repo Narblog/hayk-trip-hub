@@ -1361,6 +1361,13 @@ export type Database = {
           whatsapp_clicks: number
         }[]
       }
+      property_host: {
+        Args: { p_property_id: string }
+        Returns: {
+          avatar_url: string
+          full_name: string
+        }[]
+      }
       property_reviews: {
         Args: { p_property_id: string }
         Returns: {

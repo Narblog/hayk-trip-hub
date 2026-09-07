@@ -400,6 +400,38 @@ export const profileQuery = (userId: string | null) =>
     },
   });
 
+export const propertyHostQuery = (propertyId: string | undefined) =>
+  queryOptions({
+    queryKey: ["property-host", propertyId],
+    enabled: !!propertyId,
+    queryFn: async () => {
+      const rpc = supabase.rpc as unknown as (
+        fn: "property_host",
+        args: { p_property_id: string },
+      ) => Promise<{ data: { full_name: string; avatar_url: string | null }[] | null; error: unknown }>;
+      const { data } = await rpc("property_host", { p_property_id: propertyId! });
+      return data?.[0] ?? null;
+    },
+  });
+
+export async function uploadAvatar(userId: string, file: File) {
+  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const path = `${userId}/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: true });
+  if (error) throw error;
+  const { data } = await supabase.storage.from("avatars").createSignedUrl(path, 60 * 60 * 24 * 365 * 5);
+  const url = data?.signedUrl;
+  if (!url) throw new Error("UPLOAD_FAILED");
+  const { error: upErr } = await supabase.from("profiles").update({ avatar_url: url }).eq("id", userId);
+  if (upErr) throw upErr;
+  return url;
+}
+
+export async function updateProfileInfo(userId: string, input: { full_name?: string; phone?: string }) {
+  const { error } = await supabase.from("profiles").update(input).eq("id", userId);
+  if (error) throw error;
+}
+
 // ---------- admin ----------
 export const adminStatsQuery = () =>
   queryOptions({
@@ -1138,11 +1170,11 @@ export type BookingRow = {
   status: BookingStatus;
   decline_reason: string | null;
   created_at: string;
-  properties?: { name: string; slug: string } | null;
+  properties?: { name: string; slug: string; main_image_url: string | null; city_code: string | null } | null;
 };
 
 const BOOKING_COLUMNS =
-  "id, reference, property_id, guest_name, guest_phone, guest_email, message, check_in, check_out, nights, adults, children, infants, nightly_price, total_price, confirmed_total_price, price_change_note, currency, status, decline_reason, created_at, properties(name, slug)";
+  "id, reference, property_id, guest_name, guest_phone, guest_email, message, check_in, check_out, nights, adults, children, infants, nightly_price, total_price, confirmed_total_price, price_change_note, currency, status, decline_reason, created_at, properties(name, slug, main_image_url, city_code)";
 
 export const ownerBookingsQuery = (userId: string | null) =>
   queryOptions({
