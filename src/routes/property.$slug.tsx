@@ -168,6 +168,7 @@ function PropertyPage() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
   const propertyId = (data as { id?: string } | null | undefined)?.id ?? null;
+  const { data: host } = useQuery(propertyHostQuery(propertyId ?? undefined));
 
   useEffect(() => {
     if (propertyId) void trackPropertyEvent(propertyId, "property_view");
