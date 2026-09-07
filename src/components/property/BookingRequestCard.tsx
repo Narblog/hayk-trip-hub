@@ -173,8 +173,8 @@ export function BookingRequestCard({
 
   const alreadySent = useMemo(() => {
     if (!checkIn || !checkOut || nights <= 0) return false;
-    return sentRanges.some((r) => overlaps(r, { checkIn, checkOut }));
-  }, [checkIn, checkOut, nights, sentRanges]);
+    return activeRanges.some((r) => overlaps(r, { checkIn, checkOut }));
+  }, [checkIn, checkOut, nights, activeRanges]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
