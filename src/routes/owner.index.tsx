@@ -2,8 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
+import { CalendarClock, CheckCircle2, Eye, Wallet } from "lucide-react";
 import { InlineLoader } from "@/components/common/states";
+import { OwnerShell } from "@/components/owner/OwnerShell";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
@@ -12,10 +13,9 @@ import {
   ownerBookingsQuery,
   ownerPropertiesQuery,
   ownerStatsQuery,
-  ownerStatusHistoryQuery,
   ownerToursQuery,
 } from "@/lib/data";
-import { formatDate } from "@/lib/format";
+import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/owner/")({
@@ -30,17 +30,29 @@ export const Route = createFileRoute("/owner/")({
   component: OwnerDashboard,
 });
 
+export function monthRevenue(rows: { status: string; check_in: string; total_price: number; confirmed_total_price: number | null }[]) {
+  const now = new Date();
+  return rows
+    .filter((b) => b.status === "ACCEPTED" || b.status === "COMPLETED")
+    .filter((b) => {
+      const d = new Date(b.check_in);
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    })
+    .reduce((s, b) => s + Number(b.confirmed_total_price ?? b.total_price), 0);
+}
+
 function OwnerDashboard() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { user, isOwner } = useAuth();
   const queryClient = useQueryClient();
   const [upgrading, setUpgrading] = useState(false);
   const { data: stats } = useQuery(ownerStatsQuery(user?.id ?? null));
   const { data: props, isPending } = useQuery(ownerPropertiesQuery(user?.id ?? null));
-  const { data: history = [] } = useQuery(ownerStatusHistoryQuery((props ?? []).map((p) => p.id)));
   const { data: tours = [], isPending: toursPending } = useQuery(ownerToursQuery(user?.id ?? null));
   const { data: ownerBookings = [] } = useQuery(ownerBookingsQuery(user?.id ?? null));
   const pendingBookings = ownerBookings.filter((b) => b.status === "PENDING").length;
+  const acceptedBookings = ownerBookings.filter((b) => b.status === "ACCEPTED").length;
+  const revenue = monthRevenue(ownerBookings);
 
   if (!user)
     return (
@@ -76,117 +88,54 @@ function OwnerDashboard() {
     );
 
   return (
-    <div className="container-page py-10">
+    <OwnerShell>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-semibold">{t("owner.dashboard")}</h1>
+        <div>
+          <h1 className="font-display text-3xl font-semibold">{t("owner.dashboard")}</h1>
+          <p className="mt-1 text-muted-foreground">{t("book.ownerSub")}</p>
+        </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
-          <Button asChild variant={pendingBookings > 0 ? "default" : "outline"}>
-            <Link to="/owner/bookings">
-              {t("book.open")}
-              {pendingBookings > 0 ? (
-                <span className="ml-2 rounded-full bg-background/20 px-2 py-0.5 text-[11px] font-semibold">{pendingBookings}</span>
-              ) : null}
-            </Link>
-          </Button>
           <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
         </div>
-
       </div>
-
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          [t("owner.total"), stats?.total ?? 0],
-          [t("owner.approved"), stats?.approved ?? 0],
-          [t("owner.pending"), stats?.pending ?? 0],
-          [t("owner.views"), stats?.views ?? 0],
-        ].map(([label, value]) => (
-          <div key={String(label)} className="rounded-2xl border border-border bg-card p-5">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
-            <p className="mt-1 font-display text-2xl font-semibold">{value}</p>
-          </div>
-        ))}
+        <StatCard icon={<CalendarClock className="size-4" />} tone="gold" label={t("owner.pending")} value={String(pendingBookings)} />
+        <StatCard icon={<CheckCircle2 className="size-4" />} tone="brand" label={t("owner.approved")} value={String(acceptedBookings)} />
+        <StatCard icon={<Wallet className="size-4" />} tone="brand" label={t("owner.monthRevenue")} value={formatPrice(revenue, "AMD", lang)} />
+        <StatCard icon={<Eye className="size-4" />} tone="muted" label={t("owner.views")} value={String(stats?.views ?? 0)} />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 flex items-center justify-between gap-3">
         <h2 className="font-display text-xl font-semibold">{t("owner.myProperties")}</h2>
-        {isPending ? (
-          <InlineLoader />
-        ) : (
-          <ul className="mt-4 space-y-2">
-            {(props ?? []).map((p) => (
-              <li key={p.id} className="rounded-xl border border-border bg-card p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{p.name}</p>
-                    <p className="text-xs text-muted-foreground">{p.city_code}</p>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <StatusBadge status={p.status} />
-                    <Button asChild size="sm">
-                      <Link to="/owner/properties/$id/edit" params={{ id: p.id }}>
-                        {t("owner.edit")}
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline" size="sm">
-                      <Link to="/owner/properties/$id/calendar" params={{ id: p.id }}>
-                        {t("owner.openCalendar")}
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline" size="sm">
-                      <Link to="/owner/properties/$id/pricing" params={{ id: p.id }}>
-                        {t("price.open")}
-                      </Link>
-                    </Button>
-                  </div>
-
-                </div>
-                <div className="mt-3 border-t border-border/70 pt-3">
-                  <p className="eyebrow text-[11px] text-muted-foreground">{t("owner.history")}</p>
-                  {history.filter((h) => h.property_id === p.id).length === 0 ? (
-                    <p className="mt-1 text-xs text-muted-foreground">{t("owner.historyEmpty")}</p>
-                  ) : (
-                    <ol className="mt-2 space-y-2">
-                      {history
-                        .filter((h) => h.property_id === p.id)
-                        .map((h) => (
-                          <li key={h.id} className="flex flex-wrap items-center gap-2 text-xs">
-                            <span className="text-muted-foreground">{formatDate(h.created_at)}</span>
-                            {h.old_status ? (
-                              <>
-                                <StatusBadge status={h.old_status} />
-                                <span className="text-muted-foreground">→</span>
-                              </>
-                            ) : null}
-                            <StatusBadge status={h.new_status} />
-                            {h.note ? (
-                              <span className="text-muted-foreground">
-                                · {t("owner.historyNote")}: {h.note}
-                              </span>
-                            ) : null}
-                          </li>
-                        ))}
-                    </ol>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+        <Button asChild size="sm" variant="outline"><Link to="/owner/properties">{t("owner.navProperties")}</Link></Button>
       </div>
-
-      <AnalyticsPanel
-        ownerId={user.id}
-        properties={(props ?? []).map((p) => ({ id: p.id, name: p.name }))}
-      />
+      {isPending ? (
+        <InlineLoader />
+      ) : (
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {(props ?? []).slice(0, 4).map((p) => (
+            <li key={p.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+              <span className="size-14 shrink-0 overflow-hidden rounded-xl bg-surface">
+                {p.main_image_url ? <img src={p.main_image_url} alt="" className="size-full object-cover" /> : null}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-medium">{p.name}</span>
+                <span className="mt-1 block"><StatusBadge status={p.status} /></span>
+              </span>
+              <Button asChild size="sm" variant="outline">
+                <Link to="/owner/properties/$id/calendar" params={{ id: p.id }}>{t("owner.openCalendar")}</Link>
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <div className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="font-display text-xl font-semibold">{t("tourForm.myTours")}</h2>
-          <Button asChild size="sm" variant="outline">
-            <Link to="/owner/tours/new">{t("tourForm.new")}</Link>
-          </Button>
+          <Button asChild size="sm" variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
         </div>
         {toursPending ? (
           <InlineLoader />
@@ -195,36 +144,43 @@ function OwnerDashboard() {
         ) : (
           <ul className="mt-4 space-y-2">
             {tours.map((tr) => (
-              <li
-                key={tr.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4"
-              >
+              <li key={tr.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4">
                 <div className="min-w-0">
                   <p className="truncate font-medium">{tr.name}</p>
                   <p className="text-xs text-muted-foreground">
                     {tr.city_code ?? tr.location ?? "—"} · {formatDate(tr.created_at)}
                   </p>
-                  {tr.admin_note ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {t("owner.historyNote")}: {tr.admin_note}
-                    </p>
-                  ) : null}
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <StatusBadge status={tr.status} />
-                  {tr.status === "APPROVED" ? (
-                    <Button asChild size="sm" variant="outline">
-                      <Link to="/tour/$slug" params={{ slug: tr.slug }}>
-                        {t("admin.review")}
-                      </Link>
-                    </Button>
-                  ) : null}
-                </div>
+                <StatusBadge status={tr.status} />
               </li>
             ))}
           </ul>
         )}
       </div>
+    </OwnerShell>
+  );
+}
+
+export function StatCard({
+  icon,
+  label,
+  value,
+  tone = "brand",
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  tone?: "brand" | "gold" | "muted";
+}) {
+  const toneClass =
+    tone === "gold" ? "bg-gold/20 text-foreground" : tone === "muted" ? "bg-surface text-muted-foreground" : "bg-brand/10 text-brand";
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+      <span className={`grid size-10 shrink-0 place-items-center rounded-full ${toneClass}`}>{icon}</span>
+      <span className="min-w-0">
+        <span className="block text-xs text-muted-foreground">{label}</span>
+        <span className="block truncate font-display text-xl font-semibold">{value}</span>
+      </span>
     </div>
   );
 }

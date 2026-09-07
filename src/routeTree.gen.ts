@@ -33,6 +33,7 @@ import { Route as OwnerProfileRouteImport } from './routes/owner.profile'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
 import { Route as TourSlugRouteImport } from './routes/tour.$slug'
+import { Route as OwnerPropertiesIndexRouteImport } from './routes/owner.properties.index'
 import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.properties.new'
 import { Route as OwnerToursNewRouteImport } from './routes/owner.tours.new'
 import { Route as OwnerPropertiesIdCalendarRouteImport } from './routes/owner.properties.$id.calendar'
@@ -159,6 +160,11 @@ const TourSlugRoute = TourSlugRouteImport.update({
   path: '/tour/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerPropertiesIndexRoute = OwnerPropertiesIndexRouteImport.update({
+  id: '/owner/properties/',
+  path: '/owner/properties/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerPropertiesNewRoute = OwnerPropertiesNewRouteImport.update({
   id: '/owner/properties/new',
   path: '/owner/properties/new',
@@ -214,6 +220,7 @@ export interface FileRoutesByFullPath {
   '/owner/': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/tours/new': typeof OwnerToursNewRoute
+  '/owner/properties/': typeof OwnerPropertiesIndexRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
   '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
@@ -245,6 +252,7 @@ export interface FileRoutesByTo {
   '/owner': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/tours/new': typeof OwnerToursNewRoute
+  '/owner/properties': typeof OwnerPropertiesIndexRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
   '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/owner/': typeof OwnerIndexRoute
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/tours/new': typeof OwnerToursNewRoute
+  '/owner/properties/': typeof OwnerPropertiesIndexRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
   '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
@@ -310,6 +319,7 @@ export interface FileRouteTypes {
     | '/owner/'
     | '/owner/properties/new'
     | '/owner/tours/new'
+    | '/owner/properties/'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
     | '/owner/properties/$id/pricing'
@@ -341,6 +351,7 @@ export interface FileRouteTypes {
     | '/owner'
     | '/owner/properties/new'
     | '/owner/tours/new'
+    | '/owner/properties'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
     | '/owner/properties/$id/pricing'
@@ -372,6 +383,7 @@ export interface FileRouteTypes {
     | '/owner/'
     | '/owner/properties/new'
     | '/owner/tours/new'
+    | '/owner/properties/'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
     | '/owner/properties/$id/pricing'
@@ -404,6 +416,7 @@ export interface RootRouteChildren {
   OwnerIndexRoute: typeof OwnerIndexRoute
   OwnerPropertiesNewRoute: typeof OwnerPropertiesNewRoute
   OwnerToursNewRoute: typeof OwnerToursNewRoute
+  OwnerPropertiesIndexRoute: typeof OwnerPropertiesIndexRoute
   OwnerPropertiesIdCalendarRoute: typeof OwnerPropertiesIdCalendarRoute
   OwnerPropertiesIdEditRoute: typeof OwnerPropertiesIdEditRoute
   OwnerPropertiesIdPricingRoute: typeof OwnerPropertiesIdPricingRoute
@@ -579,6 +592,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TourSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/properties/': {
+      id: '/owner/properties/'
+      path: '/owner/properties'
+      fullPath: '/owner/properties/'
+      preLoaderRoute: typeof OwnerPropertiesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/properties/new': {
       id: '/owner/properties/new'
       path: '/owner/properties/new'
@@ -644,6 +664,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerIndexRoute: OwnerIndexRoute,
   OwnerPropertiesNewRoute: OwnerPropertiesNewRoute,
   OwnerToursNewRoute: OwnerToursNewRoute,
+  OwnerPropertiesIndexRoute: OwnerPropertiesIndexRoute,
   OwnerPropertiesIdCalendarRoute: OwnerPropertiesIdCalendarRoute,
   OwnerPropertiesIdEditRoute: OwnerPropertiesIdEditRoute,
   OwnerPropertiesIdPricingRoute: OwnerPropertiesIdPricingRoute,
