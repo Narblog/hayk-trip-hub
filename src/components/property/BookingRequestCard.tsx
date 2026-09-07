@@ -91,7 +91,14 @@ export function BookingRequestCard({
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
-  const [done, setDone] = useState<{ reference: string } | null>(null);
+  const [done, setDone] = useState(false);
+  const [sentRanges, setSentRanges] = useState<SentRange[]>([]);
+
+  useEffect(() => {
+    const ranges = readSentRanges(propertyId);
+    setSentRanges(ranges);
+    if (ranges.length > 0) setDone(true);
+  }, [propertyId]);
 
   const guests = adults + children;
   const { data: quote } = useQuery(quoteQuery(propertyId, guests));
