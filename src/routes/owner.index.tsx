@@ -81,7 +81,14 @@ function OwnerDashboard() {
         <h1 className="font-display text-3xl font-semibold">{t("owner.dashboard")}</h1>
         <div className="flex flex-wrap gap-2">
           <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
-          <Button asChild variant="outline"><Link to="/owner/bookings">{t("book.open")}</Link></Button>
+          <Button asChild variant={pendingBookings > 0 ? "default" : "outline"}>
+            <Link to="/owner/bookings">
+              {t("book.open")}
+              {pendingBookings > 0 ? (
+                <span className="ml-2 rounded-full bg-background/20 px-2 py-0.5 text-[11px] font-semibold">{pendingBookings}</span>
+              ) : null}
+            </Link>
+          </Button>
           <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
         </div>
 
