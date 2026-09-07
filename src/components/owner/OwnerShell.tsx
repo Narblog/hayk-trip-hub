@@ -71,5 +71,3 @@ export function OwnerShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-export { Tag };
