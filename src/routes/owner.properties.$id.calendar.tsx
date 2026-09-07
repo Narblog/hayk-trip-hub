@@ -5,7 +5,9 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { InlineLoader } from "@/components/common/states";
 import { supabase } from "@/integrations/supabase/client";
-import { availabilityQuery } from "@/lib/data";
+import { availabilityQuery, propertyBookingsQuery } from "@/lib/data";
+import { nightsInRange } from "@/lib/format";
+
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
