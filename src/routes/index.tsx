@@ -13,9 +13,15 @@ import { CardGridSkeleton } from "@/components/common/states";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
 import { SearchBar } from "@/components/search/SearchBar";
-import { homeQuery, refDataQuery } from "@/lib/data";
+import { homeQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 import heroImage from "@/assets/hero-armenia.jpg";
+import vibeForest from "@/assets/vibe-forest.jpg";
+import vibeLake from "@/assets/vibe-lake.jpg";
+import vibeJacuzzi from "@/assets/vibe-jacuzzi.jpg";
+import vibeFamily from "@/assets/vibe-family.jpg";
+import vibeRomantic from "@/assets/vibe-romantic.jpg";
+import vibeMountain from "@/assets/vibe-mountain.jpg";
 import promoTours from "@/assets/promo-tours.jpg";
 
 export const Route = createFileRoute("/")({
