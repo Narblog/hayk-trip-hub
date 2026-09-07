@@ -343,15 +343,17 @@ function PropertyPage() {
             </section>
           ) : null}
 
-          <section className="mt-8">
-            <h2 className="font-display text-xl font-semibold">{t("cal.title")}</h2>
-            <div className="mt-3 max-w-md">
-              <AvailabilityCalendar propertyId={p.id} />
-            </div>
-          </section>
+          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            <section>
+              <h2 className="font-display text-xl font-semibold">{t("cal.title")}</h2>
+              <div className="mt-3">
+                <AvailabilityCalendar propertyId={p.id} />
+              </div>
+            </section>
 
-          <div id="reviews" className="scroll-mt-24">
-            <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
+            <div id="reviews" className="scroll-mt-24">
+              <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
+            </div>
           </div>
 
           <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} />
