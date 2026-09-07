@@ -29,6 +29,7 @@ import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
 import { Route as OwnerAnalyticsRouteImport } from './routes/owner.analytics'
 import { Route as OwnerBookingsRouteImport } from './routes/owner.bookings'
+import { Route as OwnerCalendarRouteImport } from './routes/owner.calendar'
 import { Route as OwnerProfileRouteImport } from './routes/owner.profile'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
@@ -140,6 +141,11 @@ const OwnerBookingsRoute = OwnerBookingsRouteImport.update({
   path: '/owner/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerCalendarRoute = OwnerCalendarRouteImport.update({
+  id: '/owner/calendar',
+  path: '/owner/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerProfileRoute = OwnerProfileRouteImport.update({
   id: '/owner/profile',
   path: '/owner/profile',
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/admin/pages': typeof AdminPagesRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
   '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/calendar': typeof OwnerCalendarRoute
   '/owner/profile': typeof OwnerProfileRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
@@ -243,6 +250,7 @@ export interface FileRoutesByTo {
   '/admin/pages': typeof AdminPagesRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
   '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/calendar': typeof OwnerCalendarRoute
   '/owner/profile': typeof OwnerProfileRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
@@ -276,6 +284,7 @@ export interface FileRoutesById {
   '/admin/pages': typeof AdminPagesRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
   '/owner/bookings': typeof OwnerBookingsRoute
+  '/owner/calendar': typeof OwnerCalendarRoute
   '/owner/profile': typeof OwnerProfileRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
@@ -310,6 +319,7 @@ export interface FileRouteTypes {
     | '/admin/pages'
     | '/owner/analytics'
     | '/owner/bookings'
+    | '/owner/calendar'
     | '/owner/profile'
     | '/p/$slug'
     | '/property/$slug'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/admin/pages'
     | '/owner/analytics'
     | '/owner/bookings'
+    | '/owner/calendar'
     | '/owner/profile'
     | '/p/$slug'
     | '/property/$slug'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin/pages'
     | '/owner/analytics'
     | '/owner/bookings'
+    | '/owner/calendar'
     | '/owner/profile'
     | '/p/$slug'
     | '/property/$slug'
@@ -407,6 +419,7 @@ export interface RootRouteChildren {
   AdminPagesRoute: typeof AdminPagesRoute
   OwnerAnalyticsRoute: typeof OwnerAnalyticsRoute
   OwnerBookingsRoute: typeof OwnerBookingsRoute
+  OwnerCalendarRoute: typeof OwnerCalendarRoute
   OwnerProfileRoute: typeof OwnerProfileRoute
   PSlugRoute: typeof PSlugRoute
   PropertySlugRoute: typeof PropertySlugRoute
@@ -564,6 +577,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/calendar': {
+      id: '/owner/calendar'
+      path: '/owner/calendar'
+      fullPath: '/owner/calendar'
+      preLoaderRoute: typeof OwnerCalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/profile': {
       id: '/owner/profile'
       path: '/owner/profile'
@@ -655,6 +675,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPagesRoute: AdminPagesRoute,
   OwnerAnalyticsRoute: OwnerAnalyticsRoute,
   OwnerBookingsRoute: OwnerBookingsRoute,
+  OwnerCalendarRoute: OwnerCalendarRoute,
   OwnerProfileRoute: OwnerProfileRoute,
   PSlugRoute: PSlugRoute,
   PropertySlugRoute: PropertySlugRoute,
