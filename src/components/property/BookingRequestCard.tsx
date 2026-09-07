@@ -124,6 +124,33 @@ export function BookingRequestCard({
   const { data: availability } = useQuery(availabilityQuery(propertyId));
   const { data: bookings } = useQuery(propertyBookingsQuery(propertyId));
 
+  const tracked = sentRanges.filter((r) => r.id && r.token);
+  const { data: sentStatuses } = useQuery({
+    queryKey: ["guest-booking-status", propertyId, tracked.map((r) => r.id).join(",")],
+    enabled: tracked.length > 0,
+    refetchOnWindowFocus: true,
+    queryFn: async () => {
+      const rows = await Promise.all(
+        tracked.map(async (r) => {
+          try {
+            const row = await bookingByToken(r.id!, r.token!);
+            return [r.id!, (row?.status as string) ?? "PENDING"] as const;
+          } catch {
+            return [r.id!, "PENDING"] as const;
+          }
+        }),
+      );
+      return Object.fromEntries(rows) as Record<string, string>;
+    },
+  });
+
+  const statusOf = (r: SentRange) => (r.id ? (sentStatuses?.[r.id] ?? "PENDING") : "PENDING");
+  const isClosed = (r: SentRange) => ["DECLINED", "CANCELLED"].includes(statusOf(r));
+  const activeRanges = sentRanges.filter((r) => !isClosed(r));
+  const closedLast = sentRanges.length > 0 && activeRanges.length === 0 ? sentRanges[sentRanges.length - 1] : null;
+  const closedStatus = closedLast ? statusOf(closedLast) : null;
+
+
   const nightly = quote?.has_price ? Number(quote.nightly_price) : fallbackPrice;
   const cur = quote?.currency ?? currency;
   const nights = nightsBetween(checkIn, checkOut);
