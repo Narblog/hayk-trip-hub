@@ -43,7 +43,7 @@ export function OwnerShell({ children }: { children: ReactNode }) {
             </span>
           </div>
           {/* Mobile: compact icon grid, all items visible */}
-          <nav className="grid grid-cols-4 gap-2 lg:hidden">
+          <nav className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:hidden">
             {ITEMS.map((item) => {
               const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
               const Icon = item.icon;
@@ -52,21 +52,24 @@ export function OwnerShell({ children }: { children: ReactNode }) {
                   key={item.to}
                   to={item.to}
                   className={cn(
-                    "relative flex flex-col items-center gap-1.5 rounded-2xl border px-1 py-3 text-center transition",
+                    "relative flex min-h-[4.75rem] flex-col items-center justify-center gap-1 overflow-hidden rounded-2xl border px-1 py-2 text-center transition",
                     active
                       ? "border-brand bg-brand text-brand-foreground shadow-card"
                       : "border-border bg-card text-muted-foreground",
                   )}
                 >
-                  <Icon className="size-5" />
-                  <span className="text-[11px] font-medium leading-tight">{t(item.key)}</span>
+                  <Icon className="size-5 shrink-0" />
+                  <span className="line-clamp-2 w-full break-words px-0.5 text-[10px] font-medium leading-[1.15] hyphens-auto">
+                    {t(item.key)}
+                  </span>
                   {item.to === "/account/notifications" && unread > 0 ? (
-                    <span className="absolute right-1.5 top-1.5 rounded-full bg-gold px-1.5 text-[10px] font-semibold text-foreground">{unread}</span>
+                    <span className="absolute right-1 top-1 rounded-full bg-gold px-1.5 text-[10px] font-semibold text-foreground">{unread}</span>
                   ) : null}
                 </Link>
               );
             })}
           </nav>
+
           {/* Desktop: vertical sidebar */}
           <nav className="hidden lg:flex lg:flex-col lg:gap-1">
             {ITEMS.map((item) => {

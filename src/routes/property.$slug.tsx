@@ -398,9 +398,9 @@ function PropertyPage() {
 
       <div className="mt-4 grid gap-10 lg:grid-cols-[1fr_22rem]">
         <div>
-          <div className="flex items-start justify-between gap-4">
-            <h1 className="font-display text-3xl font-semibold">{p.name}</h1>
-            <div className="flex shrink-0 items-center gap-1">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+            <h1 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">{p.name}</h1>
+            <div className="-ml-3 flex shrink-0 items-center gap-1 sm:ml-0">
               <FavoriteButton propertyId={p.id} label={t("property.save")} />
               <button
                 type="button"
@@ -412,6 +412,7 @@ function PropertyPage() {
               </button>
             </div>
           </div>
+
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><MapPin className="size-4" /> {locationLine}</span>
