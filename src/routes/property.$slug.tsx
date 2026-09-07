@@ -130,9 +130,11 @@ function PropertyPage() {
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
     contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
+    latitude: number | null; longitude: number | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
   };
+  const hasLocation = p.latitude != null && p.longitude != null;
   const amenityList = (p.property_amenities ?? [])
     .map((row) => (ref?.amenities ?? []).find((a) => a.code === row.amenity_code))
     .filter(Boolean) as { code: string; icon?: string | null }[];
