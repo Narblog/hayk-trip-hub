@@ -10,6 +10,7 @@ import {
   Gift,
 } from "lucide-react";
 import { CardGridSkeleton } from "@/components/common/states";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
 import { SearchBar } from "@/components/search/SearchBar";
@@ -165,13 +166,28 @@ function Home() {
                 <CarFront className="size-4" />
                 {t("home.tabTours")}
               </Link>
-              <Link
-                to="/tours"
-                className="flex items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <Gift className="size-4" />
-                {t("home.tabPackages")}
-              </Link>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <Gift className="size-4" />
+                    {t("home.tabPackages")}
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 rounded-2xl" side="bottom" align="center">
+                  <div className="flex items-start gap-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
+                      <Gift className="size-4" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold">{t("home.packagesSoonTitle")}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t("home.packagesSoonSub")}</p>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="text-left">
               <SearchBar />
