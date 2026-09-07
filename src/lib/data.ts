@@ -970,3 +970,267 @@ export async function adminDeletePage(adminId: string, id: string, slug: string)
     notes: slug,
   });
 }
+
+// ---------- pricing ----------
+export type PricingType = "FIXED" | "TIERED" | "BASE_PLUS_GUEST";
+
+export type PricingTier = {
+  id?: string;
+  min_guests: number;
+  max_guests: number;
+  price_per_night: number;
+  sort_order: number;
+};
+
+export type PropertyPricing = {
+  pricing_type: PricingType;
+  fixed_price: number | null;
+  base_price: number | null;
+  included_guests: number;
+  extra_guest_price: number | null;
+  currency: string;
+  tiers: PricingTier[];
+};
+
+export const pricingQuery = (propertyId: string | undefined) =>
+  queryOptions({
+    queryKey: ["pricing", propertyId],
+    enabled: !!propertyId,
+    queryFn: async (): Promise<PropertyPricing | null> => {
+      const [{ data: base, error: e1 }, { data: tiers, error: e2 }] = await Promise.all([
+        supabase
+          .from("property_pricing")
+          .select("pricing_type, fixed_price, base_price, included_guests, extra_guest_price, currency")
+          .eq("property_id", propertyId!)
+          .maybeSingle(),
+        supabase
+          .from("property_pricing_tiers")
+          .select("id, min_guests, max_guests, price_per_night, sort_order")
+          .eq("property_id", propertyId!)
+          .order("sort_order"),
+      ]);
+      if (e1) throw e1;
+      if (e2) throw e2;
+      if (!base) return null;
+      return {
+        pricing_type: base.pricing_type as PricingType,
+        fixed_price: base.fixed_price,
+        base_price: base.base_price,
+        included_guests: base.included_guests,
+        extra_guest_price: base.extra_guest_price,
+        currency: base.currency,
+        tiers: (tiers ?? []) as PricingTier[],
+      };
+    },
+  });
+
+export async function savePricing(propertyId: string, input: PropertyPricing) {
+  const { error } = await supabase.from("property_pricing").upsert(
+    {
+      property_id: propertyId,
+      pricing_type: input.pricing_type,
+      fixed_price: input.pricing_type === "FIXED" ? input.fixed_price : null,
+      base_price: input.pricing_type === "BASE_PLUS_GUEST" ? input.base_price : null,
+      included_guests: input.included_guests,
+      extra_guest_price: input.pricing_type === "BASE_PLUS_GUEST" ? input.extra_guest_price : null,
+      currency: input.currency,
+    },
+    { onConflict: "property_id" },
+  );
+  if (error) throw error;
+
+  const { error: delErr } = await supabase.from("property_pricing_tiers").delete().eq("property_id", propertyId);
+  if (delErr) throw delErr;
+
+  if (input.pricing_type === "TIERED" && input.tiers.length) {
+    const { error: insErr } = await supabase.from("property_pricing_tiers").insert(
+      input.tiers.map((tier, i) => ({
+        property_id: propertyId,
+        min_guests: tier.min_guests,
+        max_guests: tier.max_guests,
+        price_per_night: tier.price_per_night,
+        sort_order: i,
+      })),
+    );
+    if (insErr) throw insErr;
+  }
+
+  if (input.pricing_type === "FIXED" && input.fixed_price) {
+    await supabase.from("properties").update({ price_per_night: input.fixed_price }).eq("id", propertyId);
+  }
+}
+
+export const quoteQuery = (propertyId: string | undefined, guests: number) =>
+  queryOptions({
+    queryKey: ["quote", propertyId, guests],
+    enabled: !!propertyId,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("quote_property_price", {
+        p_property_id: propertyId!,
+        p_guests: guests,
+      });
+      if (error) throw error;
+      return (data ?? [])[0] ?? null;
+    },
+  });
+
+// ---------- booking requests ----------
+export type BookingStatus = "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELLED" | "COMPLETED";
+
+export type BookingRow = {
+  id: string;
+  reference: string;
+  property_id: string;
+  guest_name: string;
+  guest_phone: string;
+  guest_email: string | null;
+  message: string | null;
+  check_in: string;
+  check_out: string;
+  nights: number;
+  adults: number;
+  children: number;
+  infants: number;
+  nightly_price: number;
+  total_price: number;
+  confirmed_total_price: number | null;
+  price_change_note: string | null;
+  currency: string;
+  status: BookingStatus;
+  decline_reason: string | null;
+  created_at: string;
+  properties?: { name: string; slug: string } | null;
+};
+
+const BOOKING_COLUMNS =
+  "id, reference, property_id, guest_name, guest_phone, guest_email, message, check_in, check_out, nights, adults, children, infants, nightly_price, total_price, confirmed_total_price, price_change_note, currency, status, decline_reason, created_at, properties(name, slug)";
+
+export const ownerBookingsQuery = (userId: string | null) =>
+  queryOptions({
+    queryKey: ["owner-bookings", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("booking_requests")
+        .select(BOOKING_COLUMNS)
+        .eq("owner_id", userId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as BookingRow[];
+    },
+  });
+
+export const myBookingsQuery = (userId: string | null) =>
+  queryOptions({
+    queryKey: ["my-bookings", userId],
+    enabled: !!userId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("booking_requests")
+        .select(BOOKING_COLUMNS)
+        .eq("customer_user_id", userId!)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as BookingRow[];
+    },
+  });
+
+export const propertyBookingsQuery = (propertyId: string | undefined) =>
+  queryOptions({
+    queryKey: ["property-bookings", propertyId],
+    enabled: !!propertyId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("booking_requests")
+        .select("id, check_in, check_out, status")
+        .eq("property_id", propertyId!)
+        .in("status", ["PENDING", "ACCEPTED"]);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+export type BookingInput = {
+  propertyId: string;
+  checkIn: string;
+  checkOut: string;
+  adults: number;
+  children: number;
+  infants: number;
+  name: string;
+  phone: string;
+  email: string;
+  message: string;
+};
+
+export async function createBookingRequest(input: BookingInput) {
+  const { data, error } = await supabase.rpc("create_booking_request", {
+    p_property_id: input.propertyId,
+    p_check_in: input.checkIn,
+    p_check_out: input.checkOut,
+    p_adults: input.adults,
+    p_children: input.children,
+    p_infants: input.infants,
+    p_name: input.name,
+    p_phone: input.phone,
+    p_email: input.email,
+    p_message: input.message,
+  });
+  if (error) throw error;
+  const row = (data ?? [])[0];
+  if (!row) throw new Error("BOOKING_FAILED");
+  if (typeof window !== "undefined" && row.guest_token) {
+    const store = JSON.parse(window.localStorage.getItem("stayland.bookings") ?? "[]") as {
+      id: string;
+      reference: string;
+      token: string;
+    }[];
+    store.unshift({ id: row.booking_id, reference: row.reference, token: row.guest_token });
+    window.localStorage.setItem("stayland.bookings", JSON.stringify(store.slice(0, 20)));
+  }
+  return row;
+}
+
+export function localGuestBookings() {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(window.localStorage.getItem("stayland.bookings") ?? "[]") as {
+      id: string;
+      reference: string;
+      token: string;
+    }[];
+  } catch {
+    return [];
+  }
+}
+
+export async function respondBooking(input: {
+  bookingId: string;
+  action: "ACCEPT" | "DECLINE";
+  confirmedTotal?: number | null;
+  note?: string;
+  reason?: string;
+}) {
+  const { error } = await supabase.rpc("respond_booking_request", {
+    p_booking_id: input.bookingId,
+    p_action: input.action,
+    ...(input.confirmedTotal != null ? { p_confirmed_total: input.confirmedTotal } : {}),
+    ...(input.note ? { p_note: input.note } : {}),
+    ...(input.reason ? { p_reason: input.reason } : {}),
+  });
+  if (error) throw error;
+}
+
+export async function cancelBooking(bookingId: string, token?: string) {
+  const { error } = await supabase.rpc("cancel_booking_request", {
+    p_booking_id: bookingId,
+    ...(token ? { p_token: token } : {}),
+  });
+  if (error) throw error;
+}
+
+export async function bookingByToken(bookingId: string, token: string) {
+  const { data, error } = await supabase.rpc("booking_by_token", { p_booking_id: bookingId, p_token: token });
+  if (error) throw error;
+  return (data ?? [])[0] ?? null;
+}
