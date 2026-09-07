@@ -154,7 +154,8 @@ function Home() {
           <p className="mx-auto mt-2.5 max-w-2xl px-2 text-[0.8125rem] leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:mt-3 md:text-base">{t("hero.subtitle")}</p>
 
           <div className="mx-auto mt-8 max-w-4xl md:mt-12">
-            <div className="scrollbar-none mx-auto flex w-full items-center justify-start gap-1 overflow-x-auto rounded-t-3xl bg-card/95 px-1.5 pt-2 shadow-search backdrop-blur sm:w-fit sm:justify-center sm:px-2">
+          <div className="mx-auto max-w-full rounded-3xl border border-border/70 bg-card/95 shadow-search backdrop-blur md:max-w-4xl">
+            <div className="scrollbar-none mx-auto flex w-full items-center justify-start gap-1 overflow-x-auto px-1.5 pt-2 sm:w-fit sm:justify-center sm:px-2">
               <span className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-brand bg-card px-3 py-2 text-[0.8125rem] font-semibold text-foreground sm:px-5 sm:py-2.5 sm:text-sm">
                 <HomeIcon className="size-4 text-brand" />
                 {t("home.tabStays")}
