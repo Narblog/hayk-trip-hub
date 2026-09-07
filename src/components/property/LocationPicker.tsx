@@ -26,8 +26,8 @@ export default function LocationPicker({
       hasPos ? [lat!, lng!] : ARMENIA_CENTER,
       hasPos ? 14 : 7,
     );
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
       maxZoom: 19,
     }).addTo(m);
 

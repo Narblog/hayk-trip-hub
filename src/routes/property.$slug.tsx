@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, MessageCircle, Phone, Star, Users, X } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
@@ -10,10 +10,13 @@ import { BookingRequestCard } from "@/components/property/BookingRequestCard";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
 import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { trackPropertyEvent } from "@/lib/analytics";
 import { propertyQuery, refDataQuery, relatedToursQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+
+const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
 export const Route = createFileRoute("/property/$slug")({
   head: ({ params }) => ({
@@ -127,9 +130,11 @@ function PropertyPage() {
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
     contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
+    latitude: number | null; longitude: number | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
   };
+  const hasLocation = p.latitude != null && p.longitude != null;
   const amenityList = (p.property_amenities ?? [])
     .map((row) => (ref?.amenities ?? []).find((a) => a.code === row.amenity_code))
     .filter(Boolean) as { code: string; icon?: string | null }[];
@@ -338,15 +343,17 @@ function PropertyPage() {
             </section>
           ) : null}
 
-          <section className="mt-8">
-            <h2 className="font-display text-xl font-semibold">{t("cal.title")}</h2>
-            <div className="mt-3 max-w-md">
-              <AvailabilityCalendar propertyId={p.id} />
-            </div>
-          </section>
+          <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+            <section>
+              <h2 className="font-display text-xl font-semibold">{t("cal.title")}</h2>
+              <div className="mt-3">
+                <AvailabilityCalendar propertyId={p.id} />
+              </div>
+            </section>
 
-          <div id="reviews" className="scroll-mt-24">
-            <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
+            <div id="reviews" className="scroll-mt-24">
+              <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
+            </div>
           </div>
 
           <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} />
@@ -363,7 +370,15 @@ function PropertyPage() {
             currency={p.currency ?? "AMD"}
           />
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-
+            {hasLocation ? (
+              <div className="-mx-5 -mt-5 mb-5 overflow-hidden rounded-t-2xl">
+                <ClientOnly fallback={<Skeleton className="h-44 w-full" />}>
+                  <Suspense fallback={<Skeleton className="h-44 w-full" />}>
+                    <PropertyMiniMap lat={Number(p.latitude)} lng={Number(p.longitude)} />
+                  </Suspense>
+                </ClientOnly>
+              </div>
+            ) : null}
           <div className="mt-5 space-y-2">
             {p.contact_phone ? (
               <Button asChild className="h-auto w-full justify-start py-3">
