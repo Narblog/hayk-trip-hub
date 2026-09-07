@@ -9,7 +9,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { createBookingRequest, propertyBookingsQuery, quoteQuery, availabilityQuery } from "@/lib/data";
 import { formatPrice, nightsBetween, nightsInRange, todayISO } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
-import { useAuth } from "@/lib/auth";
 
 const ERRORS: Record<string, string> = {
   DATES_TAKEN: "book.errUnavailable",
@@ -62,7 +61,6 @@ export function BookingRequestCard({
   currency: string;
 }) {
   const { t, lang } = useI18n();
-  const { user } = useAuth();
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [adults, setAdults] = useState(2);
@@ -205,7 +203,6 @@ export function BookingRequestCard({
         {sending ? t("book.sending") : t("book.submit")}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">{t("book.disclaimer")}</p>
-      {!user ? <p className="mt-1 text-xs text-muted-foreground">{t("book.mySub")}</p> : null}
     </form>
   );
 }
