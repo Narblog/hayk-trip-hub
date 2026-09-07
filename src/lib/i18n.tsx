@@ -841,6 +841,7 @@ const ru: Dict = {
   "nav.account": "Мой аккаунт",
   "nav.favorites": "Избранное",
   "nav.ownerDashboard": "Кабинет хозяина",
+  "nav.myPage": "Моя страница",
   "nav.adminDashboard": "Админ",
   "nav.home": "Главная",
   "nav.search": "Поиск",
