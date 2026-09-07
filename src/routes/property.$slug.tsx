@@ -468,86 +468,96 @@ function PropertyPage() {
 
 
 
-        <aside className="h-fit space-y-4 lg:sticky lg:top-24">
+        <aside className="h-fit overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
           <BookingRequestCard
             propertyId={p.id}
             propertyTitle={p.name}
             maxGuests={Number(p.max_guests) || 2}
             fallbackPrice={Number(p.price_per_night)}
             currency={p.currency ?? "AMD"}
+            embedded
           />
-          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
-            <ShieldCheck className="size-4 text-brand" />
-            {t("property.secureBooking")}
-          </p>
 
-          <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-            {hasLocation ? (
-              <div className="-mx-5 -mt-5 mb-5 overflow-hidden rounded-t-2xl">
-                <ClientOnly fallback={<Skeleton className="h-44 w-full" />}>
-                  <Suspense fallback={<Skeleton className="h-44 w-full" />}>
-                    <PropertyMiniMap lat={Number(p.latitude)} lng={Number(p.longitude)} />
-                  </Suspense>
-                </ClientOnly>
-              </div>
-            ) : null}
-            <h2 className="font-display text-base font-semibold">{t("property.location")}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">{locationLine}</p>
-            {hasLocation ? (
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:underline"
-              >
-                {t("property.openInMaps")}
-                <ExternalLink className="size-3.5" />
-              </a>
-            ) : null}
-
-            <div className="mt-5 space-y-2">
+          {(p.contact_phone || whatsappNumber || instagramHandle) ? (
+            <div className="mt-4 grid grid-cols-2 gap-2">
               {p.contact_phone ? (
-                <Button asChild className="h-auto w-full justify-start py-3">
+                <Button asChild variant="outline" className="min-w-0">
                   <a href={`tel:${p.contact_phone}`} onClick={() => void trackPropertyEvent(p.id, "phone_click")}>
-                    <Phone className="size-5 shrink-0" />
-                    <span className="min-w-0 text-left"><span className="block text-xs opacity-75">{t("property.call")}</span><span className="block truncate">{p.contact_phone}</span></span>
-                  </a>
-                </Button>
-              ) : null}
-              {whatsappNumber ? (
-                <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                  <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "whatsapp_click")}>
-                    <MessageCircle className="size-5 shrink-0" />
-                    <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.whatsapp")}</span><span className="block truncate">{p.contact_whatsapp}</span></span>
+                    <Phone className="size-4 shrink-0" />
+                    <span className="truncate">{p.contact_phone}</span>
                   </a>
                 </Button>
               ) : null}
               {instagramHandle ? (
-                <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
+                <Button asChild variant="outline" className="min-w-0">
                   <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "instagram_click")}>
-                    <Instagram className="size-5 shrink-0" />
-                    <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.instagram")}</span><span className="block truncate">@{instagramHandle}</span></span>
+                    <Instagram className="size-4 shrink-0" />
+                    <span className="truncate">Instagram</span>
+                  </a>
+                </Button>
+              ) : whatsappNumber ? (
+                <Button asChild variant="outline" className="min-w-0">
+                  <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "whatsapp_click")}>
+                    <MessageCircle className="size-4 shrink-0" />
+                    <span className="truncate">{t("property.whatsapp")}</span>
                   </a>
                 </Button>
               ) : null}
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">{t("property.approxLocation")}</p>
-          </div>
+          ) : null}
 
-          <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-            <div className="flex items-center gap-3">
-              <div className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-surface">
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-4 text-brand" />
+            {t("property.secureBooking")}
+          </p>
+
+          <section className="mt-5 border-t border-border pt-5">
+            {hasLocation ? (
+              <div className="grid grid-cols-[7.5rem_minmax(0,1fr)] overflow-hidden rounded-xl border border-border">
+                <div className="overflow-hidden">
+                  <ClientOnly fallback={<Skeleton className="h-32 w-full" />}>
+                    <Suspense fallback={<Skeleton className="h-32 w-full" />}>
+                      <PropertyMiniMap lat={Number(p.latitude)} lng={Number(p.longitude)} className="h-32 w-full" />
+                    </Suspense>
+                  </ClientOnly>
+                </div>
+                <div className="min-w-0 p-3">
+                  <h2 className="font-display text-base font-semibold">{t("property.location")}</h2>
+                  <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{locationLine}</p>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-brand hover:underline"
+                  >
+                    {t("property.openInMaps")}
+                    <ExternalLink className="size-3 shrink-0" />
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h2 className="font-display text-base font-semibold">{t("property.location")}</h2>
+                <p className="mt-1 text-sm text-muted-foreground">{locationLine}</p>
+              </div>
+            )}
+            <p className="mt-2 text-xs text-muted-foreground">{t("property.approxLocation")}</p>
+          </section>
+
+          <section className="mt-5 border-t border-border pt-5">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-surface">
                 {p.main_image_url ? (
                   <img src={p.main_image_url} alt="" className="size-full object-cover" />
                 ) : (
                   <Users className="size-5 text-muted-foreground" />
                 )}
               </div>
-              <div>
-                <p className="flex items-center gap-2 font-display text-base font-semibold">
-                  {t("property.hostedBy")} StayLand
+              <div className="min-w-0">
+                <p className="flex min-w-0 flex-wrap items-center gap-2 font-display text-base font-semibold">
+                  <span className="truncate">{t("property.hostedBy")} StayLand</span>
                   {p.review_count >= 5 && Number(p.rating) >= 4.5 ? (
-                    <span className="rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand">{t("property.superhost")}</span>
+                    <span className="shrink-0 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand">{t("property.superhost")}</span>
                   ) : null}
                 </p>
                 <p className="text-xs text-muted-foreground">StayLand</p>
@@ -558,7 +568,7 @@ function PropertyPage() {
                 <a href={`tel:${p.contact_phone}`}>{t("property.contactHost")}</a>
               </Button>
             ) : null}
-          </div>
+          </section>
         </aside>
 
       </div>
