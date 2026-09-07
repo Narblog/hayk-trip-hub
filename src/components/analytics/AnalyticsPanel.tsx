@@ -72,12 +72,12 @@ export function AnalyticsPanel({
     <section className="mt-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-display text-xl font-semibold">{title ?? t("analytics.title")}</h2>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex w-full min-w-0 flex-wrap gap-2 sm:w-auto">
           {properties?.length ? (
             <select
               value={propertyId}
               onChange={(e) => setPropertyId(e.target.value)}
-              className="rounded-full border border-border bg-card px-3 py-1.5 text-sm"
+              className="w-full min-w-0 max-w-full truncate rounded-full border border-border bg-card px-3 py-1.5 text-sm sm:w-auto"
             >
               <option value="">{t("analytics.allProperties")}</option>
               {properties.map((p) => (
@@ -87,6 +87,7 @@ export function AnalyticsPanel({
               ))}
             </select>
           ) : null}
+
           <div className="flex flex-wrap gap-1.5">
             {PERIODS.map((p) => (
               <button
