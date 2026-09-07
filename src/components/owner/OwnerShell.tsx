@@ -42,7 +42,33 @@ export function OwnerShell({ children }: { children: ReactNode }) {
               <span className="block truncate text-xs text-muted-foreground">{t("owner.dashboard")}</span>
             </span>
           </div>
-          <nav className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:gap-1 lg:px-0">
+          {/* Mobile: compact icon grid, all items visible */}
+          <nav className="grid grid-cols-4 gap-2 lg:hidden">
+            {ITEMS.map((item) => {
+              const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={cn(
+                    "relative flex flex-col items-center gap-1.5 rounded-2xl border px-1 py-3 text-center transition",
+                    active
+                      ? "border-brand bg-brand text-brand-foreground shadow-card"
+                      : "border-border bg-card text-muted-foreground",
+                  )}
+                >
+                  <Icon className="size-5" />
+                  <span className="text-[11px] font-medium leading-tight">{t(item.key)}</span>
+                  {item.to === "/account/notifications" && unread > 0 ? (
+                    <span className="absolute right-1.5 top-1.5 rounded-full bg-gold px-1.5 text-[10px] font-semibold text-foreground">{unread}</span>
+                  ) : null}
+                </Link>
+              );
+            })}
+          </nav>
+          {/* Desktop: vertical sidebar */}
+          <nav className="hidden lg:flex lg:flex-col lg:gap-1">
             {ITEMS.map((item) => {
               const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
               const Icon = item.icon;
