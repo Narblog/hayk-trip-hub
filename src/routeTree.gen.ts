@@ -21,6 +21,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToursRouteImport } from './routes/tours'
 import { Route as AccountIndexRouteImport } from './routes/account.index'
+import { Route as AccountBookingsRouteImport } from './routes/account.bookings'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
@@ -93,6 +94,11 @@ const ToursRoute = ToursRouteImport.update({
 const AccountIndexRoute = AccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountBookingsRoute = AccountBookingsRouteImport.update({
+  id: '/account/bookings',
+  path: '/account/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountNotificationsRoute = AccountNotificationsRouteImport.update({
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
+  '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
+  '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
+  '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
@@ -259,6 +268,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/tours'
+    | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
@@ -286,6 +296,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/tours'
+    | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
@@ -313,6 +324,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/tours'
+    | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
@@ -341,6 +353,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   ToursRoute: typeof ToursRoute
+  AccountBookingsRoute: typeof AccountBookingsRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
   AdminPagesRoute: typeof AdminPagesRoute
@@ -441,6 +454,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account/'
       preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/bookings': {
+      id: '/account/bookings'
+      path: '/account/bookings'
+      fullPath: '/account/bookings'
+      preLoaderRoute: typeof AccountBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account/notifications': {
@@ -549,6 +569,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   ToursRoute: ToursRoute,
+  AccountBookingsRoute: AccountBookingsRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
   AdminPagesRoute: AdminPagesRoute,
