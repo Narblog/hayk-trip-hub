@@ -5,6 +5,8 @@ import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, 
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
+import { BookingRequestCard } from "@/components/property/BookingRequestCard";
+
 import { AmenityIcon } from "@/components/property/AmenityIcon";
 import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
