@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Bell, Building2, CalendarDays, Home, UserRound } from "lucide-react";
+import { BarChart3, Bell, Building2, CalendarDays, CalendarRange, Home, UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { notificationsQuery, profileQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
@@ -11,6 +11,7 @@ const ITEMS = [
   { to: "/owner", key: "owner.navHome", icon: Home, exact: true },
   { to: "/owner/properties", key: "owner.navProperties", icon: Building2, exact: false },
   { to: "/owner/bookings", key: "owner.navBookings", icon: CalendarDays, exact: false },
+  { to: "/owner/calendar", key: "owner.navCalendar", icon: CalendarRange, exact: false },
   { to: "/owner/analytics", key: "owner.navAnalytics", icon: BarChart3, exact: false },
   { to: "/owner/profile", key: "owner.navProfile", icon: UserRound, exact: false },
   { to: "/account/notifications", key: "owner.navNotifications", icon: Bell, exact: false },
