@@ -181,21 +181,8 @@ function Home() {
       </section>
 
       <div className="container-page relative z-0 pb-10">
-        {/* Category chips */}
-        {(ref?.types ?? []).length ? (
-          <div className="scrollbar-none -mx-4 mt-8 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-            {(ref?.types ?? []).map((type) => (
-              <Link
-                key={type.code}
-                to="/search"
-                search={{ guests: 2, page: 1, types: [type.code] }}
-                className="shrink-0 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium shadow-card transition-colors hover:border-brand hover:text-brand"
-              >
-                {localized(type, "name")}
-              </Link>
-            ))}
-          </div>
-        ) : null}
+        {/* Vibe chips */}
+        <Vibes />
 
         {/* Recommended carousel */}
         <section className="mt-10">
