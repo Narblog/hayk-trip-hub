@@ -105,10 +105,16 @@ export function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link to="/account/bookings">
+                      <CalendarCheck className="size-4" /> {t("book.myTitle")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to="/favorites">
                       <Heart className="size-4" /> {t("nav.favorites")}
                     </Link>
                   </DropdownMenuItem>
+
                   {isOwner ? (
                     <DropdownMenuItem asChild>
                       <Link to="/owner">
