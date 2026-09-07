@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, MessageCircle, Phone, Star, Users, X } from "lucide-react";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
@@ -10,10 +10,13 @@ import { BookingRequestCard } from "@/components/property/BookingRequestCard";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
 import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { trackPropertyEvent } from "@/lib/analytics";
 import { propertyQuery, refDataQuery, relatedToursQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+
+const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
 export const Route = createFileRoute("/property/$slug")({
   head: ({ params }) => ({
