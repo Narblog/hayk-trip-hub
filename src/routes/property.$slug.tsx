@@ -370,7 +370,15 @@ function PropertyPage() {
             currency={p.currency ?? "AMD"}
           />
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
-
+            {hasLocation ? (
+              <div className="-mx-5 -mt-5 mb-5 overflow-hidden rounded-t-2xl">
+                <ClientOnly fallback={<Skeleton className="h-44 w-full" />}>
+                  <Suspense fallback={<Skeleton className="h-44 w-full" />}>
+                    <PropertyMiniMap lat={Number(p.latitude)} lng={Number(p.longitude)} />
+                  </Suspense>
+                </ClientOnly>
+              </div>
+            ) : null}
           <div className="mt-5 space-y-2">
             {p.contact_phone ? (
               <Button asChild className="h-auto w-full justify-start py-3">
