@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import {
   becomeOwner,
+  ownerBookingsQuery,
   ownerPropertiesQuery,
   ownerStatsQuery,
   ownerStatusHistoryQuery,
