@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bell, Heart, LayoutDashboard, LogOut, Menu, Shield, User as UserIcon } from "lucide-react";
+import { Bell, CalendarCheck, Heart, LayoutDashboard, LogOut, Menu, Shield, User as UserIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -105,10 +105,16 @@ export function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link to="/account/bookings">
+                      <CalendarCheck className="size-4" /> {t("book.myTitle")}
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to="/favorites">
                       <Heart className="size-4" /> {t("nav.favorites")}
                     </Link>
                   </DropdownMenuItem>
+
                   {isOwner ? (
                     <DropdownMenuItem asChild>
                       <Link to="/owner">

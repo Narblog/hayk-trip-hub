@@ -21,11 +21,13 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ToursRouteImport } from './routes/tours'
 import { Route as AccountIndexRouteImport } from './routes/account.index'
+import { Route as AccountBookingsRouteImport } from './routes/account.bookings'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
+import { Route as OwnerBookingsRouteImport } from './routes/owner.bookings'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PropertySlugRouteImport } from './routes/property.$slug'
 import { Route as TourSlugRouteImport } from './routes/tour.$slug'
@@ -33,6 +35,7 @@ import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.propertie
 import { Route as OwnerToursNewRouteImport } from './routes/owner.tours.new'
 import { Route as OwnerPropertiesIdCalendarRouteImport } from './routes/owner.properties.$id.calendar'
 import { Route as OwnerPropertiesIdEditRouteImport } from './routes/owner.properties.$id.edit'
+import { Route as OwnerPropertiesIdPricingRouteImport } from './routes/owner.properties.$id.pricing'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -94,6 +97,11 @@ const AccountIndexRoute = AccountIndexRouteImport.update({
   path: '/account/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountBookingsRoute = AccountBookingsRouteImport.update({
+  id: '/account/bookings',
+  path: '/account/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountNotificationsRoute = AccountNotificationsRouteImport.update({
   id: '/account/notifications',
   path: '/account/notifications',
@@ -117,6 +125,11 @@ const AdminPagesRoute = AdminPagesRouteImport.update({
 const OwnerIndexRoute = OwnerIndexRouteImport.update({
   id: '/owner/',
   path: '/owner/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerBookingsRoute = OwnerBookingsRouteImport.update({
+  id: '/owner/bookings',
+  path: '/owner/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PSlugRoute = PSlugRouteImport.update({
@@ -155,6 +168,12 @@ const OwnerPropertiesIdEditRoute = OwnerPropertiesIdEditRouteImport.update({
   path: '/owner/properties/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerPropertiesIdPricingRoute =
+  OwnerPropertiesIdPricingRouteImport.update({
+    id: '/owner/properties/$id/pricing',
+    path: '/owner/properties/$id/pricing',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -168,9 +187,11 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
+  '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
@@ -181,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
+  '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -194,9 +216,11 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
+  '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
@@ -207,6 +231,7 @@ export interface FileRoutesByTo {
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
+  '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -221,9 +246,11 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tours': typeof ToursRoute
+  '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
+  '/owner/bookings': typeof OwnerBookingsRoute
   '/p/$slug': typeof PSlugRoute
   '/property/$slug': typeof PropertySlugRoute
   '/tour/$slug': typeof TourSlugRoute
@@ -234,6 +261,7 @@ export interface FileRoutesById {
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
+  '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -249,9 +277,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/tours'
+    | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
+    | '/owner/bookings'
     | '/p/$slug'
     | '/property/$slug'
     | '/tour/$slug'
@@ -262,6 +292,7 @@ export interface FileRouteTypes {
     | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
+    | '/owner/properties/$id/pricing'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -275,9 +306,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/tours'
+    | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
+    | '/owner/bookings'
     | '/p/$slug'
     | '/property/$slug'
     | '/tour/$slug'
@@ -288,6 +321,7 @@ export interface FileRouteTypes {
     | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
+    | '/owner/properties/$id/pricing'
   id:
     | '__root__'
     | '/'
@@ -301,9 +335,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms'
     | '/tours'
+    | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
+    | '/owner/bookings'
     | '/p/$slug'
     | '/property/$slug'
     | '/tour/$slug'
@@ -314,6 +350,7 @@ export interface FileRouteTypes {
     | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
+    | '/owner/properties/$id/pricing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -328,9 +365,11 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   ToursRoute: typeof ToursRoute
+  AccountBookingsRoute: typeof AccountBookingsRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
   AdminPagesRoute: typeof AdminPagesRoute
+  OwnerBookingsRoute: typeof OwnerBookingsRoute
   PSlugRoute: typeof PSlugRoute
   PropertySlugRoute: typeof PropertySlugRoute
   TourSlugRoute: typeof TourSlugRoute
@@ -341,6 +380,7 @@ export interface RootRouteChildren {
   OwnerToursNewRoute: typeof OwnerToursNewRoute
   OwnerPropertiesIdCalendarRoute: typeof OwnerPropertiesIdCalendarRoute
   OwnerPropertiesIdEditRoute: typeof OwnerPropertiesIdEditRoute
+  OwnerPropertiesIdPricingRoute: typeof OwnerPropertiesIdPricingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -429,6 +469,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/bookings': {
+      id: '/account/bookings'
+      path: '/account/bookings'
+      fullPath: '/account/bookings'
+      preLoaderRoute: typeof AccountBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/notifications': {
       id: '/account/notifications'
       path: '/account/notifications'
@@ -462,6 +509,13 @@ declare module '@tanstack/react-router' {
       path: '/owner'
       fullPath: '/owner/'
       preLoaderRoute: typeof OwnerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner/bookings': {
+      id: '/owner/bookings'
+      path: '/owner/bookings'
+      fullPath: '/owner/bookings'
+      preLoaderRoute: typeof OwnerBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/p/$slug': {
@@ -513,6 +567,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerPropertiesIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/properties/$id/pricing': {
+      id: '/owner/properties/$id/pricing'
+      path: '/owner/properties/$id/pricing'
+      fullPath: '/owner/properties/$id/pricing'
+      preLoaderRoute: typeof OwnerPropertiesIdPricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -528,9 +589,11 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   ToursRoute: ToursRoute,
+  AccountBookingsRoute: AccountBookingsRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
   AdminPagesRoute: AdminPagesRoute,
+  OwnerBookingsRoute: OwnerBookingsRoute,
   PSlugRoute: PSlugRoute,
   PropertySlugRoute: PropertySlugRoute,
   TourSlugRoute: TourSlugRoute,
@@ -541,6 +604,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerToursNewRoute: OwnerToursNewRoute,
   OwnerPropertiesIdCalendarRoute: OwnerPropertiesIdCalendarRoute,
   OwnerPropertiesIdEditRoute: OwnerPropertiesIdEditRoute,
+  OwnerPropertiesIdPricingRoute: OwnerPropertiesIdPricingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

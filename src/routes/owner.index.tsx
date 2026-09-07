@@ -78,8 +78,10 @@ function OwnerDashboard() {
         <h1 className="font-display text-3xl font-semibold">{t("owner.dashboard")}</h1>
         <div className="flex flex-wrap gap-2">
           <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
+          <Button asChild variant="outline"><Link to="/owner/bookings">{t("book.open")}</Link></Button>
           <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
         </div>
+
       </div>
 
 
@@ -122,7 +124,13 @@ function OwnerDashboard() {
                         {t("owner.openCalendar")}
                       </Link>
                     </Button>
+                    <Button asChild variant="outline" size="sm">
+                      <Link to="/owner/properties/$id/pricing" params={{ id: p.id }}>
+                        {t("price.open")}
+                      </Link>
+                    </Button>
                   </div>
+
                 </div>
                 <div className="mt-3 border-t border-border/70 pt-3">
                   <p className="eyebrow text-[11px] text-muted-foreground">{t("owner.history")}</p>

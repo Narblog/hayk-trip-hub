@@ -5,7 +5,9 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { InlineLoader } from "@/components/common/states";
 import { supabase } from "@/integrations/supabase/client";
-import { availabilityQuery } from "@/lib/data";
+import { availabilityQuery, propertyBookingsQuery } from "@/lib/data";
+import { nightsInRange } from "@/lib/format";
+
 import { useAuth } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 
@@ -58,12 +60,25 @@ function CalendarPage() {
   });
 
   const availability = useQuery(availabilityQuery(id));
+  const bookings = useQuery(propertyBookingsQuery(id));
 
   const blocked = useMemo(() => {
     const set = new Set<string>();
     for (const row of availability.data ?? []) if (row.status !== "AVAILABLE") set.add(row.date);
     return set;
   }, [availability.data]);
+
+  const bookedSets = useMemo(() => {
+    const pending = new Set<string>();
+    const accepted = new Set<string>();
+    for (const b of bookings.data ?? []) {
+      const target = b.status === "ACCEPTED" ? accepted : pending;
+      for (const d of nightsInRange(b.check_in, b.check_out)) target.add(d);
+    }
+    return { pending, accepted };
+  }, [bookings.data]);
+
+
 
   const save = useMutation({
     mutationFn: async ({ dates, status }: { dates: string[]; status: "BLOCKED" | "AVAILABLE" }) => {
@@ -138,7 +153,9 @@ function CalendarPage() {
           {cells.map((d, i) => {
             if (!d) return <div key={`e${i}`} />;
             const key = iso(d);
-            const isBlocked = blocked.has(key);
+            const isAccepted = bookedSets.accepted.has(key);
+            const isPending = !isAccepted && bookedSets.pending.has(key);
+            const isBlocked = blocked.has(key) && !isAccepted;
             const past = key < iso(today);
             return (
               <Button
@@ -146,12 +163,16 @@ function CalendarPage() {
                 type="button"
                 variant="outline"
                 size="icon"
-                disabled={past || save.isPending}
+                disabled={past || isAccepted || save.isPending}
                 onClick={() => save.mutate({ dates: [key], status: isBlocked ? "AVAILABLE" : mode })}
                 className={[
                   "aspect-square h-auto min-h-10 w-full rounded-lg p-0 text-xs transition touch-manipulation sm:text-sm",
                   past ? "cursor-not-allowed border-transparent text-muted-foreground/40" : "hover:border-primary",
-                  isBlocked
+                  isAccepted
+                    ? "border-emerald-600/50 bg-emerald-600/20 font-semibold text-emerald-700 dark:text-emerald-400"
+                    : isPending
+                    ? "border-amber-500/50 bg-amber-500/15 text-amber-700 dark:text-amber-400"
+                    : isBlocked
                     ? "border-destructive/40 bg-destructive/10 text-destructive line-through"
                     : "border-border bg-background",
                 ].join(" ")}
@@ -165,6 +186,9 @@ function CalendarPage() {
         <div className="mt-5 flex flex-wrap items-center gap-4 text-sm">
           <span className="flex items-center gap-2"><span className="size-3 rounded border border-border bg-background" />{t("cal.legendFree")}</span>
           <span className="flex items-center gap-2"><span className="size-3 rounded border border-destructive/40 bg-destructive/20" />{t("cal.legendBlocked")}</span>
+          <span className="flex items-center gap-2"><span className="size-3 rounded border border-amber-500/50 bg-amber-500/25" />{t("bstatus.PENDING")}</span>
+          <span className="flex items-center gap-2"><span className="size-3 rounded border border-emerald-600/50 bg-emerald-600/30" />{t("bstatus.ACCEPTED")}</span>
+
           <div className="grid w-full grid-cols-1 gap-2 sm:ms-auto sm:flex sm:w-auto">
             <Button variant="outline" size="sm" className="min-h-11 whitespace-normal" disabled={save.isPending} onClick={() => save.mutate({ dates: monthDates, status: "BLOCKED" })}>
               {t("cal.blockMonth")}
