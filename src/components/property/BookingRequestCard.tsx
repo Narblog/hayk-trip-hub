@@ -137,17 +137,11 @@ export function BookingRequestCard({
           <CalendarCheck className="size-7" />
         </div>
         <h3 className="mt-4 font-display text-xl font-semibold">{t("book.success")}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {t("book.successBody").replace("{ref}", done.reference)}
-        </p>
-        <div className="mt-5 grid gap-2">
-          <Button asChild>
-            <Link to="/account/bookings">{t("book.viewBookings")}</Link>
-          </Button>
-          <Button variant="outline" onClick={() => { setDone(null); setCheckIn(""); setCheckOut(""); }}>
-            {t("book.another")}
-          </Button>
-        </div>
+        <p className="mt-1 text-sm text-muted-foreground">{t("book.successBody")}</p>
+        <Button className="mt-5 h-12 w-full rounded-full" disabled>
+          <CalendarCheck className="size-4" />
+          {t("book.booked")}
+        </Button>
       </div>
     );
   }
