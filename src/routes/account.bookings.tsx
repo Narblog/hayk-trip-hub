@@ -24,6 +24,22 @@ export const Route = createFileRoute("/account/bookings")({
   component: MyBookingsPage,
 });
 
+type GuestBooking = {
+  id: string;
+  reference: string;
+  property_name: string | null;
+  property_slug: string | null;
+  check_in: string;
+  check_out: string;
+  nights: number;
+  total_price: number;
+  confirmed_total_price: number | null;
+  currency: string;
+  status: BookingStatus;
+  price_change_note: string | null;
+  decline_reason: string | null;
+};
+
 type Tab = "UPCOMING" | "PENDING" | "PAST" | "CANCELLED";
 
 function MyBookingsPage() {
@@ -60,7 +76,7 @@ function MyBookingsPage() {
       }))
     : guestQueries
         .map((q, i) => {
-          const b = q.data as Record<string, unknown> | null | undefined;
+          const b = q.data as GuestBooking | null | undefined;
           if (!b) return null;
           return {
             id: String(b.id),
@@ -73,8 +89,8 @@ function MyBookingsPage() {
             total: Number(b.confirmed_total_price ?? b.total_price),
             currency: String(b.currency),
             status: b.status as BookingStatus,
-            note: (b.price_change_note as string | null) ?? null,
-            reason: (b.decline_reason as string | null) ?? null,
+            note: b.price_change_note ?? null,
+            reason: b.decline_reason ?? null,
             token: guestRefs[i]?.token,
           };
         })

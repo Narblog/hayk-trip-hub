@@ -47,8 +47,8 @@ function OwnerBookingsPage() {
         bookingId: input.bookingId,
         action: input.action,
         confirmedTotal: input.action === "ACCEPT" && total ? Number(total) : null,
-        note: input.action === "ACCEPT" ? note : undefined,
-        reason: input.action === "DECLINE" ? reason : undefined,
+        ...(input.action === "ACCEPT" && note ? { note } : {}),
+        ...(input.action === "DECLINE" && reason ? { reason } : {}),
       }),
     onSuccess: (_d, v) => {
       qc.invalidateQueries({ queryKey: ["owner-bookings"] });
