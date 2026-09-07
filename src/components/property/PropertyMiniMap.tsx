@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-export default function PropertyMiniMap({ lat, lng }: { lat: number; lng: number }) {
+export default function PropertyMiniMap({ lat, lng, className = "h-44 w-full" }: { lat: number; lng: number; className?: string }) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
 
@@ -41,5 +41,5 @@ export default function PropertyMiniMap({ lat, lng }: { lat: number; lng: number
     };
   }, [lat, lng]);
 
-  return <div ref={el} className="h-44 w-full bg-surface" />;
+  return <div ref={el} className={`${className} bg-surface`} />;
 }

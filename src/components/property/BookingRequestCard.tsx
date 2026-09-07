@@ -90,12 +90,14 @@ export function BookingRequestCard({
   maxGuests,
   fallbackPrice,
   currency,
+  embedded = false,
 }: {
   propertyId: string;
   propertyTitle?: string;
   maxGuests: number;
   fallbackPrice: number;
   currency: string;
+  embedded?: boolean;
 }) {
   const { t, lang } = useI18n();
   const [checkIn, setCheckIn] = useState("");
@@ -191,7 +193,7 @@ export function BookingRequestCard({
 
   if (done) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-6 text-center shadow-card">
+      <div className={embedded ? "px-1 py-5 text-center" : "rounded-2xl border border-border bg-card p-6 text-center shadow-card"}>
         <div className="mx-auto grid size-14 place-items-center rounded-full bg-brand-soft text-brand">
           <CalendarCheck className="size-7" />
         </div>
@@ -209,7 +211,7 @@ export function BookingRequestCard({
 
   return (
     <>
-      <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+      <div className={embedded ? "px-1 py-1" : "rounded-2xl border border-border bg-card p-5 shadow-card"}>
         <p className="font-display text-2xl font-semibold">
           {formatPrice(nightly, cur, lang)}
           <span className="ml-1 text-sm font-normal text-muted-foreground">/ {t("card.perNight")}</span>
