@@ -165,8 +165,10 @@ export function SearchBar({
   return (
     <form
       onSubmit={submit}
-      className={`w-full rounded-3xl border border-border/70 bg-card p-2 md:rounded-full md:p-2 ${
-        variant === "hero" ? "shadow-search" : "shadow-card"
+      className={`w-full p-2 md:p-2 ${
+        variant === "hero"
+          ? ""
+          : "rounded-3xl border border-border/70 bg-card shadow-card md:rounded-full"
       }`}
     >
       <div className="flex flex-col gap-1 md:flex-row md:items-center md:divide-x md:divide-border">
