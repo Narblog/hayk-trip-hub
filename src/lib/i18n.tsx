@@ -23,6 +23,7 @@ const en: Dict = {
   "nav.account": "My account",
   "nav.favorites": "Favorites",
   "nav.ownerDashboard": "Owner dashboard",
+  "nav.myPage": "My page",
   "nav.adminDashboard": "Admin",
   "nav.home": "Home",
   "nav.search": "Search",
