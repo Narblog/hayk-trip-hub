@@ -124,7 +124,13 @@ function OwnerDashboard() {
                         {t("owner.openCalendar")}
                       </Link>
                     </Button>
+                    <Button asChild variant="outline" size="sm">
+                      <Link to="/owner/properties/$id/pricing" params={{ id: p.id }}>
+                        {t("price.open")}
+                      </Link>
+                    </Button>
                   </div>
+
                 </div>
                 <div className="mt-3 border-t border-border/70 pt-3">
                   <p className="eyebrow text-[11px] text-muted-foreground">{t("owner.history")}</p>
