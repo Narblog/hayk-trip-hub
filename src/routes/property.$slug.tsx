@@ -1,7 +1,8 @@
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { BedDouble, Bath, ChevronLeft, ChevronRight, Instagram, Images, MapPin, MessageCircle, Phone, Star, Users, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
+import { toast } from "sonner";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
@@ -12,7 +13,7 @@ import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackPropertyEvent } from "@/lib/analytics";
-import { propertyQuery, refDataQuery, relatedToursQuery } from "@/lib/data";
+import { propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -33,6 +34,66 @@ export const Route = createFileRoute("/property/$slug")({
 });
 
 type Img = { id: string; image_url: string; is_cover: boolean | null; sort_order: number };
+
+function SimilarStays({ cityCode, regionCode, excludeId }: { cityCode: string | null; regionCode: string | null; excludeId: string | null }) {
+  const { t, lang, localized } = useI18n();
+  const { data: ref } = useQuery(refDataQuery());
+  const { data } = useQuery(similarPropertiesQuery(cityCode, regionCode, excludeId));
+  const items = (data ?? []) as SimilarProperty[];
+  if (!items.length) return null;
+
+  return (
+    <section className="mt-12">
+      <div className="flex items-end justify-between gap-4">
+        <h2 className="font-display text-xl font-semibold">{t("property.similarStays")}</h2>
+        <Link
+          to="/search"
+          search={{ destination: "", checkIn: "", checkOut: "", guests: 2, sort: "recommended", page: 1, types: [], amenities: [], minPrice: 0, maxPrice: 200000, bedrooms: 0, minRating: 0, view: "list" }}
+          className="shrink-0 rounded-full border border-border px-4 py-2 text-xs font-semibold transition-colors hover:border-brand hover:text-brand"
+        >
+          {t("property.viewMore")}
+        </Link>
+      </div>
+      <div className="scrollbar-none -mx-4 mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 sm:pb-0">
+        {items.map((sp) => (
+          <Link
+            key={sp.id}
+            to="/property/$slug"
+            params={{ slug: sp.slug }}
+            className="group relative w-[70%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-auto"
+          >
+            <div className="relative aspect-4/3 overflow-hidden bg-surface">
+              {sp.main_image_url ? (
+                <img
+                  src={sp.main_image_url}
+                  alt={sp.name}
+                  loading="lazy"
+                  className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : null}
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/10 to-transparent" />
+              <div className="absolute right-3 top-3">
+                <FavoriteButton propertyId={sp.id} />
+              </div>
+              <div className="absolute inset-x-3 bottom-3 text-background">
+                <p className="line-clamp-1 text-sm font-semibold">{sp.name}</p>
+                <p className="mt-0.5 flex items-center justify-between text-xs opacity-90">
+                  <span>{localized(ref?.cities.find((c) => c.code === sp.city_code), "name") || sp.city_code}</span>
+                  {sp.review_count > 0 ? (
+                    <span className="flex items-center gap-1 font-semibold">
+                      <Star className="size-3 fill-gold text-gold" />
+                      {Number(sp.rating).toFixed(1)} ({sp.review_count})
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cityCode: string | null }) {
   const { t, lang, localized } = useI18n();
@@ -126,6 +187,7 @@ function PropertyPage() {
 
   const p = data as unknown as {
     id: string; name: string; description: string | null; city_code: string | null; region_code: string | null;
+    property_type: string | null;
     price_per_night: number; currency: string; max_guests: number; bedrooms: number;
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
@@ -135,6 +197,12 @@ function PropertyPage() {
     property_amenities?: { amenity_code: string }[];
   };
   const hasLocation = p.latitude != null && p.longitude != null;
+  const city = ref?.cities.find((c) => c.code === p.city_code) ?? null;
+  const region = ref?.regions.find((r) => r.code === p.region_code) ?? null;
+  const typeRow = ref?.types.find((tp) => tp.code === p.property_type) ?? null;
+  const cityName = localized(city, "name") || p.city_code || "";
+  const regionName = localized(region, "name") || p.region_code || "";
+  const locationLine = [p.address || cityName, regionName && regionName !== cityName ? regionName : "", "Armenia"].filter(Boolean).join(", ");
   const amenityList = (p.property_amenities ?? [])
     .map((row) => (ref?.amenities ?? []).find((a) => a.code === row.amenity_code))
     .filter(Boolean) as { code: string; icon?: string | null }[];
@@ -167,6 +235,20 @@ function PropertyPage() {
     setActiveImage(closestIndex);
   }
 
+  async function sharePage() {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: p.name, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast.success(t("property.linkCopied"));
+      }
+    } catch {
+      // user cancelled
+    }
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
@@ -176,7 +258,7 @@ function PropertyPage() {
     address: {
       "@type": "PostalAddress",
       addressCountry: "AM",
-      addressLocality: localized(ref?.cities.find((c) => c.code === p.city_code), "name") || p.city_code || undefined,
+      addressLocality: cityName || undefined,
       streetAddress: p.address ?? undefined,
     },
     telephone: p.contact_phone ?? undefined,
@@ -236,6 +318,13 @@ function PropertyPage() {
             </button>
           ))}
         </div>
+        {p.review_count > 0 ? (
+          <span className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-full bg-card/95 px-3.5 py-2 text-sm font-semibold shadow-card backdrop-blur">
+            <Star className="size-4 fill-gold text-gold" />
+            {Number(p.rating).toFixed(1)}
+            <span className="font-normal text-muted-foreground">({p.review_count} {t("property.reviews").toLowerCase()})</span>
+          </span>
+        ) : null}
         {gallery.length > 1 ? (
           <button
             type="button"
@@ -288,49 +377,69 @@ function PropertyPage() {
         </div>
       ) : null}
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_22rem]">
+      <nav aria-label="Breadcrumb" className="mt-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+        <Link to="/" className="hover:text-brand">{t("nav.home")}</Link>
+        {regionName ? (
+          <>
+            <span aria-hidden>/</span>
+            <span>{regionName}</span>
+          </>
+        ) : null}
+        {cityName ? (
+          <>
+            <span aria-hidden>/</span>
+            <span>{cityName}</span>
+          </>
+        ) : null}
+        <span aria-hidden>/</span>
+        <span className="text-foreground">{p.name}</span>
+      </nav>
+
+      <div className="mt-4 grid gap-10 lg:grid-cols-[1fr_22rem]">
         <div>
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="font-display text-3xl font-semibold">{p.name}</h1>
-              <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
-                <MapPin className="size-4" /> {p.address || p.city_code}
-              </p>
+            <h1 className="font-display text-3xl font-semibold">{p.name}</h1>
+            <div className="flex shrink-0 items-center gap-1">
+              <FavoriteButton propertyId={p.id} label={t("property.save")} />
+              <button
+                type="button"
+                onClick={() => void sharePage()}
+                className="flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <Share2 className="size-4.5" />
+                <span>{t("property.share")}</span>
+              </button>
             </div>
-            <FavoriteButton propertyId={p.id} className="border border-border" />
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-5 border-y border-border py-4 text-sm">
-            <span className="flex items-center gap-1.5"><Users className="size-4" /> {p.max_guests} {t("card.guests")}</span>
-            <span className="flex items-center gap-1.5"><BedDouble className="size-4" /> {p.bedrooms} {t("card.bedrooms")}</span>
-            <span className="flex items-center gap-1.5"><Bath className="size-4" /> {p.bathrooms} {t("property.bathrooms")}</span>
-            <a href="#reviews" className="flex items-center gap-1.5 hover:text-brand">
-              {p.review_count > 0 ? (
-                <>
-                  <Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count})
-                </>
-              ) : (
-                <span className="text-muted-foreground">{t("reviews.new")}</span>
-              )}
-            </a>
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5"><MapPin className="size-4" /> {locationLine}</span>
+            {p.review_count > 0 ? (
+              <a href="#reviews" className="flex items-center gap-1.5 hover:text-brand">
+                <Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count} {t("property.reviews").toLowerCase()})
+              </a>
+            ) : null}
+            {typeRow ? (
+              <span className="flex items-center gap-1.5 border-l border-border pl-4">{localized(typeRow, "name")}</span>
+            ) : null}
+            <span className="flex items-center gap-1.5 border-l border-border pl-4">
+              <Users className="size-4" /> {t("property.upToGuests").replace("{n}", String(p.max_guests))}
+            </span>
           </div>
 
-          <section className="mt-8">
-            <h2 className="font-display text-xl font-semibold">{t("property.about")}</h2>
-            <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{p.description}</p>
-          </section>
+          {p.description ? (
+            <p className="mt-4 whitespace-pre-line leading-relaxed text-muted-foreground">{p.description}</p>
+          ) : null}
 
           {amenityList.length ? (
             <section className="mt-8">
               <h2 className="font-display text-xl font-semibold">{t("property.amenities")}</h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-4 flex flex-wrap gap-2.5">
                 {amenityList.map((a) => (
-                  <div key={a.code} className="flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-brand/30 bg-brand/10 text-brand">
-                      <AmenityIcon icon={a.icon} className="size-5" />
-                    </span>
-                    <span className="min-w-0 truncate text-sm">{localized(a, "name")}</span>
-                  </div>
+                  <span key={a.code} className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-sm">
+                    <AmenityIcon icon={a.icon} className="size-4.5 text-brand" />
+                    {localized(a, "name")}
+                  </span>
                 ))}
               </div>
             </section>
@@ -355,8 +464,6 @@ function PropertyPage() {
               <ReviewsSection propertyId={p.id} ownerId={p.owner_id ?? null} />
             </div>
           </div>
-
-          <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} />
         </div>
 
 
@@ -369,6 +476,11 @@ function PropertyPage() {
             fallbackPrice={Number(p.price_per_night)}
             currency={p.currency ?? "AMD"}
           />
+          <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+            <ShieldCheck className="size-4 text-brand" />
+            {t("property.secureBooking")}
+          </p>
+
           <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
             {hasLocation ? (
               <div className="-mx-5 -mt-5 mb-5 overflow-hidden rounded-t-2xl">
@@ -379,37 +491,80 @@ function PropertyPage() {
                 </ClientOnly>
               </div>
             ) : null}
-          <div className="mt-5 space-y-2">
-            {p.contact_phone ? (
-              <Button asChild className="h-auto w-full justify-start py-3">
-                <a href={`tel:${p.contact_phone}`} onClick={() => void trackPropertyEvent(p.id, "phone_click")}>
-                  <Phone className="size-5 shrink-0" />
-                  <span className="min-w-0 text-left"><span className="block text-xs opacity-75">{t("property.call")}</span><span className="block truncate">{p.contact_phone}</span></span>
-                </a>
-              </Button>
+            <h2 className="font-display text-base font-semibold">{t("property.location")}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{locationLine}</p>
+            {hasLocation ? (
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${p.latitude},${p.longitude}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:underline"
+              >
+                {t("property.openInMaps")}
+                <ExternalLink className="size-3.5" />
+              </a>
             ) : null}
-            {whatsappNumber ? (
-              <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "whatsapp_click")}>
-                  <MessageCircle className="size-5 shrink-0" />
-                  <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.whatsapp")}</span><span className="block truncate">{p.contact_whatsapp}</span></span>
-                </a>
-              </Button>
-            ) : null}
-            {instagramHandle ? (
-              <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
-                <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "instagram_click")}>
-                  <Instagram className="size-5 shrink-0" />
-                  <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.instagram")}</span><span className="block truncate">@{instagramHandle}</span></span>
-                </a>
-              </Button>
-            ) : null}
+
+            <div className="mt-5 space-y-2">
+              {p.contact_phone ? (
+                <Button asChild className="h-auto w-full justify-start py-3">
+                  <a href={`tel:${p.contact_phone}`} onClick={() => void trackPropertyEvent(p.id, "phone_click")}>
+                    <Phone className="size-5 shrink-0" />
+                    <span className="min-w-0 text-left"><span className="block text-xs opacity-75">{t("property.call")}</span><span className="block truncate">{p.contact_phone}</span></span>
+                  </a>
+                </Button>
+              ) : null}
+              {whatsappNumber ? (
+                <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
+                  <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "whatsapp_click")}>
+                    <MessageCircle className="size-5 shrink-0" />
+                    <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.whatsapp")}</span><span className="block truncate">{p.contact_whatsapp}</span></span>
+                  </a>
+                </Button>
+              ) : null}
+              {instagramHandle ? (
+                <Button asChild variant="outline" className="h-auto w-full justify-start py-3">
+                  <a href={`https://instagram.com/${instagramHandle}`} target="_blank" rel="noreferrer" onClick={() => void trackPropertyEvent(p.id, "instagram_click")}>
+                    <Instagram className="size-5 shrink-0" />
+                    <span className="min-w-0 text-left"><span className="block text-xs text-muted-foreground">{t("property.instagram")}</span><span className="block truncate">@{instagramHandle}</span></span>
+                  </a>
+                </Button>
+              ) : null}
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">{t("property.approxLocation")}</p>
           </div>
-          <p className="mt-3 text-xs text-muted-foreground">{t("property.approxLocation")}</p>
+
+          <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+            <div className="flex items-center gap-3">
+              <div className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-full bg-surface">
+                {p.main_image_url ? (
+                  <img src={p.main_image_url} alt="" className="size-full object-cover" />
+                ) : (
+                  <Users className="size-5 text-muted-foreground" />
+                )}
+              </div>
+              <div>
+                <p className="flex items-center gap-2 font-display text-base font-semibold">
+                  {t("property.hostedBy")} StayLand
+                  {p.review_count >= 5 && Number(p.rating) >= 4.5 ? (
+                    <span className="rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand">{t("property.superhost")}</span>
+                  ) : null}
+                </p>
+                <p className="text-xs text-muted-foreground">StayLand</p>
+              </div>
+            </div>
+            {p.contact_phone ? (
+              <Button asChild variant="outline" className="mt-4 w-full">
+                <a href={`tel:${p.contact_phone}`}>{t("property.contactHost")}</a>
+              </Button>
+            ) : null}
           </div>
         </aside>
 
       </div>
+
+      <SimilarStays cityCode={p.city_code ?? null} regionCode={p.region_code ?? null} excludeId={p.id} />
+      <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} />
     </div>
   );
 }

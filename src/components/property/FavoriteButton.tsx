@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { toggleFavorite } from "@/lib/data";
 
-export function FavoriteButton({ propertyId, className = "" }: { propertyId: string; className?: string }) {
+export function FavoriteButton({ propertyId, className = "", label }: { propertyId: string; className?: string; label?: string }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -46,9 +46,14 @@ export function FavoriteButton({ propertyId, className = "" }: { propertyId: str
         }
         mutation.mutate();
       }}
-      className={`grid size-9 place-items-center rounded-full bg-card/85 backdrop-blur transition-transform hover:scale-105 ${className}`}
+      className={
+        label
+          ? `flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-colors hover:bg-muted ${className}`
+          : `grid size-9 place-items-center rounded-full bg-card/85 backdrop-blur transition-transform hover:scale-105 ${className}`
+      }
     >
       <Heart className={`size-4.5 ${active ? "fill-brand text-brand" : "text-foreground"}`} />
+      {label ? <span>{label}</span> : null}
     </button>
   );
 }
