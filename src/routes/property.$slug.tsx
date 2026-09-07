@@ -352,11 +352,15 @@ function PropertyPage() {
 
 
 
-        <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
-          <p className="font-display text-2xl font-semibold">
-            {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
-            <span className="ml-1 text-sm font-normal text-muted-foreground">/ {t("card.perNight")}</span>
-          </p>
+        <aside className="h-fit space-y-4 lg:sticky lg:top-24">
+          <BookingRequestCard
+            propertyId={p.id}
+            maxGuests={Number(p.max_guests) || 2}
+            fallbackPrice={Number(p.price_per_night)}
+            currency={p.currency ?? "AMD"}
+          />
+          <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+
           <div className="mt-5 space-y-2">
             {p.contact_phone ? (
               <Button asChild className="h-auto w-full justify-start py-3">
