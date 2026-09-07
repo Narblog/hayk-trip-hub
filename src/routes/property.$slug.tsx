@@ -357,6 +357,7 @@ function PropertyPage() {
         <aside className="h-fit space-y-4 lg:sticky lg:top-24">
           <BookingRequestCard
             propertyId={p.id}
+            propertyTitle={p.name}
             maxGuests={Number(p.max_guests) || 2}
             fallbackPrice={Number(p.price_per_night)}
             currency={p.currency ?? "AMD"}

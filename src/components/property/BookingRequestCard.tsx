@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarCheck, Minus, Plus } from "lucide-react";
+import { CalendarCheck, CalendarDays, Minus, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -68,13 +76,23 @@ function overlaps(a: SentRange, b: SentRange) {
   return a.checkIn < b.checkOut && a.checkOut > b.checkIn;
 }
 
+function formatDateLine(iso: string, lang: string) {
+  const d = new Date(`${iso}T00:00:00`);
+  return d.toLocaleDateString(lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB", {
+    day: "numeric",
+    month: "short",
+  });
+}
+
 export function BookingRequestCard({
   propertyId,
+  propertyTitle,
   maxGuests,
   fallbackPrice,
   currency,
 }: {
   propertyId: string;
+  propertyTitle?: string;
   maxGuests: number;
   fallbackPrice: number;
   currency: string;
@@ -92,6 +110,7 @@ export function BookingRequestCard({
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [open, setOpen] = useState(false);
   const [sentRanges, setSentRanges] = useState<SentRange[]>([]);
 
   useEffect(() => {
@@ -159,6 +178,7 @@ export function BookingRequestCard({
       } catch {
         // storage full or blocked — booking is still created server-side
       }
+      setOpen(false);
       setDone(true);
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
@@ -185,58 +205,110 @@ export function BookingRequestCard({
     );
   }
 
+  const canOpen = nights > 0 && !rangeConflict && !alreadySent;
+
   return (
-    <form onSubmit={submit} className="rounded-2xl border border-border bg-card p-5 shadow-card">
-      <p className="font-display text-2xl font-semibold">
-        {formatPrice(nightly, cur, lang)}
-        <span className="ml-1 text-sm font-normal text-muted-foreground">/ {t("card.perNight")}</span>
-      </p>
-      <h3 className="mt-4 text-sm font-semibold">{t("book.title")}</h3>
+    <>
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
+        <p className="font-display text-2xl font-semibold">
+          {formatPrice(nightly, cur, lang)}
+          <span className="ml-1 text-sm font-normal text-muted-foreground">/ {t("card.perNight")}</span>
+        </p>
+        <h3 className="mt-4 text-sm font-semibold">{t("book.title")}</h3>
 
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <div>
-          <Label htmlFor="bk-in" className="text-xs text-muted-foreground">{t("book.checkIn")}</Label>
-          <Input id="bk-in" type="date" min={todayISO()} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="mt-1" />
-        </div>
-        <div>
-          <Label htmlFor="bk-out" className="text-xs text-muted-foreground">{t("book.checkOut")}</Label>
-          <Input id="bk-out" type="date" min={checkIn || todayISO()} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="mt-1" />
-        </div>
-      </div>
-
-      <div className="mt-3 space-y-2">
-        <Stepper label={t("book.adults")} value={adults} min={1} max={maxGuests} onChange={setAdults} />
-        <Stepper label={t("book.children")} value={children} min={0} max={Math.max(0, maxGuests - adults)} onChange={setChildren} />
-        <Stepper label={t("book.infants")} value={infants} min={0} max={5} onChange={setInfants} />
-      </div>
-
-      {nights > 0 ? (
-        <div className="mt-3 rounded-xl bg-surface p-3 text-sm">
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span>{formatPrice(nightly, cur, lang)} × {nights} {t("book.nights")}</span>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <div>
+            <Label htmlFor="bk-in" className="text-xs text-muted-foreground">{t("book.checkIn")}</Label>
+            <Input id="bk-in" type="date" min={todayISO()} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="mt-1" />
           </div>
-          <div className="mt-1 flex items-center justify-between font-semibold">
-            <span>{t("book.total")}</span>
-            <span>{formatPrice(total, cur, lang)}</span>
+          <div>
+            <Label htmlFor="bk-out" className="text-xs text-muted-foreground">{t("book.checkOut")}</Label>
+            <Input id="bk-out" type="date" min={checkIn || todayISO()} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="mt-1" />
           </div>
         </div>
-      ) : null}
 
-      <div className="mt-3 grid gap-2">
-        <Input placeholder={t("book.name")} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} required />
-        <Input placeholder={t("book.phone")} value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} required />
-        <Input type="email" placeholder={t("book.email")} value={email} onChange={(e) => setEmail(e.target.value)} maxLength={120} />
-        <Textarea placeholder={t("book.message")} value={message} onChange={(e) => setMessage(e.target.value.slice(0, 300))} rows={3} />
+        <div className="mt-3 space-y-2">
+          <Stepper label={t("book.adults")} value={adults} min={1} max={maxGuests} onChange={setAdults} />
+          <Stepper label={t("book.children")} value={children} min={0} max={Math.max(0, maxGuests - adults)} onChange={setChildren} />
+          <Stepper label={t("book.infants")} value={infants} min={0} max={5} onChange={setInfants} />
+        </div>
+
+        {nights > 0 ? (
+          <div className="mt-3 rounded-xl bg-surface p-3 text-sm">
+            <div className="flex items-center justify-between text-muted-foreground">
+              <span>{formatPrice(nightly, cur, lang)} × {nights} {t("book.nights")}</span>
+            </div>
+            <div className="mt-1 flex items-center justify-between font-semibold">
+              <span>{t("book.total")}</span>
+              <span>{formatPrice(total, cur, lang)}</span>
+            </div>
+          </div>
+        ) : null}
+
+        {rangeConflict ? <p className="mt-3 text-sm text-destructive">{t("book.errUnavailable")}</p> : null}
+        {!rangeConflict && alreadySent ? <p className="mt-3 text-sm text-destructive">{t("book.errDuplicate")}</p> : null}
+
+        <Button type="button" className="mt-4 h-12 w-full rounded-full" disabled={!canOpen} onClick={() => { setError(null); setOpen(true); }}>
+          {t("book.openModal")}
+        </Button>
+        <p className="mt-3 text-xs text-muted-foreground">{t("book.disclaimer")}</p>
       </div>
 
-      {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
-      {rangeConflict ? <p className="mt-3 text-sm text-destructive">{t("book.errUnavailable")}</p> : null}
-      {!rangeConflict && alreadySent ? <p className="mt-3 text-sm text-destructive">{t("book.errDuplicate")}</p> : null}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="font-display text-2xl">{t("book.modalTitle")}</DialogTitle>
+            {propertyTitle ? <DialogDescription>{propertyTitle}</DialogDescription> : null}
+          </DialogHeader>
 
-      <Button type="submit" className="mt-4 h-12 w-full rounded-full" disabled={sending || rangeConflict || alreadySent}>
-        {sending ? t("book.sending") : t("book.submit")}
-      </Button>
-      <p className="mt-3 text-xs text-muted-foreground">{t("book.disclaimer")}</p>
-    </form>
+          <form onSubmit={submit}>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 rounded-xl border border-border px-4 py-3 text-sm">
+              <span className="inline-flex items-center gap-2">
+                <CalendarDays className="size-4 text-muted-foreground" />
+                <span className="font-medium">
+                  {formatDateLine(checkIn, lang)} – {formatDateLine(checkOut, lang)}
+                </span>
+                <span className="text-muted-foreground">{nights} {t("book.nights")}</span>
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Users className="size-4 text-muted-foreground" />
+                <span className="font-medium">{guests} {t("book.guests").toLowerCase()}</span>
+              </span>
+            </div>
+
+            <div className="mt-3 space-y-1 border-b border-border pb-3 text-sm">
+              <div className="flex items-center justify-between text-muted-foreground">
+                <span>{formatPrice(nightly, cur, lang)} × {nights} {t("book.nights")}</span>
+                <span>{formatPrice(total, cur, lang)}</span>
+              </div>
+              <div className="flex items-center justify-between font-semibold">
+                <span>{t("book.total")}</span>
+                <span>{formatPrice(total, cur, lang)}</span>
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <Input placeholder={t("book.name")} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} required />
+                <Input placeholder={t("book.phone")} value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={30} required />
+              </div>
+              <Input type="email" placeholder={t("book.email")} value={email} onChange={(e) => setEmail(e.target.value)} maxLength={120} />
+              <Textarea placeholder={t("book.message")} value={message} onChange={(e) => setMessage(e.target.value.slice(0, 300))} rows={3} />
+            </div>
+
+            {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+
+            <DialogFooter className="mt-5 gap-2 sm:justify-between">
+              <Button type="button" variant="outline" className="rounded-full" onClick={() => setOpen(false)}>
+                {t("book.dismiss")}
+              </Button>
+              <Button type="submit" className="rounded-full" disabled={sending}>
+                {sending ? t("book.sending") : t("book.submit")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
