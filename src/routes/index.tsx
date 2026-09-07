@@ -134,7 +134,7 @@ function Home() {
     if (recommendedIds.has(p.id) || seen.has(p.id)) continue;
     seen.add(p.id);
     grid.push(p);
-    if (grid.length === 8) break;
+    if (grid.length === 12) break;
   }
 
   return (
