@@ -56,7 +56,7 @@ function Stepper({
   );
 }
 
-type SentRange = { checkIn: string; checkOut: string };
+type SentRange = { checkIn: string; checkOut: string; id?: string; token?: string };
 
 function sentKey(propertyId: string) {
   return `stayland.requests.${propertyId}`;
