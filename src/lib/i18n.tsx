@@ -432,6 +432,7 @@ const hy: Dict = {
   "nav.account": "Իմ հաշիվը",
   "nav.favorites": "Ընտրված",
   "nav.ownerDashboard": "Տիրոջ վահանակ",
+  "nav.myPage": "Իմ էջը",
   "nav.adminDashboard": "Ադմին",
   "nav.home": "Գլխավոր",
   "nav.search": "Որոնում",
