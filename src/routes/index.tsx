@@ -194,6 +194,7 @@ function Home() {
               <SearchBar />
             </div>
           </div>
+          </div>
         </div>
       </section>
 
