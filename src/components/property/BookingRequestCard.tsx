@@ -198,7 +198,22 @@ export function BookingRequestCard({
         email,
         message,
       });
-      const next = [...sentRanges, { checkIn, checkOut }];
+      const created = await createBookingRequest({
+        propertyId,
+        checkIn,
+        checkOut,
+        adults,
+        children,
+        infants,
+        name,
+        phone,
+        email,
+        message,
+      });
+      const next: SentRange[] = [
+        ...sentRanges,
+        { checkIn, checkOut, id: created.booking_id as string, token: created.guest_token as string },
+      ];
       setSentRanges(next);
       try {
         window.localStorage.setItem(sentKey(propertyId), JSON.stringify(next));
@@ -216,7 +231,9 @@ export function BookingRequestCard({
     }
   }
 
-  if (done) {
+  const showSent = (done || activeRanges.length > 0) && activeRanges.length > 0;
+
+  if (showSent) {
     return (
       <div className={embedded ? "px-1 py-5 text-center" : "rounded-2xl border border-border bg-card p-6 text-center shadow-card"}>
         <div className="mx-auto grid size-14 place-items-center rounded-full bg-brand-soft text-brand">
@@ -231,6 +248,37 @@ export function BookingRequestCard({
       </div>
     );
   }
+
+  if (closedStatus) {
+    return (
+      <div className={embedded ? "px-1 py-5 text-center" : "rounded-2xl border border-border bg-card p-6 text-center shadow-card"}>
+        <div className="mx-auto grid size-14 place-items-center rounded-full bg-destructive/10 text-destructive">
+          <CalendarX className="size-7" />
+        </div>
+        <h3 className="mt-4 font-display text-xl font-semibold">
+          {t(closedStatus === "DECLINED" ? "book.declinedTitle" : "book.cancelledTitle")}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t(closedStatus === "DECLINED" ? "book.declinedBody" : "book.cancelledBody")}
+        </p>
+        <Button
+          className="mt-5 h-12 w-full rounded-full"
+          onClick={() => {
+            setSentRanges([]);
+            setDone(false);
+            try {
+              window.localStorage.removeItem(sentKey(propertyId));
+            } catch {
+              // ignore
+            }
+          }}
+        >
+          {t("book.newRequest")}
+        </Button>
+      </div>
+    );
+  }
+
 
   const canOpen = nights > 0 && !rangeConflict && !alreadySent;
 
