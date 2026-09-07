@@ -75,10 +75,51 @@ function SectionHead({
   );
 }
 
+function Vibes() {
+  const { t } = useI18n();
+  const vibes = [
+    { img: vibeForest, label: t("vibe.forest"), search: { guests: 2, page: 1, amenities: ["forest_view"] } as const },
+    { img: vibeLake, label: t("vibe.lake"), search: { guests: 2, page: 1, amenities: ["lake_view"] } as const },
+    { img: vibeJacuzzi, label: t("vibe.jacuzzi"), search: { guests: 2, page: 1, amenities: ["jacuzzi"] } as const },
+    { img: vibeFamily, label: t("vibe.family"), search: { guests: 2, page: 1 } as const },
+    { img: vibeRomantic, label: t("vibe.romantic"), search: { guests: 2, page: 1, amenities: ["fireplace"] } as const },
+    { img: vibeMountain, label: t("vibe.mountain"), search: { guests: 2, page: 1, amenities: ["mountain_view"] } as const },
+  ];
+  return (
+    <section className="mt-8 md:mt-10">
+      <h2 className="font-display text-xl md:text-2xl">{t("home.vibes")}</h2>
+      <div className="scrollbar-none -mx-4 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-6">
+        {vibes.map((v) => (
+          <Link
+            key={v.label}
+            to="/search"
+            search={v.search}
+            className="group relative w-36 shrink-0 snap-start overflow-hidden rounded-2xl shadow-card transition-shadow hover:shadow-lift sm:w-auto"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden">
+              <img
+                src={v.img}
+                alt={v.label}
+                loading="lazy"
+                width={640}
+                height={400}
+                className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
+              <p className="absolute inset-x-0 bottom-0 p-2.5 text-center text-sm font-semibold text-background drop-shadow">
+                {v.label}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Home() {
-  const { t, localized } = useI18n();
+  const { t } = useI18n();
   const { data, isPending } = useQuery(homeQuery());
-  const { data: ref } = useQuery(refDataQuery());
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
