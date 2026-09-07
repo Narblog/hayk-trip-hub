@@ -23,7 +23,15 @@ export type PropertyCardData = {
   is_featured?: boolean;
 };
 
-export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData; showAvailable?: boolean }) {
+export function PropertyCard({
+  p,
+  showAvailable = false,
+  compact = false,
+}: {
+  p: PropertyCardData;
+  showAvailable?: boolean;
+  compact?: boolean;
+}) {
   const { t, lang, localized } = useI18n();
   const { data: ref } = useQuery(refDataQuery());
   const city = ref?.cities.find((c) => c.code === p.city_code);
@@ -32,7 +40,7 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
   return (
     <article className="group relative overflow-hidden rounded-3xl border border-border/70 bg-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
       <Link to="/property/$slug" params={{ slug: p.slug }} className="block">
-        <div className="relative aspect-4/5 overflow-hidden bg-surface">
+        <div className={`relative overflow-hidden bg-surface ${compact ? "aspect-4/3" : "aspect-4/5"}`}>
           {p.main_image_url ? (
             <img
               src={p.main_image_url}
@@ -75,9 +83,9 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
           </div>
         </div>
       </Link>
-      <FavoriteButton propertyId={p.id} className="absolute right-3 top-3" />
+      <FavoriteButton propertyId={p.id} className="absolute right-3 top-3 z-20" />
 
-      <div className="space-y-3 p-5">
+      <div className={compact ? "space-y-2 p-4" : "space-y-3 p-5"}>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <MapPin className="size-3.5" /> {localized(city, "name") || p.city_code}
@@ -85,9 +93,11 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
           <span className="flex items-center gap-1">
             <Users className="size-3.5" /> {p.max_guests} {t("card.guests")}
           </span>
-          <span className="flex items-center gap-1">
-            <BedDouble className="size-3.5" /> {p.bedrooms} {t("card.bedrooms")}
-          </span>
+          {compact ? null : (
+            <span className="flex items-center gap-1">
+              <BedDouble className="size-3.5" /> {p.bedrooms} {t("card.bedrooms")}
+            </span>
+          )}
         </div>
 
         <div className="flex items-end justify-between border-t border-border/70 pt-3">
@@ -98,15 +108,26 @@ export function PropertyCard({ p, showAvailable = false }: { p: PropertyCardData
             </span>
             <span className="ml-1 text-xs text-muted-foreground">/ {t("card.perNight")}</span>
           </p>
-          <Link
-            to="/property/$slug"
-            params={{ slug: p.slug }}
-            className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold transition-colors hover:border-brand hover:text-brand"
-          >
-            {t("card.view")}
-          </Link>
+          {compact ? null : (
+            <Link
+              to="/property/$slug"
+              params={{ slug: p.slug }}
+              className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold transition-colors hover:border-brand hover:text-brand"
+            >
+              {t("card.view")}
+            </Link>
+          )}
         </div>
       </div>
+
+      {compact ? (
+        <Link
+          to="/property/$slug"
+          params={{ slug: p.slug }}
+          aria-label={p.name}
+          className="absolute inset-0 z-10"
+        />
+      ) : null}
     </article>
   );
 }
