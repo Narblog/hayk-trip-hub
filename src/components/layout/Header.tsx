@@ -86,6 +86,34 @@ export function Header() {
                   ) : null}
                 </Link>
               </Button>
+              {isAdmin ? (
+                <>
+                  <Button asChild size="sm" className="hidden rounded-full sm:inline-flex">
+                    <Link to="/admin">
+                      <Shield className="size-4" /> {t("nav.adminDashboard")}
+                    </Link>
+                  </Button>
+                  <Link
+                    to="/admin"
+                    aria-label={t("nav.adminDashboard")}
+                    className="ml-1 rounded-full ring-offset-background focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <Avatar className="size-9 border border-border">
+                      <AvatarFallback className="bg-brand-soft text-xs font-semibold text-brand">
+                        {initials(profile?.full_name ?? user.email)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label={t("nav.logout")}
+                    onClick={() => void signOut()}
+                  >
+                    <LogOut className="size-4" />
+                  </Button>
+                </>
+              ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button className="ml-1 rounded-full ring-offset-background focus-visible:ring-2 focus-visible:ring-ring">
@@ -122,19 +150,14 @@ export function Header() {
                       </Link>
                     </DropdownMenuItem>
                   ) : null}
-                  {isAdmin ? (
-                    <DropdownMenuItem asChild>
-                      <Link to="/admin">
-                        <Shield className="size-4" /> {t("nav.adminDashboard")}
-                      </Link>
-                    </DropdownMenuItem>
-                  ) : null}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={() => void signOut()}>
                     <LogOut className="size-4" /> {t("nav.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              )}
+
             </>
           ) : (
             <div className="hidden items-center gap-2 sm:flex">
