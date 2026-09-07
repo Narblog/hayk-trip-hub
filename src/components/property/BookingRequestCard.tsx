@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarCheck, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,26 @@ function Stepper({
       </div>
     </div>
   );
+}
+
+type SentRange = { checkIn: string; checkOut: string };
+
+function sentKey(propertyId: string) {
+  return `stayland.requests.${propertyId}`;
+}
+
+function readSentRanges(propertyId: string): SentRange[] {
+  try {
+    const raw = window.localStorage.getItem(sentKey(propertyId));
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((r) => r && typeof r.checkIn === "string" && typeof r.checkOut === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function overlaps(a: SentRange, b: SentRange) {
+  return a.checkIn < b.checkOut && a.checkOut > b.checkIn;
 }
 
 export function BookingRequestCard({
