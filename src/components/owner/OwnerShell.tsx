@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Bell, Building2, CalendarDays, Home, Tag, UserRound } from "lucide-react";
+import { BarChart3, Bell, Building2, CalendarDays, Home, UserRound } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { notificationsQuery, profileQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
