@@ -427,17 +427,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Become a host */}
-        <section className="mt-20 overflow-hidden rounded-4xl bg-highland px-8 py-14 text-center text-highland-foreground md:px-16">
-          <h2 className="mx-auto max-w-2xl font-display text-3xl md:text-4xl">{t("home.hostHeadline")}</h2>
-          <p className="mx-auto mt-4 max-w-xl text-highland-foreground/80">{t("home.ownerCtaSub")}</p>
-          <Link
-            to="/owner/properties/new"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-brand px-7 py-3 text-sm font-semibold text-brand-foreground transition-opacity hover:opacity-90"
-          >
-            {t("home.hostCta")} <ArrowRight className="size-4" />
-          </Link>
-        </section>
 
         {/* Recently added */}
         <Row title={t("home.recentlyAdded")} items={(data?.recent ?? []) as PropertyCardData[]} />
