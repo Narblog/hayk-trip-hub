@@ -74,13 +74,13 @@
 :root {
   --radius: 1.4rem;
   /* Paper / ink / forest / apricot — StayLand editorial system */
-  --background: oklch(0.973 0.004 95);
+  --background: oklch(0.965 0.013 92);
   --foreground: oklch(0.225 0.011 165);
-  --surface: oklch(0.945 0.014 88);
+  --surface: oklch(0.938 0.02 89);
   --surface-foreground: oklch(0.235 0.012 70);
-  --card: oklch(0.988 0.003 95);
+  --card: oklch(0.99 0.005 95);
   --card-foreground: oklch(0.235 0.012 70);
-  --popover: oklch(0.988 0.003 95);
+  --popover: oklch(0.99 0.005 95);
   --popover-foreground: oklch(0.235 0.012 70);
   --primary: oklch(0.33 0.04 168);
   --primary-foreground: oklch(0.968 0.012 85);
