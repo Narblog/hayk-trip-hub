@@ -33,6 +33,7 @@ import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.propertie
 import { Route as OwnerToursNewRouteImport } from './routes/owner.tours.new'
 import { Route as OwnerPropertiesIdCalendarRouteImport } from './routes/owner.properties.$id.calendar'
 import { Route as OwnerPropertiesIdEditRouteImport } from './routes/owner.properties.$id.edit'
+import { Route as OwnerPropertiesIdPricingRouteImport } from './routes/owner.properties.$id.pricing'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -155,6 +156,12 @@ const OwnerPropertiesIdEditRoute = OwnerPropertiesIdEditRouteImport.update({
   path: '/owner/properties/$id/edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OwnerPropertiesIdPricingRoute =
+  OwnerPropertiesIdPricingRouteImport.update({
+    id: '/owner/properties/$id/pricing',
+    path: '/owner/properties/$id/pricing',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
+  '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -207,6 +215,7 @@ export interface FileRoutesByTo {
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
+  '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -234,6 +243,7 @@ export interface FileRoutesById {
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
+  '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
+    | '/owner/properties/$id/pricing'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -288,6 +299,7 @@ export interface FileRouteTypes {
     | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
+    | '/owner/properties/$id/pricing'
   id:
     | '__root__'
     | '/'
@@ -314,6 +326,7 @@ export interface FileRouteTypes {
     | '/owner/tours/new'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
+    | '/owner/properties/$id/pricing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -341,6 +354,7 @@ export interface RootRouteChildren {
   OwnerToursNewRoute: typeof OwnerToursNewRoute
   OwnerPropertiesIdCalendarRoute: typeof OwnerPropertiesIdCalendarRoute
   OwnerPropertiesIdEditRoute: typeof OwnerPropertiesIdEditRoute
+  OwnerPropertiesIdPricingRoute: typeof OwnerPropertiesIdPricingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -513,6 +527,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerPropertiesIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/owner/properties/$id/pricing': {
+      id: '/owner/properties/$id/pricing'
+      path: '/owner/properties/$id/pricing'
+      fullPath: '/owner/properties/$id/pricing'
+      preLoaderRoute: typeof OwnerPropertiesIdPricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -541,6 +562,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerToursNewRoute: OwnerToursNewRoute,
   OwnerPropertiesIdCalendarRoute: OwnerPropertiesIdCalendarRoute,
   OwnerPropertiesIdEditRoute: OwnerPropertiesIdEditRoute,
+  OwnerPropertiesIdPricingRoute: OwnerPropertiesIdPricingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
