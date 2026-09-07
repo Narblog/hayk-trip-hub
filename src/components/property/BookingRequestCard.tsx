@@ -125,16 +125,22 @@ export function BookingRequestCard({
     return nightsInRange(checkIn, checkOut).some((d) => takenNights.has(d));
   }, [checkIn, checkOut, nights, takenNights]);
 
+  const alreadySent = useMemo(() => {
+    if (!checkIn || !checkOut || nights <= 0) return false;
+    return sentRanges.some((r) => overlaps(r, { checkIn, checkOut }));
+  }, [checkIn, checkOut, nights, sentRanges]);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     if (nights <= 0) return setError(t("book.errDates"));
     if (rangeConflict) return setError(t("book.errUnavailable"));
+    if (alreadySent) return setError(t("book.errDuplicate"));
     if (name.trim().length < 2) return setError(t("book.errName"));
     if (phone.trim().length < 5) return setError(t("book.errPhone"));
     setSending(true);
     try {
-      const row = await createBookingRequest({
+      await createBookingRequest({
         propertyId,
         checkIn,
         checkOut,
@@ -146,7 +152,14 @@ export function BookingRequestCard({
         email,
         message,
       });
-      setDone({ reference: row.reference });
+      const next = [...sentRanges, { checkIn, checkOut }];
+      setSentRanges(next);
+      try {
+        window.localStorage.setItem(sentKey(propertyId), JSON.stringify(next));
+      } catch {
+        // storage full or blocked — booking is still created server-side
+      }
+      setDone(true);
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const key = Object.keys(ERRORS).find((k) => raw.includes(k));
