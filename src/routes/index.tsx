@@ -145,23 +145,23 @@ function Home() {
           <img src={heroImage} alt="Armenian mountain landscape at sunrise" className="size-full object-cover" />
           <div className="hero-fade absolute inset-0" />
         </div>
-        <div className="container-page relative z-10 pb-14 pt-20 text-center md:pb-16 md:pt-24">
-          <h1 className="mx-auto max-w-4xl font-display text-[1.65rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-5xl md:leading-[1.15]">
+        <div className="container-page relative z-10 pb-12 pt-16 text-center md:pb-16 md:pt-24">
+          <h1 className="mx-auto max-w-4xl font-display text-[1.45rem] leading-[1.25] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-5xl md:leading-[1.15]">
             {t("hero.l1")} {t("hero.l2a")}
             <span className="text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]">{t("hero.hl")}</span>
             {t("hero.l2b")}
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base">{t("hero.subtitle")}</p>
+          <p className="mx-auto mt-2.5 max-w-2xl px-2 text-[0.8125rem] leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:mt-3 md:text-base">{t("hero.subtitle")}</p>
 
-          <div className="mx-auto mt-10 max-w-4xl md:mt-12">
-            <div className="mx-auto flex w-fit items-center gap-1 rounded-t-3xl bg-card/95 px-2 pt-2 shadow-search backdrop-blur">
-              <span className="flex items-center gap-2 rounded-t-2xl border-b-2 border-brand bg-card px-5 py-2.5 text-sm font-semibold text-foreground">
+          <div className="mx-auto mt-8 max-w-4xl md:mt-12">
+            <div className="scrollbar-none mx-auto flex w-full items-center justify-start gap-1 overflow-x-auto rounded-t-3xl bg-card/95 px-1.5 pt-2 shadow-search backdrop-blur sm:w-fit sm:justify-center sm:px-2">
+              <span className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-brand bg-card px-3 py-2 text-[0.8125rem] font-semibold text-foreground sm:px-5 sm:py-2.5 sm:text-sm">
                 <HomeIcon className="size-4 text-brand" />
                 {t("home.tabStays")}
               </span>
               <Link
                 to="/tours"
-                className="flex items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
               >
                 <CarFront className="size-4" />
                 {t("home.tabTours")}
@@ -170,7 +170,7 @@ function Home() {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
                   >
                     <Gift className="size-4" />
                     {t("home.tabPackages")}

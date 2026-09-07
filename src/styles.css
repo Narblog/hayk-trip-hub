@@ -251,9 +251,9 @@
 @utility hero-fade {
   background-image: linear-gradient(
     to bottom,
-    color-mix(in oklab, oklch(0.2 0.02 168) 38%, transparent) 0%,
-    color-mix(in oklab, oklch(0.2 0.02 168) 18%, transparent) 40%,
-    color-mix(in oklab, var(--color-background) 45%, transparent) 78%,
+    color-mix(in oklab, oklch(0.2 0.02 168) 42%, transparent) 0%,
+    color-mix(in oklab, oklch(0.2 0.02 168) 22%, transparent) 55%,
+    color-mix(in oklab, var(--color-background) 55%, transparent) 92%,
     var(--color-background) 100%
   );
 }
