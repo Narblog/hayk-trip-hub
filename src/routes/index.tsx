@@ -144,15 +144,15 @@ function Home() {
           <img src={heroImage} alt="Armenian mountain landscape at sunrise" className="size-full object-cover" />
           <div className="hero-fade absolute inset-0" />
         </div>
-        <div className="container-page relative z-10 pb-12 pt-14 text-center md:pb-16 md:pt-20">
-          <h1 className="mx-auto max-w-4xl font-display text-3xl leading-[1.15] text-background md:text-5xl">
+        <div className="container-page relative z-10 pb-14 pt-20 text-center md:pb-16 md:pt-24">
+          <h1 className="mx-auto max-w-4xl font-display text-[1.65rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-5xl md:leading-[1.15]">
             {t("hero.l1")} {t("hero.l2a")}
             <span className="text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]">{t("hero.hl")}</span>
             {t("hero.l2b")}
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-base text-background/85">{t("hero.subtitle")}</p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base">{t("hero.subtitle")}</p>
 
-          <div className="mx-auto mt-6 max-w-4xl">
+          <div className="mx-auto mt-10 max-w-4xl md:mt-12">
             <div className="mx-auto flex w-fit items-center gap-1 rounded-t-3xl bg-card/95 px-2 pt-2 shadow-search backdrop-blur">
               <span className="flex items-center gap-2 rounded-t-2xl border-b-2 border-brand bg-card px-5 py-2.5 text-sm font-semibold text-foreground">
                 <HomeIcon className="size-4 text-brand" />
