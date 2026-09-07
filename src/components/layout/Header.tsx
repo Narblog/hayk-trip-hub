@@ -205,6 +205,15 @@ export function Header() {
                 >
                   {t("nav.listProperty")}
                 </Link>
+                {user && isOwner ? (
+                  <Link
+                    to="/owner"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-3 py-3 font-display text-lg hover:bg-surface"
+                  >
+                    {t("nav.myPage")}
+                  </Link>
+                ) : null}
                 <div className="mt-4 border-t border-border pt-4">
                   {user ? (
                     <Button variant="outline" className="w-full" onClick={() => void signOut()}>
