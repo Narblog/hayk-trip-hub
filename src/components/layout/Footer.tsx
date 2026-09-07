@@ -46,8 +46,8 @@ export function Footer() {
 
 
   return (
-    <footer className="mt-24 border-t border-border/70 bg-surface">
-      <div className="container-page grid gap-10 py-16 md:grid-cols-4">
+    <footer className="mt-14 border-t border-border/70 bg-surface md:mt-24">
+      <div className="container-page grid gap-8 py-10 md:grid-cols-4 md:gap-10 md:py-16">
         <div className="space-y-4">
           <Logo />
           <p className="max-w-xs text-sm text-muted-foreground">{t("footer.desc")}</p>
@@ -88,7 +88,7 @@ export function Footer() {
           </div>
         ))}
       </div>
-      <div className="border-t border-border/70">
+      <div className="border-t border-border/70 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <div className="container-page flex flex-wrap items-center justify-between gap-2 py-5 text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} StayLand.am — {t("footer.rights")}</span>
           <span className="eyebrow">{t("footer.madeIn")}</span>

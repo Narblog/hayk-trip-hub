@@ -46,7 +46,7 @@ function OwnerCalendarPage() {
       ) : (
         <ul className="mt-6 grid gap-3 sm:grid-cols-2">
           {props.map((p) => (
-            <li key={p.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+            <li key={p.id} className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-4">
               <span className="size-14 shrink-0 overflow-hidden rounded-xl bg-surface">
                 {p.main_image_url ? <img src={p.main_image_url} alt="" className="size-full object-cover" /> : null}
               </span>

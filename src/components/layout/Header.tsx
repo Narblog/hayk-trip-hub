@@ -53,7 +53,7 @@ export function Header() {
           : "border-border/70 bg-background/90 shadow-card"
       } backdrop-blur-xl`}
     >
-      <div className="container-page flex h-20 items-center justify-between gap-4">
+      <div className="container-page flex h-16 items-center justify-between gap-2 md:h-20 md:gap-4">
         <div className="flex items-center gap-8">
           <Logo />
           <nav className="hidden items-center gap-2 md:flex">
