@@ -60,12 +60,25 @@ function CalendarPage() {
   });
 
   const availability = useQuery(availabilityQuery(id));
+  const bookings = useQuery(propertyBookingsQuery(id));
 
   const blocked = useMemo(() => {
     const set = new Set<string>();
     for (const row of availability.data ?? []) if (row.status !== "AVAILABLE") set.add(row.date);
     return set;
   }, [availability.data]);
+
+  const bookedSets = useMemo(() => {
+    const pending = new Set<string>();
+    const accepted = new Set<string>();
+    for (const b of bookings.data ?? []) {
+      const target = b.status === "ACCEPTED" ? accepted : pending;
+      for (const d of nightsInRange(b.check_in, b.check_out)) target.add(d);
+    }
+    return { pending, accepted };
+  }, [bookings.data]);
+
+
 
   const save = useMutation({
     mutationFn: async ({ dates, status }: { dates: string[]; status: "BLOCKED" | "AVAILABLE" }) => {
