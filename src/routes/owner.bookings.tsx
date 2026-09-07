@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { BookingStatusPill } from "@/components/booking/BookingStatusPill";
 import { useAuth } from "@/lib/auth";
-import { ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
+import { cancelBooking, ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -65,6 +65,16 @@ function OwnerBookingsPage() {
       const raw = err instanceof Error ? err.message : "";
       toast.error(raw.includes("CONFLICT") ? t("book.conflict") : t("book.errGeneric"));
     },
+  });
+
+  const cancel = useMutation({
+    mutationFn: (bookingId: string) => cancelBooking(bookingId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["owner-bookings"] });
+      qc.invalidateQueries({ queryKey: ["availability"] });
+      toast.success(t("book.cancelled"));
+    },
+    onError: () => toast.error(t("book.errGeneric")),
   });
 
   if (!user)
@@ -198,6 +208,19 @@ function OwnerBookingsPage() {
                       >
                         <Check className="size-4" /> {t("book.accept")}
                       </Button>
+                    </div>
+                  ) : null}
+
+                  {b.status === "ACCEPTED" ? (
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      <Button
+                        variant="outline"
+                        disabled={cancel.isPending}
+                        onClick={() => cancel.mutate(b.id)}
+                      >
+                        <X className="size-4" /> {t("book.cancelAccepted")}
+                      </Button>
+                      <span className="text-xs text-muted-foreground">{t("book.cancelAcceptedHint")}</span>
                     </div>
                   ) : null}
 
