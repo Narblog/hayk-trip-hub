@@ -388,7 +388,9 @@ function PropertyPage() {
             ) : null}
           </div>
           <p className="mt-3 text-xs text-muted-foreground">{t("property.approxLocation")}</p>
+          </div>
         </aside>
+
       </div>
     </div>
   );
