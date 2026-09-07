@@ -13,9 +13,15 @@ import { CardGridSkeleton } from "@/components/common/states";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
 import { SearchBar } from "@/components/search/SearchBar";
-import { homeQuery, refDataQuery } from "@/lib/data";
+import { homeQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 import heroImage from "@/assets/hero-armenia.jpg";
+import vibeForest from "@/assets/vibe-forest.jpg";
+import vibeLake from "@/assets/vibe-lake.jpg";
+import vibeJacuzzi from "@/assets/vibe-jacuzzi.jpg";
+import vibeFamily from "@/assets/vibe-family.jpg";
+import vibeRomantic from "@/assets/vibe-romantic.jpg";
+import vibeMountain from "@/assets/vibe-mountain.jpg";
 import promoTours from "@/assets/promo-tours.jpg";
 
 export const Route = createFileRoute("/")({
@@ -69,10 +75,51 @@ function SectionHead({
   );
 }
 
+function Vibes() {
+  const { t } = useI18n();
+  const vibes = [
+    { img: vibeForest, label: t("vibe.forest"), search: { guests: 2, page: 1, amenities: ["forest_view"] } as const },
+    { img: vibeLake, label: t("vibe.lake"), search: { guests: 2, page: 1, amenities: ["lake_view"] } as const },
+    { img: vibeJacuzzi, label: t("vibe.jacuzzi"), search: { guests: 2, page: 1, amenities: ["jacuzzi"] } as const },
+    { img: vibeFamily, label: t("vibe.family"), search: { guests: 2, page: 1 } as const },
+    { img: vibeRomantic, label: t("vibe.romantic"), search: { guests: 2, page: 1, amenities: ["fireplace"] } as const },
+    { img: vibeMountain, label: t("vibe.mountain"), search: { guests: 2, page: 1, amenities: ["mountain_view"] } as const },
+  ];
+  return (
+    <section className="mt-8 md:mt-10">
+      <h2 className="font-display text-xl md:text-2xl">{t("home.vibes")}</h2>
+      <div className="scrollbar-none -mx-4 mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-6">
+        {vibes.map((v) => (
+          <Link
+            key={v.label}
+            to="/search"
+            search={v.search}
+            className="group relative w-36 shrink-0 snap-start overflow-hidden rounded-2xl shadow-card transition-shadow hover:shadow-lift sm:w-auto"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden">
+              <img
+                src={v.img}
+                alt={v.label}
+                loading="lazy"
+                width={640}
+                height={400}
+                className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
+              <p className="absolute inset-x-0 bottom-0 p-2.5 text-center text-sm font-semibold text-background drop-shadow">
+                {v.label}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Home() {
-  const { t, localized } = useI18n();
+  const { t } = useI18n();
   const { data, isPending } = useQuery(homeQuery());
-  const { data: ref } = useQuery(refDataQuery());
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
@@ -134,21 +181,8 @@ function Home() {
       </section>
 
       <div className="container-page relative z-0 pb-10">
-        {/* Category chips */}
-        {(ref?.types ?? []).length ? (
-          <div className="scrollbar-none -mx-4 mt-8 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-            {(ref?.types ?? []).map((type) => (
-              <Link
-                key={type.code}
-                to="/search"
-                search={{ guests: 2, page: 1, types: [type.code] }}
-                className="shrink-0 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium shadow-card transition-colors hover:border-brand hover:text-brand"
-              >
-                {localized(type, "name")}
-              </Link>
-            ))}
-          </div>
-        ) : null}
+        {/* Vibe chips */}
+        <Vibes />
 
         {/* Recommended carousel */}
         <section className="mt-10">
