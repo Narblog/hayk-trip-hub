@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CalendarCheck, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,6 +48,26 @@ function Stepper({
   );
 }
 
+type SentRange = { checkIn: string; checkOut: string };
+
+function sentKey(propertyId: string) {
+  return `stayland.requests.${propertyId}`;
+}
+
+function readSentRanges(propertyId: string): SentRange[] {
+  try {
+    const raw = window.localStorage.getItem(sentKey(propertyId));
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((r) => r && typeof r.checkIn === "string" && typeof r.checkOut === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function overlaps(a: SentRange, b: SentRange) {
+  return a.checkIn < b.checkOut && a.checkOut > b.checkIn;
+}
+
 export function BookingRequestCard({
   propertyId,
   maxGuests,
@@ -71,7 +91,14 @@ export function BookingRequestCard({
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
-  const [done, setDone] = useState<{ reference: string } | null>(null);
+  const [done, setDone] = useState(false);
+  const [sentRanges, setSentRanges] = useState<SentRange[]>([]);
+
+  useEffect(() => {
+    const ranges = readSentRanges(propertyId);
+    setSentRanges(ranges);
+    if (ranges.length > 0) setDone(true);
+  }, [propertyId]);
 
   const guests = adults + children;
   const { data: quote } = useQuery(quoteQuery(propertyId, guests));
@@ -98,16 +125,22 @@ export function BookingRequestCard({
     return nightsInRange(checkIn, checkOut).some((d) => takenNights.has(d));
   }, [checkIn, checkOut, nights, takenNights]);
 
+  const alreadySent = useMemo(() => {
+    if (!checkIn || !checkOut || nights <= 0) return false;
+    return sentRanges.some((r) => overlaps(r, { checkIn, checkOut }));
+  }, [checkIn, checkOut, nights, sentRanges]);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     if (nights <= 0) return setError(t("book.errDates"));
     if (rangeConflict) return setError(t("book.errUnavailable"));
+    if (alreadySent) return setError(t("book.errDuplicate"));
     if (name.trim().length < 2) return setError(t("book.errName"));
     if (phone.trim().length < 5) return setError(t("book.errPhone"));
     setSending(true);
     try {
-      const row = await createBookingRequest({
+      await createBookingRequest({
         propertyId,
         checkIn,
         checkOut,
@@ -119,7 +152,14 @@ export function BookingRequestCard({
         email,
         message,
       });
-      setDone({ reference: row.reference });
+      const next = [...sentRanges, { checkIn, checkOut }];
+      setSentRanges(next);
+      try {
+        window.localStorage.setItem(sentKey(propertyId), JSON.stringify(next));
+      } catch {
+        // storage full or blocked — booking is still created server-side
+      }
+      setDone(true);
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const key = Object.keys(ERRORS).find((k) => raw.includes(k));
@@ -191,8 +231,9 @@ export function BookingRequestCard({
 
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
       {rangeConflict ? <p className="mt-3 text-sm text-destructive">{t("book.errUnavailable")}</p> : null}
+      {!rangeConflict && alreadySent ? <p className="mt-3 text-sm text-destructive">{t("book.errDuplicate")}</p> : null}
 
-      <Button type="submit" className="mt-4 h-12 w-full rounded-full" disabled={sending || rangeConflict}>
+      <Button type="submit" className="mt-4 h-12 w-full rounded-full" disabled={sending || rangeConflict || alreadySent}>
         {sending ? t("book.sending") : t("book.submit")}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">{t("book.disclaimer")}</p>
