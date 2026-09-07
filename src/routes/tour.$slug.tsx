@@ -117,9 +117,12 @@ function TourPage() {
         </div>
 
         <aside className="h-fit rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
-          <p className="text-xs text-muted-foreground">{t("common.from")}</p>
+          {t("common.from") ? <p className="text-xs text-muted-foreground">{t("common.from")}</p> : null}
           <p className="font-display text-3xl font-semibold text-brand">
             {formatPrice(Number(data.price), data.currency ?? "AMD", lang)}
+            {t("common.fromAfter") ? (
+              <span className="ml-1 text-sm font-normal text-muted-foreground">{t("common.fromAfter")}</span>
+            ) : null}
           </p>
           <p className="text-xs text-muted-foreground">/ {t("common.person")}</p>
           <div className="mt-5 space-y-2">

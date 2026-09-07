@@ -156,13 +156,16 @@ function ToursPage() {
                         ) : null}
                       </div>
                       <div className="mt-5 flex items-end justify-between">
-                        <p className="text-sm">
-                          <span className="text-xs text-muted-foreground">{t("common.from")} </span>
-                          <span className="font-display text-2xl font-semibold text-brand">
-                            {formatPrice(Number(featured.price), featured.currency ?? "AMD", lang)}
-                          </span>
-                          <span className="text-xs text-muted-foreground"> / {t("common.person")}</span>
-                        </p>
+                         <p className="text-sm">
+                           {t("common.from") ? <span className="text-xs text-muted-foreground">{t("common.from")} </span> : null}
+                           <span className="font-display text-2xl font-semibold text-brand">
+                             {formatPrice(Number(featured.price), featured.currency ?? "AMD", lang)}
+                           </span>
+                           {t("common.fromAfter") ? (
+                             <span className="text-xs text-muted-foreground">{t("common.fromAfter")}</span>
+                           ) : null}
+                           <span className="text-xs text-muted-foreground"> / {t("common.person")}</span>
+                         </p>
                         <span className="rounded-full border border-border px-4 py-2 text-sm font-semibold transition-colors group-hover:border-brand group-hover:text-brand">
                           {t("tours.viewDetails")}
                         </span>
@@ -213,13 +216,16 @@ function ToursPage() {
                             <Clock className="size-3" /> {tour.duration_hours} {t("tours.hours")}
                           </span>
                         </p>
-                        <p className="pt-1 text-sm">
-                          <span className="text-xs text-muted-foreground">{t("common.from")} </span>
-                          <span className="font-display text-lg font-semibold">
-                            {formatPrice(Number(tour.price), tour.currency ?? "AMD", lang)}
-                          </span>
-                          <span className="text-xs text-muted-foreground"> / {t("common.person")}</span>
-                        </p>
+                         <p className="pt-1 text-sm">
+                           {t("common.from") ? <span className="text-xs text-muted-foreground">{t("common.from")} </span> : null}
+                           <span className="font-display text-lg font-semibold">
+                             {formatPrice(Number(tour.price), tour.currency ?? "AMD", lang)}
+                           </span>
+                           {t("common.fromAfter") ? (
+                             <span className="text-xs text-muted-foreground">{t("common.fromAfter")}</span>
+                           ) : null}
+                           <span className="text-xs text-muted-foreground"> / {t("common.person")}</span>
+                         </p>
                       </div>
                     </Link>
                   );
