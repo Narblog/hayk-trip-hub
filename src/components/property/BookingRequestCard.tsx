@@ -116,9 +116,7 @@ export function BookingRequestCard({
   const [sentRanges, setSentRanges] = useState<SentRange[]>([]);
 
   useEffect(() => {
-    const ranges = readSentRanges(propertyId);
-    setSentRanges(ranges);
-    if (ranges.length > 0) setDone(true);
+    setSentRanges(readSentRanges(propertyId));
   }, [propertyId]);
 
   const guests = adults + children;
