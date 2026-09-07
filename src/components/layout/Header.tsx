@@ -86,6 +86,13 @@ export function Header() {
                   ) : null}
                 </Link>
               </Button>
+              {isOwner ? (
+                <Button asChild size="sm" className="hidden rounded-full sm:inline-flex">
+                  <Link to="/owner">
+                    <LayoutDashboard className="size-4" /> {t("nav.myPage")}
+                  </Link>
+                </Button>
+              ) : null}
               {isAdmin ? (
                 <>
                   <Button asChild size="sm" className="hidden rounded-full sm:inline-flex">
