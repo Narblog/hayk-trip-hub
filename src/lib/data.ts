@@ -136,6 +136,43 @@ export const propertyQuery = (slug: string) =>
     },
   });
 
+export type SimilarProperty = {
+  id: string;
+  name: string;
+  slug: string;
+  city_code: string | null;
+  price_per_night: number;
+  currency: string;
+  rating: number;
+  review_count: number;
+  main_image_url: string | null;
+};
+
+export const similarPropertiesQuery = (
+  cityCode: string | null,
+  regionCode: string | null,
+  excludeId: string | null,
+) =>
+  queryOptions({
+    queryKey: ["similar-properties", cityCode, regionCode, excludeId],
+    enabled: !!excludeId && !!(cityCode || regionCode),
+    queryFn: async () => {
+      let q = supabase
+        .from("properties")
+        .select("id,name,slug,city_code,price_per_night,currency,rating,review_count,main_image_url")
+        .eq("status", "APPROVED")
+        .eq("is_active", true)
+        .order("rating", { ascending: false })
+        .limit(4);
+      if (cityCode) q = q.eq("city_code", cityCode);
+      else if (regionCode) q = q.eq("region_code", regionCode);
+      if (excludeId) q = q.neq("id", excludeId);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data ?? []) as unknown as SimilarProperty[];
+    },
+  });
+
 export const availabilityQuery = (propertyId: string | undefined) =>
   queryOptions({
     queryKey: ["availability", propertyId],
