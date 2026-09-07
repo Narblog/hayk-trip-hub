@@ -1451,7 +1451,7 @@ const brandHy: Dict = {
   "card.featured": "Ընտրված",
   "home.exploreArmenia": "Բացահայտիր Հայաստանը",
   "home.exploreArmeniaSub": "Դիտիր կացարանները ըստ ուղղությունների։",
-  "home.featuredEyebrow": "Ընտրված ձեռքով",
+  "home.featuredEyebrow": "\n",
   "home.featured": "Առանձնացված կացարաններ",
   "home.featuredSub": "Վայրեր, ուր ճամփորդները վերադառնում են։",
   "home.cabinsGuesthouses": "Տնակներ և հյուրատներ",
