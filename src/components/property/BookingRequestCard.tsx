@@ -231,8 +231,9 @@ export function BookingRequestCard({
 
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
       {rangeConflict ? <p className="mt-3 text-sm text-destructive">{t("book.errUnavailable")}</p> : null}
+      {!rangeConflict && alreadySent ? <p className="mt-3 text-sm text-destructive">{t("book.errDuplicate")}</p> : null}
 
-      <Button type="submit" className="mt-4 h-12 w-full rounded-full" disabled={sending || rangeConflict}>
+      <Button type="submit" className="mt-4 h-12 w-full rounded-full" disabled={sending || rangeConflict || alreadySent}>
         {sending ? t("book.sending") : t("book.submit")}
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">{t("book.disclaimer")}</p>
