@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import {
   becomeOwner,
+  ownerBookingsQuery,
   ownerPropertiesQuery,
   ownerStatsQuery,
   ownerStatusHistoryQuery,
@@ -38,6 +39,8 @@ function OwnerDashboard() {
   const { data: props, isPending } = useQuery(ownerPropertiesQuery(user?.id ?? null));
   const { data: history = [] } = useQuery(ownerStatusHistoryQuery((props ?? []).map((p) => p.id)));
   const { data: tours = [], isPending: toursPending } = useQuery(ownerToursQuery(user?.id ?? null));
+  const { data: ownerBookings = [] } = useQuery(ownerBookingsQuery(user?.id ?? null));
+  const pendingBookings = ownerBookings.filter((b) => b.status === "PENDING").length;
 
   if (!user)
     return (
@@ -78,7 +81,14 @@ function OwnerDashboard() {
         <h1 className="font-display text-3xl font-semibold">{t("owner.dashboard")}</h1>
         <div className="flex flex-wrap gap-2">
           <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
-          <Button asChild variant="outline"><Link to="/owner/bookings">{t("book.open")}</Link></Button>
+          <Button asChild variant={pendingBookings > 0 ? "default" : "outline"}>
+            <Link to="/owner/bookings">
+              {t("book.open")}
+              {pendingBookings > 0 ? (
+                <span className="ml-2 rounded-full bg-background/20 px-2 py-0.5 text-[11px] font-semibold">{pendingBookings}</span>
+              ) : null}
+            </Link>
+          </Button>
           <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
         </div>
 
