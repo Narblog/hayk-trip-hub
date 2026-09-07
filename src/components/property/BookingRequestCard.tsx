@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarCheck, CalendarDays, Minus, Plus, Users } from "lucide-react";
+import { CalendarCheck, CalendarDays, CalendarX, Minus, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { createBookingRequest, propertyBookingsQuery, quoteQuery, availabilityQuery } from "@/lib/data";
+import { bookingByToken, createBookingRequest, propertyBookingsQuery, quoteQuery, availabilityQuery } from "@/lib/data";
 import { formatPrice, nightsBetween, nightsInRange, todayISO } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -56,7 +56,7 @@ function Stepper({
   );
 }
 
-type SentRange = { checkIn: string; checkOut: string };
+type SentRange = { checkIn: string; checkOut: string; id?: string; token?: string };
 
 function sentKey(propertyId: string) {
   return `stayland.requests.${propertyId}`;
@@ -116,15 +116,40 @@ export function BookingRequestCard({
   const [sentRanges, setSentRanges] = useState<SentRange[]>([]);
 
   useEffect(() => {
-    const ranges = readSentRanges(propertyId);
-    setSentRanges(ranges);
-    if (ranges.length > 0) setDone(true);
+    setSentRanges(readSentRanges(propertyId));
   }, [propertyId]);
 
   const guests = adults + children;
   const { data: quote } = useQuery(quoteQuery(propertyId, guests));
   const { data: availability } = useQuery(availabilityQuery(propertyId));
   const { data: bookings } = useQuery(propertyBookingsQuery(propertyId));
+
+  const tracked = sentRanges.filter((r) => r.id && r.token);
+  const { data: sentStatuses } = useQuery({
+    queryKey: ["guest-booking-status", propertyId, tracked.map((r) => r.id).join(",")],
+    enabled: tracked.length > 0,
+    refetchOnWindowFocus: true,
+    queryFn: async () => {
+      const rows = await Promise.all(
+        tracked.map(async (r) => {
+          try {
+            const row = await bookingByToken(r.id!, r.token!);
+            return [r.id!, (row?.status as string) ?? "PENDING"] as const;
+          } catch {
+            return [r.id!, "PENDING"] as const;
+          }
+        }),
+      );
+      return Object.fromEntries(rows) as Record<string, string>;
+    },
+  });
+
+  const statusOf = (r: SentRange) => (r.id ? (sentStatuses?.[r.id] ?? "PENDING") : "PENDING");
+  const isClosed = (r: SentRange) => ["DECLINED", "CANCELLED"].includes(statusOf(r));
+  const activeRanges = sentRanges.filter((r) => !isClosed(r));
+  const closedLast = sentRanges.length > 0 && activeRanges.length === 0 ? sentRanges[sentRanges.length - 1] : null;
+  const closedStatus = closedLast ? statusOf(closedLast) : null;
+
 
   const nightly = quote?.has_price ? Number(quote.nightly_price) : fallbackPrice;
   const cur = quote?.currency ?? currency;
@@ -148,8 +173,8 @@ export function BookingRequestCard({
 
   const alreadySent = useMemo(() => {
     if (!checkIn || !checkOut || nights <= 0) return false;
-    return sentRanges.some((r) => overlaps(r, { checkIn, checkOut }));
-  }, [checkIn, checkOut, nights, sentRanges]);
+    return activeRanges.some((r) => overlaps(r, { checkIn, checkOut }));
+  }, [checkIn, checkOut, nights, activeRanges]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -173,7 +198,22 @@ export function BookingRequestCard({
         email,
         message,
       });
-      const next = [...sentRanges, { checkIn, checkOut }];
+      const created = await createBookingRequest({
+        propertyId,
+        checkIn,
+        checkOut,
+        adults,
+        children,
+        infants,
+        name,
+        phone,
+        email,
+        message,
+      });
+      const next: SentRange[] = [
+        ...sentRanges,
+        { checkIn, checkOut, id: created.booking_id as string, token: created.guest_token as string },
+      ];
       setSentRanges(next);
       try {
         window.localStorage.setItem(sentKey(propertyId), JSON.stringify(next));
@@ -191,7 +231,9 @@ export function BookingRequestCard({
     }
   }
 
-  if (done) {
+  const showSent = (done || activeRanges.length > 0) && activeRanges.length > 0;
+
+  if (showSent) {
     return (
       <div className={embedded ? "px-1 py-5 text-center" : "rounded-2xl border border-border bg-card p-6 text-center shadow-card"}>
         <div className="mx-auto grid size-14 place-items-center rounded-full bg-brand-soft text-brand">
@@ -206,6 +248,37 @@ export function BookingRequestCard({
       </div>
     );
   }
+
+  if (closedStatus) {
+    return (
+      <div className={embedded ? "px-1 py-5 text-center" : "rounded-2xl border border-border bg-card p-6 text-center shadow-card"}>
+        <div className="mx-auto grid size-14 place-items-center rounded-full bg-destructive/10 text-destructive">
+          <CalendarX className="size-7" />
+        </div>
+        <h3 className="mt-4 font-display text-xl font-semibold">
+          {t(closedStatus === "DECLINED" ? "book.declinedTitle" : "book.cancelledTitle")}
+        </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t(closedStatus === "DECLINED" ? "book.declinedBody" : "book.cancelledBody")}
+        </p>
+        <Button
+          className="mt-5 h-12 w-full rounded-full"
+          onClick={() => {
+            setSentRanges([]);
+            setDone(false);
+            try {
+              window.localStorage.removeItem(sentKey(propertyId));
+            } catch {
+              // ignore
+            }
+          }}
+        >
+          {t("book.newRequest")}
+        </Button>
+      </div>
+    );
+  }
+
 
   const canOpen = nights > 0 && !rangeConflict && !alreadySent;
 
