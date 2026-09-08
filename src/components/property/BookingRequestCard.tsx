@@ -186,18 +186,6 @@ export function BookingRequestCard({
     if (phone.trim().length < 5) return setError(t("book.errPhone"));
     setSending(true);
     try {
-      await createBookingRequest({
-        propertyId,
-        checkIn,
-        checkOut,
-        adults,
-        children,
-        infants,
-        name,
-        phone,
-        email,
-        message,
-      });
       const created = await createBookingRequest({
         propertyId,
         checkIn,
