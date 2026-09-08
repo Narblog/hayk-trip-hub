@@ -321,6 +321,8 @@ const en: Dict = {
   "status.CHANGES_REQUESTED": "Changes requested",
   "notif.title": "Notifications",
   "notif.empty": "No notifications yet.",
+  "notif.markAllRead": "Mark all as read",
+  "notif.back": "Back",
   "tours.title": "Tours & experiences",
   "tours.subtitle": "Guided hikes, wine valleys, monasteries and mountain roads.",
   "tours.duration": "Duration",

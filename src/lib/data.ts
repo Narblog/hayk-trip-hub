@@ -389,6 +389,15 @@ export const notificationsQuery = (userId: string | null) =>
     },
   });
 
+export async function markAllNotificationsRead(userId: string) {
+  const { error } = await supabase
+    .from("notifications")
+    .update({ is_read: true })
+    .eq("user_id", userId)
+    .eq("is_read", false);
+  if (error) throw error;
+}
+
 export const profileQuery = (userId: string | null) =>
   queryOptions({
     queryKey: ["profile", userId],
