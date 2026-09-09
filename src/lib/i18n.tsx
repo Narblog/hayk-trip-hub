@@ -1953,7 +1953,7 @@ const bookHy: Dict = {
   "price.noPrice": "Գինը՝ պահանջով",
   "price.forGuests": "{n} հյուրի համար",
   "book.title": "Ուղարկել ամրագրման հայտ",
-  "book.openModal": "Գրել ամրագրում",
+  "book.openModal": "Ուղարկել ամրագրման հայտ",
   "book.modalTitle": "Ամրագրման հայտ",
   "book.dismiss": "Չեղարկել",
   "book.checkIn": "Մուտք",
