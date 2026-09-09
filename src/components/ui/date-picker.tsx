@@ -13,7 +13,20 @@ const parseISO = (s: string) => {
 };
 
 const HY_MONTHS = ["Հունվար", "Փետրվար", "Մարտ", "Ապրիլ", "Մայիս", "Հունիս", "Հուլիս", "Օգոստոս", "Սեպտեմբեր", "Հոկտեմբեր", "Նոյեմբեր", "Դեկտեմբեր"];
+export const HY_MONTHS_SHORT = ["Հնվ", "Փտվ", "Մրտ", "Ապր", "Մյս", "Հնս", "Հլս", "Օգս", "Սեպ", "Հոկ", "Նոյ", "Դեկ"];
 const HY_WEEKDAYS = ["Երկ", "Երք", "Չրք", "Հնգ", "Ուր", "Շբթ", "Կիր"];
+
+/** Short date label ("16 Սեպ 2026" in Armenian), independent of browser locale data. */
+export function calendarDateLabel(date: Date, lang: string, locale: string, withYear = true) {
+  if (lang === "hy") {
+    return `${date.getDate()} ${HY_MONTHS_SHORT[date.getMonth()]}${withYear ? ` ${date.getFullYear()}` : ""}`;
+  }
+  return date.toLocaleDateString(locale, {
+    day: "numeric",
+    month: "short",
+    ...(withYear ? { year: "numeric" as const } : {}),
+  });
+}
 
 export function calendarMonthLabel(date: Date, lang: string, locale: string) {
   if (lang === "hy") return `${HY_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
@@ -61,9 +74,7 @@ export function DatePicker({
   const cells: (Date | null)[] = Array.from({ length: lead }, () => null);
   for (let d = 1; d <= total; d++) cells.push(new Date(cursor.getFullYear(), cursor.getMonth(), d));
 
-  const display = value
-    ? parseISO(value).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })
-    : null;
+  const display = value ? calendarDateLabel(parseISO(value), lang, locale) : null;
 
   return (
     <Popover
