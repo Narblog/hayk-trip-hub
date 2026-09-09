@@ -28,9 +28,12 @@ export function parseISODate(s: string | null | undefined): Date | undefined {
   return new Date(y, m - 1, d);
 }
 
+const HY_MONTHS_SHORT = ["Հնվ", "Փտվ", "Մրտ", "Ապր", "Մյս", "Հնս", "Հլս", "Օգս", "Սեպ", "Հոկ", "Նոյ", "Դեկ"];
+
 export function formatDate(s: string | null | undefined, lang: Lang = "hy") {
   const d = parseISODate(s);
   if (!d) return "";
+  if (lang === "hy") return `${d.getDate()} ${HY_MONTHS_SHORT[d.getMonth()]}`;
   return new Intl.DateTimeFormat(LOCALES[lang], { day: "numeric", month: "short" }).format(d);
 }
 
