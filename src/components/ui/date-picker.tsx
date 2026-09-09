@@ -9,7 +9,7 @@ const iso = (d: Date) =>
 
 const parseISO = (s: string) => {
   const [y, m, d] = s.split("-").map(Number);
-  return new Date(y, (m || 1) - 1, d || 1);
+  return new Date(y || 1970, (m || 1) - 1, d || 1);
 };
 
 export function DatePicker({
