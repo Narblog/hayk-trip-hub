@@ -169,6 +169,7 @@ function PropertyPage() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const propertyId = (data as { id?: string } | null | undefined)?.id ?? null;
   const { data: host } = useQuery(propertyHostQuery(propertyId ?? undefined));
+  const hostName = (host?.full_name ?? "").trim();
 
   useEffect(() => {
     if (propertyId) void trackPropertyEvent(propertyId, "property_view");
@@ -556,21 +557,27 @@ function PropertyPage() {
             <div className="flex min-w-0 items-center gap-3">
               <div className="grid size-14 shrink-0 place-items-center overflow-hidden rounded-full bg-surface">
                 {host?.avatar_url ? (
-                  <img src={host.avatar_url} alt={host.full_name} className="size-full object-cover" />
-                ) : p.main_image_url ? (
-                  <img src={p.main_image_url} alt="" className="size-full object-cover" />
+                  <img src={host.avatar_url} alt={host.full_name ?? ""} className="size-full object-cover" />
+                ) : hostName ? (
+                  <span className="font-display text-lg font-semibold text-muted-foreground">
+                    {hostName
+                      .split(/\s+/)
+                      .slice(0, 2)
+                      .map((w) => w[0]?.toUpperCase() ?? "")
+                      .join("")}
+                  </span>
                 ) : (
                   <Users className="size-5 text-muted-foreground" />
                 )}
               </div>
               <div className="min-w-0">
                 <p className="flex min-w-0 flex-wrap items-center gap-2 font-display text-base font-semibold">
-                  <span className="truncate">{t("property.hostedBy")} {host?.full_name || "StayLand"}</span>
+                  <span className="truncate">{t("property.hostedBy")} {hostName || "StayLand"}</span>
                   {p.review_count >= 5 && Number(p.rating) >= 4.5 ? (
                     <span className="shrink-0 rounded-full border border-brand/30 bg-brand/10 px-2 py-0.5 text-[10px] font-semibold text-brand">{t("property.superhost")}</span>
                   ) : null}
                 </p>
-                <p className="text-xs text-muted-foreground">StayLand</p>
+                {hostName ? <p className="truncate text-xs text-muted-foreground">{hostName}</p> : null}
               </div>
             </div>
             {p.contact_phone ? (
