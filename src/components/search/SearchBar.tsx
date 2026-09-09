@@ -24,34 +24,18 @@ function DateField({
   onChange: (value: string) => void;
   fieldClass: string;
 }) {
-  const [focused, setFocused] = useState(false);
-  const empty = !value;
-  const showPlaceholder = empty && !focused;
   return (
-    <label className={fieldClass}>
+    <div className={fieldClass}>
       {icon}
-      <span className="sr-only">{label}</span>
-      <div className="relative flex min-w-0 flex-1">
-        <input
-          type="date"
-          min={min}
-          value={value}
-          placeholder={placeholder}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          onChange={(e) => onChange(e.target.value)}
-          className={`w-full bg-transparent text-base outline-none md:text-sm ${
-            showPlaceholder ? "text-transparent" : ""
-          }`}
-          aria-label={label}
-        />
-        {showPlaceholder ? (
-          <span className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-base text-muted-foreground md:text-sm">
-            {placeholder}
-          </span>
-        ) : null}
-      </div>
-    </label>
+      <DatePicker
+        value={value}
+        min={min}
+        onChange={onChange}
+        placeholder={placeholder}
+        label={label}
+        buttonClassName="h-auto flex-1 border-0 bg-transparent px-0 text-base shadow-none focus-visible:ring-0 md:text-sm"
+      />
+    </div>
   );
 }
 
