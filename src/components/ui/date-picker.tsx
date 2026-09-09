@@ -74,9 +74,7 @@ export function DatePicker({
   const cells: (Date | null)[] = Array.from({ length: lead }, () => null);
   for (let d = 1; d <= total; d++) cells.push(new Date(cursor.getFullYear(), cursor.getMonth(), d));
 
-  const display = value
-    ? parseISO(value).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })
-    : null;
+  const display = value ? calendarDateLabel(parseISO(value), lang, locale) : null;
 
   return (
     <Popover
