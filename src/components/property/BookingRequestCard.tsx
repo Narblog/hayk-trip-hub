@@ -282,11 +282,11 @@ export function BookingRequestCard({
         <div className="mt-3 grid grid-cols-2 gap-2">
           <div>
             <Label htmlFor="bk-in" className="text-xs text-muted-foreground">{t("book.checkIn")}</Label>
-            <Input id="bk-in" type="date" min={todayISO()} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="mt-1" />
+            <Input id="bk-in" type="date" lang={lang} min={todayISO()} value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="mt-1" />
           </div>
           <div>
             <Label htmlFor="bk-out" className="text-xs text-muted-foreground">{t("book.checkOut")}</Label>
-            <Input id="bk-out" type="date" min={checkIn || todayISO()} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="mt-1" />
+            <Input id="bk-out" type="date" lang={lang} min={checkIn || todayISO()} value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="mt-1" />
           </div>
         </div>
 
