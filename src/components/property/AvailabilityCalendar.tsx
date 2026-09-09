@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { calendarMonthLabel, calendarWeekdays } from "@/components/ui/date-picker";
 import { availabilityQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 
@@ -26,15 +27,13 @@ export function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
   const total = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate();
   const cells: (Date | null)[] = Array.from({ length: lead }, () => null);
   for (let d = 1; d <= total; d++) cells.push(new Date(cursor.getFullYear(), cursor.getMonth(), d));
-  const weekdays = Array.from({ length: 7 }, (_, i) =>
-    new Date(2024, 0, 1 + i).toLocaleDateString(locale, { weekday: "short" }),
-  );
+  const weekdays = calendarWeekdays(lang, locale);
 
   return (
     <div className="w-full rounded-2xl border border-border bg-card p-3 sm:p-4">
       <div className="flex items-center justify-between gap-2">
         <Button aria-label="Previous month" variant="ghost" size="icon" className="size-11 shrink-0 text-xl" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}>←</Button>
-        <p className="min-w-0 text-center text-sm font-medium capitalize sm:text-base">{cursor.toLocaleDateString(locale, { month: "long", year: "numeric" })}</p>
+        <p className="min-w-0 text-center text-sm font-medium capitalize sm:text-base">{calendarMonthLabel(cursor, lang, locale)}</p>
         <Button aria-label="Next month" variant="ghost" size="icon" className="size-11 shrink-0 text-xl" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}>→</Button>
       </div>
       <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[11px] text-muted-foreground">
