@@ -79,10 +79,8 @@ function overlaps(a: SentRange, b: SentRange) {
 
 function formatDateLine(iso: string, lang: string) {
   const d = new Date(`${iso}T00:00:00`);
-  return d.toLocaleDateString(lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB", {
-    day: "numeric",
-    month: "short",
-  });
+  const locale = lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB";
+  return calendarDateLabel(d, lang, locale, false);
 }
 
 export function BookingRequestCard({
