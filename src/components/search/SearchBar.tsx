@@ -34,6 +34,7 @@ function DateField({
         onChange={onChange}
         placeholder={placeholder}
         label={label}
+        hideIcon
         buttonClassName="h-auto flex-1 border-0 bg-transparent px-0 text-base shadow-none focus-visible:ring-0 md:text-sm"
       />
     </div>

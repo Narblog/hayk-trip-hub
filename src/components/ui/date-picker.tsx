@@ -29,6 +29,7 @@ export function DatePicker({
   label?: string;
   className?: string;
   buttonClassName?: string;
+  hideIcon?: boolean;
 }) {
   const { lang } = useI18n();
   const locale = lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB";
@@ -75,7 +76,7 @@ export function DatePicker({
             buttonClassName,
           )}
         >
-          <CalendarDays className="size-4 shrink-0 text-muted-foreground" />
+          {hideIcon ? null : <CalendarDays className="size-4 shrink-0 text-muted-foreground" />}
           <span className={cn("min-w-0 flex-1 truncate", !display && "text-muted-foreground")}>
             {display ?? placeholder ?? ""}
           </span>
