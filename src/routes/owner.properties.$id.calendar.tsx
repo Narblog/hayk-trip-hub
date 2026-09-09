@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { calendarMonthLabel, calendarWeekdays } from "@/components/ui/date-picker";
 import { InlineLoader } from "@/components/common/states";
 import { supabase } from "@/integrations/supabase/client";
 import { availabilityQuery, propertyBookingsQuery } from "@/lib/data";
