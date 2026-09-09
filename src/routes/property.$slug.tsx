@@ -169,6 +169,7 @@ function PropertyPage() {
   const galleryRef = useRef<HTMLDivElement>(null);
   const propertyId = (data as { id?: string } | null | undefined)?.id ?? null;
   const { data: host } = useQuery(propertyHostQuery(propertyId ?? undefined));
+  const hostName = (host?.full_name ?? "").trim();
 
   useEffect(() => {
     if (propertyId) void trackPropertyEvent(propertyId, "property_view");
