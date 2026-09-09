@@ -20,6 +20,7 @@ export function DatePicker({
   label,
   className,
   buttonClassName,
+  hideIcon = false,
 }: {
   value: string;
   onChange: (isoValue: string) => void;

@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarDays, MapPin, Minus, Plus, Search, Users } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { maxGuestsQuery, refDataQuery } from "@/lib/data";
 import { addDaysISO, todayISO } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
