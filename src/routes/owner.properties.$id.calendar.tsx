@@ -113,13 +113,9 @@ function CalendarPage() {
   if (!property.data) return <div className="container-page py-16 text-center text-muted-foreground">{t("cal.notFound")}</div>;
 
   const cells = monthDays(cursor.getFullYear(), cursor.getMonth());
-  const monthLabel = cursor.toLocaleDateString(lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB", {
-    month: "long",
-    year: "numeric",
-  });
-  const weekdays = Array.from({ length: 7 }, (_, i) =>
-    new Date(2024, 0, 1 + i).toLocaleDateString(lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB", { weekday: "short" }),
-  );
+  const locale = lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB";
+  const monthLabel = calendarMonthLabel(cursor, lang, locale);
+  const weekdays = calendarWeekdays(lang, locale);
   const monthDates = cells.filter(Boolean).map((d) => iso(d as Date));
 
   return (
