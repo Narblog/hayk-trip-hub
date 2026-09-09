@@ -12,6 +12,21 @@ const parseISO = (s: string) => {
   return new Date(y || 1970, (m || 1) - 1, d || 1);
 };
 
+const HY_MONTHS = ["Հունվար", "Փետրվար", "Մարտ", "Ապրիլ", "Մայիս", "Հունիս", "Հուլիս", "Օգոստոս", "Սեպտեմբեր", "Հոկտեմբեր", "Նոյեմբեր", "Դեկտեմբեր"];
+const HY_WEEKDAYS = ["Երկ", "Երք", "Չրք", "Հնգ", "Ուր", "Շբթ", "Կիր"];
+
+export function calendarMonthLabel(date: Date, lang: string, locale: string) {
+  if (lang === "hy") return `${HY_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+  return date.toLocaleDateString(locale, { month: "long", year: "numeric" });
+}
+
+export function calendarWeekdays(lang: string, locale: string) {
+  if (lang === "hy") return HY_WEEKDAYS;
+  return Array.from({ length: 7 }, (_, i) =>
+    new Date(2024, 0, 1 + i).toLocaleDateString(locale, { weekday: "short" }),
+  );
+}
+
 export function DatePicker({
   value,
   onChange,
@@ -38,13 +53,7 @@ export function DatePicker({
   const base = value ? parseISO(value) : today;
   const [cursor, setCursor] = useState(new Date(base.getFullYear(), base.getMonth(), 1));
 
-  const weekdays = useMemo(
-    () =>
-      Array.from({ length: 7 }, (_, i) =>
-        new Date(2024, 0, 1 + i).toLocaleDateString(locale, { weekday: "short" }),
-      ),
-    [locale],
-  );
+  const weekdays = useMemo(() => calendarWeekdays(lang, locale), [lang, locale]);
 
   const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
   const lead = (first.getDay() + 6) % 7;
@@ -93,7 +102,7 @@ export function DatePicker({
             <ChevronLeft className="size-4" />
           </button>
           <p className="text-sm font-medium capitalize">
-            {cursor.toLocaleDateString(locale, { month: "long", year: "numeric" })}
+            {calendarMonthLabel(cursor, lang, locale)}
           </p>
           <button
             type="button"
