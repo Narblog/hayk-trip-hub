@@ -116,7 +116,7 @@ function ToursPage() {
                       {featured.main_image_url ? (
                         <img
                           src={featured.main_image_url}
-                          alt={featured.name}
+                          alt={localized(featured, "name") || featured.name}
                           className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                         />
                       ) : null}
@@ -135,9 +135,9 @@ function ToursPage() {
                         );
                       })()}
                       <h2 className="mt-2 font-display text-2xl font-semibold leading-snug md:text-3xl">
-                        {featured.name}
+                        {localized(featured, "name") || featured.name}
                       </h2>
-                      <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{featured.description}</p>
+                      <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{localized(featured, "description") || featured.description}</p>
                       <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <MapPin className="size-3.5" /> {featured.city_code}
@@ -191,7 +191,7 @@ function ToursPage() {
                         {tour.main_image_url ? (
                           <img
                             src={tour.main_image_url}
-                            alt={tour.name}
+                            alt={localized(tour, "name") || tour.name}
                             loading="lazy"
                             className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
@@ -207,7 +207,7 @@ function ToursPage() {
                         ) : null}
                       </div>
                       <div className="space-y-2 p-4">
-                        <p className="font-display text-base font-semibold leading-snug">{tour.name}</p>
+                        <p className="font-display text-base font-semibold leading-snug">{localized(tour, "name") || tour.name}</p>
                         <p className="flex items-center gap-3 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <MapPin className="size-3" /> {tour.city_code}

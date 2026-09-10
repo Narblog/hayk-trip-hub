@@ -129,7 +129,7 @@ function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cit
               {tr.main_image_url ? (
                 <img
                   src={tr.main_image_url}
-                  alt={tr.name}
+                  alt={localized(tr, "name") || tr.name}
                   loading="lazy"
                   className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -142,7 +142,7 @@ function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cit
               ) : null}
             </div>
             <div className="space-y-2 p-4">
-              <h3 className="line-clamp-1 font-display text-base font-semibold">{tr.name}</h3>
+              <h3 className="line-clamp-1 font-display text-base font-semibold">{localized(tr, "name") || tr.name}</h3>
               <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <MapPin className="size-3.5" />
                 {localized(ref?.cities.find((c) => c.code === tr.city_code), "name") || tr.location || tr.city_code}
