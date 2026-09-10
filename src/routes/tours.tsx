@@ -34,6 +34,11 @@ function ToursPage() {
     return (ref?.categories ?? []).filter((c) => used.has(c.code));
   }, [ref, tours]);
 
+  const cityName = (code: string | null, fallback?: string | null) => {
+    const c = ref?.cities.find((x) => x.code === code);
+    return (c ? localized(c, "name") : null) || fallback || code || "";
+  };
+
   const filtered = useMemo(() => {
     const all = tours ?? [];
     if (!category) return all;
@@ -140,7 +145,7 @@ function ToursPage() {
                       <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{localized(featured, "description") || featured.description}</p>
                       <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
-                          <MapPin className="size-3.5" /> {featured.city_code}
+                          <MapPin className="size-3.5" /> {cityName(featured.city_code, featured.location)}
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock className="size-3.5" /> {featured.duration_hours} {t("tours.hours")}
@@ -210,7 +215,7 @@ function ToursPage() {
                         <p className="font-display text-base font-semibold leading-snug">{localized(tour, "name") || tour.name}</p>
                         <p className="flex items-center gap-3 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
-                            <MapPin className="size-3" /> {tour.city_code}
+                            <MapPin className="size-3" /> {cityName(tour.city_code, tour.location)}
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="size-3" /> {tour.duration_hours} {t("tours.hours")}
