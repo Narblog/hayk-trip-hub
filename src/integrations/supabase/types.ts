@@ -1130,6 +1130,8 @@ export type Database = {
           created_at: string
           currency: string
           description: string | null
+          description_hy: string | null
+          description_ru: string | null
           duration_hours: number | null
           id: string
           is_demo: boolean
@@ -1141,6 +1143,8 @@ export type Database = {
           max_participants: number
           meeting_point: string | null
           name: string
+          name_hy: string | null
+          name_ru: string | null
           owner_id: string | null
           price: number
           rating: number
@@ -1163,6 +1167,8 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          description_hy?: string | null
+          description_ru?: string | null
           duration_hours?: number | null
           id?: string
           is_demo?: boolean
@@ -1174,6 +1180,8 @@ export type Database = {
           max_participants?: number
           meeting_point?: string | null
           name: string
+          name_hy?: string | null
+          name_ru?: string | null
           owner_id?: string | null
           price?: number
           rating?: number
@@ -1196,6 +1204,8 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          description_hy?: string | null
+          description_ru?: string | null
           duration_hours?: number | null
           id?: string
           is_demo?: boolean
@@ -1207,6 +1217,8 @@ export type Database = {
           max_participants?: number
           meeting_point?: string | null
           name?: string
+          name_hy?: string | null
+          name_ru?: string | null
           owner_id?: string | null
           price?: number
           rating?: number

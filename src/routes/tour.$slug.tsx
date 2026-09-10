@@ -67,7 +67,7 @@ function TourPage() {
       <section className="relative">
         <div className="relative aspect-16/10 w-full overflow-hidden bg-surface sm:aspect-21/9">
           {data.main_image_url ? (
-            <img src={data.main_image_url} alt={data.name} className="size-full object-cover" />
+            <img src={data.main_image_url} alt={localized(data, "name") || data.name} className="size-full object-cover" />
           ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/85 via-foreground/25 to-transparent" />
         </div>
@@ -77,7 +77,7 @@ function TourPage() {
               <Icon className="size-3.5" /> {cat ? localized(cat, "name") : data.category}
             </span>
             <h1 className="mt-3 font-display text-3xl font-semibold text-background drop-shadow-md md:text-4xl">
-              {data.name}
+              {localized(data, "name") || data.name}
             </h1>
             <div className="mt-3 flex flex-wrap gap-4 text-sm text-background/90">
               <span className="flex items-center gap-1.5">
@@ -103,7 +103,7 @@ function TourPage() {
         <div>
           <section>
             <h2 className="font-display text-xl font-semibold">{t("tours.aboutTour")}</h2>
-            <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{data.description}</p>
+            <p className="mt-3 whitespace-pre-line leading-relaxed text-muted-foreground">{localized(data, "description") || data.description}</p>
           </section>
 
           {data.meeting_point ? (
