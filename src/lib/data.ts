@@ -678,7 +678,7 @@ export const relatedToursQuery = (regionCode: string | null | undefined, cityCod
       const { data, error } = await supabase
         .from("tours")
         .select(
-          "id,name,slug,category,city_code,region_code,location,duration_hours,currency,price,main_image_url,rating,review_count,is_featured",
+          "id,name,name_hy,name_ru,slug,category,city_code,region_code,location,duration_hours,currency,price,main_image_url,rating,review_count,is_featured",
         )
         .eq("status", "APPROVED")
         .or(filters.join(","))
@@ -693,6 +693,8 @@ export const relatedToursQuery = (regionCode: string | null | undefined, cityCod
 export type RelatedTour = {
   id: string;
   name: string;
+  name_hy: string | null;
+  name_ru: string | null;
   slug: string;
   category: string | null;
   city_code: string | null;
