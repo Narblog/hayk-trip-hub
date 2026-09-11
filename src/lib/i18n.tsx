@@ -1485,7 +1485,7 @@ const brandHy: Dict = {
   "home.hostHeadline": "Հասիր ավելի շատ ճամփորդների։ Առանց միջնորդավճարի։",
   "home.hostCta": "Ավելացնել իմ գույքը",
   "home.recentlyAdded": "Վերջերս ավելացված",
-  "home.stays": "\n",
+  "home.stays": "Կացարաններ",
   "home.staysSub": "Դիտիր ստուգված կացարանները Հայաստանում։",
   "home.seeAllStays": "Տեսնել բոլոր կացարանները",
   "brand.name": "StayLand",
