@@ -134,7 +134,7 @@ function Home() {
     if (recommendedIds.has(p.id) || seen.has(p.id)) continue;
     seen.add(p.id);
     grid.push(p);
-    if (grid.length === 12) break;
+    if (grid.length === 16) break;
   }
 
   return (
@@ -222,7 +222,7 @@ function Home() {
           <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {isPending ? null : grid.map((p) => <PropertyCard key={p.id} p={p} compact />)}
           </div>
-          {isPending ? <CardGridSkeleton count={12} /> : null}
+          {isPending ? <CardGridSkeleton count={16} /> : null}
           <div className="mt-7 flex justify-center">
             <Link
               to="/search"
