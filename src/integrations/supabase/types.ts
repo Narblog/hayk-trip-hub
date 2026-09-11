@@ -1416,6 +1416,7 @@ export type Database = {
           p_check_in?: string
           p_check_out?: string
           p_destination?: string
+          p_featured?: boolean
           p_guests?: number
           p_limit?: number
           p_max_price?: number
