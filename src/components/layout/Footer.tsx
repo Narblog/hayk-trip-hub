@@ -46,50 +46,52 @@ export function Footer() {
 
 
   return (
-    <footer className="mt-14 border-t border-border/70 bg-surface md:mt-24">
-      <div className="container-page grid gap-8 py-10 md:grid-cols-4 md:gap-10 md:py-16">
-        <div className="space-y-4">
-          <Logo />
-          <p className="max-w-xs text-sm text-muted-foreground">{t("footer.desc")}</p>
-          <div className="flex items-center gap-2">
-            {[Instagram, Facebook, Send].map((Icon, i) => (
-              <span
-                key={i}
-                className="flex size-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground"
-                aria-hidden="true"
-              >
-                <Icon className="size-4" />
-              </span>
-            ))}
-          </div>
-          <LanguageSwitcher />
-        </div>
-
-        {columns.map((col) => (
-          <div key={col.title}>
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              {col.title}
-            </h3>
-            <ul className="space-y-2 text-sm">
-              {col.links.map((l) => (
-                <li key={l.to + l.label}>
-                  {"slug" in l ? (
-                    <Link to="/p/$slug" params={{ slug: l.slug }} className="hover:text-brand">
-                      {l.label}
-                    </Link>
-                  ) : (
-                    <Link to={l.to} className="hover:text-brand">
-                      {l.label}
-                    </Link>
-                  )}
-                </li>
+    <footer className="mt-10 border-t border-border/70 bg-surface md:mt-16">
+      <div className="container-page py-6 md:py-10">
+        <div className="grid grid-cols-3 gap-3 md:grid-cols-4 md:gap-8">
+          <div className="col-span-3 flex flex-wrap items-center gap-x-4 gap-y-2 sm:col-span-1 sm:block sm:space-y-2">
+            <Logo />
+            <p className="max-w-xs text-xs text-muted-foreground md:text-sm">{t("footer.desc")}</p>
+            <div className="flex items-center gap-2">
+              {[Instagram, Facebook, Send].map((Icon, i) => (
+                <span
+                  key={i}
+                  className="flex size-8 items-center justify-center rounded-full border border-border bg-card text-muted-foreground md:size-9"
+                  aria-hidden="true"
+                >
+                  <Icon className="size-3.5 md:size-4" />
+                </span>
               ))}
-            </ul>
+            </div>
+            <LanguageSwitcher />
           </div>
-        ))}
+
+          {columns.map((col) => (
+            <div key={col.title} className="min-w-0">
+              <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-normal text-muted-foreground md:mb-3 md:text-xs md:tracking-widest">
+                {col.title}
+              </h3>
+              <ul className="space-y-1.5 text-xs leading-snug md:space-y-2 md:text-sm">
+                {col.links.map((l) => (
+                  <li key={l.to + l.label} className="min-w-0">
+                    {"slug" in l ? (
+                      <Link to="/p/$slug" params={{ slug: l.slug }} className="hover:text-brand">
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <Link to={l.to} className="hover:text-brand">
+                        {l.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="border-t border-border/70 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
-        <div className="container-page flex flex-wrap items-center justify-between gap-2 py-5 text-xs text-muted-foreground">
+        <div className="container-page flex flex-wrap items-center justify-between gap-2 py-3 text-[11px] text-muted-foreground md:py-4 md:text-xs">
           <span>© {new Date().getFullYear()} StayLand.am — {t("footer.rights")}</span>
           <span className="eyebrow">{t("footer.madeIn")}</span>
         </div>
