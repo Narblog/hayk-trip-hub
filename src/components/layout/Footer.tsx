@@ -91,7 +91,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border/70 pb-[calc(4.5rem+env(safe-area-inset-bottom))] md:pb-0">
-        <div className="container-page flex flex-wrap items-center justify-between gap-2 py-5 text-xs text-muted-foreground">
+        <div className="container-page flex flex-wrap items-center justify-between gap-2 py-3 text-[11px] text-muted-foreground md:py-4 md:text-xs">
           <span>© {new Date().getFullYear()} StayLand.am — {t("footer.rights")}</span>
           <span className="eyebrow">{t("footer.madeIn")}</span>
         </div>
