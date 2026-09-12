@@ -213,6 +213,7 @@ function Home() {
             sub={t("home.featuredSub")}
             to="/search"
             linkLabel={t("home.seeAll")}
+            search={{ guests: 2, page: 1, featured: true }}
           />
           <div className="mt-5">
             {isPending ? <CardGridSkeleton count={4} /> : <PropertyCarousel items={recommended} />}
