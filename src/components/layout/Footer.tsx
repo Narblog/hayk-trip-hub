@@ -48,8 +48,8 @@ export function Footer() {
   return (
     <footer className="mt-10 border-t border-border/70 bg-surface md:mt-16">
       <div className="container-page py-6 md:py-10">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:gap-8">
-          <div className="col-span-2 space-y-2 sm:col-span-1">
+        <div className="grid grid-cols-3 gap-3 md:grid-cols-4 md:gap-8">
+          <div className="col-span-3 flex flex-wrap items-center gap-x-4 gap-y-2 sm:col-span-1 sm:block sm:space-y-2">
             <Logo />
             <p className="max-w-xs text-xs text-muted-foreground md:text-sm">{t("footer.desc")}</p>
             <div className="flex items-center gap-2">
