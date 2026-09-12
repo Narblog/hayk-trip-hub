@@ -49,12 +49,14 @@ function SectionHead({
   sub,
   to,
   linkLabel,
+  search,
 }: {
   eyebrow?: string | undefined;
   title: string;
   sub?: string | undefined;
   to?: "/search" | "/tours" | "/destinations" | undefined;
   linkLabel?: string | undefined;
+  search?: Record<string, unknown> | undefined;
 }) {
   return (
     <div className="flex items-end justify-between gap-4">
@@ -66,6 +68,7 @@ function SectionHead({
       {to ? (
         <Link
           to={to}
+          search={search as never}
           className="group hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-foreground transition-colors hover:text-brand sm:flex"
         >
           {linkLabel}
@@ -210,6 +213,7 @@ function Home() {
             sub={t("home.featuredSub")}
             to="/search"
             linkLabel={t("home.seeAll")}
+            search={{ guests: 2, page: 1, featured: true }}
           />
           <div className="mt-5">
             {isPending ? <CardGridSkeleton count={4} /> : <PropertyCarousel items={recommended} />}

@@ -31,6 +31,7 @@ const schema = z.object({
   bedrooms: fallback(z.number(), 0).default(0),
   minRating: fallback(z.number(), 0).default(0),
   view: fallback(z.string(), "list").default("list"),
+  featured: fallback(z.boolean(), false).default(false),
 });
 
 export const Route = createFileRoute("/search")({
@@ -100,6 +101,7 @@ function SearchPage() {
     sort: s["sort"],
     page: Math.max(1, s["page"]),
     pageSize,
+    ...(s["featured"] ? { featured: true } : {}),
     types: filters["types"],
     amenities: filters["amenities"],
     ...(filters["minPrice"] > PRICE_MIN ? { minPrice: filters["minPrice"] } : {}),

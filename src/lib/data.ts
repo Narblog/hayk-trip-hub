@@ -44,6 +44,7 @@ export type SearchParams = {
   bedrooms?: number;
   minRating?: number;
   sort?: string;
+  featured?: boolean;
   page?: number;
   pageSize?: number;
 };
@@ -65,6 +66,7 @@ export async function searchProperties(p: SearchParams): Promise<{ items: Search
   if (p.maxPrice != null) args["p_max_price"] = p.maxPrice;
   if (p.bedrooms != null) args["p_bedrooms"] = p.bedrooms;
   if (p.minRating != null) args["p_min_rating"] = p.minRating;
+  if (p.featured) args["p_featured"] = true;
   const rpc = (supabase.rpc as unknown as (
     fn: "search_properties",
     params: Record<string, unknown>,
