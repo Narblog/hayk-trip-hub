@@ -71,15 +71,15 @@ export function Footer() {
               <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground md:mb-3 md:text-xs">
                 {col.title}
               </h3>
-              <ul className="space-y-1.5 text-xs md:space-y-2 md:text-sm">
+              <ul className="space-y-1.5 text-xs leading-snug md:space-y-2 md:text-sm">
                 {col.links.map((l) => (
                   <li key={l.to + l.label} className="min-w-0">
                     {"slug" in l ? (
-                      <Link to="/p/$slug" params={{ slug: l.slug }} className="block truncate hover:text-brand">
+                      <Link to="/p/$slug" params={{ slug: l.slug }} className="hover:text-brand">
                         {l.label}
                       </Link>
                     ) : (
-                      <Link to={l.to} className="block truncate hover:text-brand">
+                      <Link to={l.to} className="hover:text-brand">
                         {l.label}
                       </Link>
                     )}
