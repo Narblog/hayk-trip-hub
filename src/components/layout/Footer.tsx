@@ -68,7 +68,7 @@ export function Footer() {
 
           {columns.map((col) => (
             <div key={col.title} className="min-w-0">
-              <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground md:mb-3 md:text-xs">
+              <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-normal text-muted-foreground md:mb-3 md:text-xs md:tracking-widest">
                 {col.title}
               </h3>
               <ul className="space-y-1.5 text-xs leading-snug md:space-y-2 md:text-sm">
