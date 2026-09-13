@@ -4,11 +4,14 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About StayLand — Armenian stays and experiences" },
-      { name: "description", content: "StayLand connects travellers with Armenian hotels, guesthouses, cabins, villas and local tour operators." },
-      { property: "og:title", content: "About StayLand" },
-      { property: "og:description", content: "Armenian hospitality, listed by the people who host it." },
+      { title: "StayLand-ի մասին — Հայկական կացարաններ և փորձառություններ" },
+      { name: "description", content: "StayLand-ը կապում է ճանապարհորդներին Հայաստանի հյուրատների, տնակների, վիլաների և տեղական տուր օպերատորների հետ։" },
+      { property: "og:title", content: "StayLand-ի մասին" },
+      { property: "og:description", content: "Հայկական հյուրընկալություն՝ ներկայացված հենց տանտերերի կողմից։" },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/about" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/about" }],
   }),
   component: AboutPage,
 });

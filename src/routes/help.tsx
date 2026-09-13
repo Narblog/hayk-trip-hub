@@ -5,17 +5,19 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/help")({
   head: () => ({
     meta: [
-      { title: "Help & contact — StayLand Armenia" },
+      { title: "Օգնություն և կապ — StayLand Հայաստան" },
       {
         name: "description",
         content:
-          "Get help with a stay, a listing or your StayLand account. Travellers contact Armenian hosts directly; hosts list for free.",
+          "Օգնություն կացարանի, հայտարարության կամ StayLand հաշվի վերաբերյալ։ Ճանապարհորդները կապվում են տանտերերի հետ ուղիղ, տանտերերը հրապարակում են անվճար։",
       },
-      { property: "og:title", content: "StayLand help & contact" },
-      { property: "og:description", content: "Support for travellers and hosts on StayLand Armenia." },
+      { property: "og:title", content: "StayLand օգնություն և կապ" },
+      { property: "og:description", content: "Աջակցություն ճանապարհորդներին և տանտերերին StayLand Հայաստանում։" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/help" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/help" }],
   }),
   component: HelpPage,
 });

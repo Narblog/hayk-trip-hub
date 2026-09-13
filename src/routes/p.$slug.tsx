@@ -11,8 +11,10 @@ export const Route = createFileRoute("/p/$slug")({
       { property: "og:title", content: "StayLand Armenia" },
       { property: "og:description", content: "StayLand Armenia information page." },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: `https://hayk-trip-hub.lovable.app/p/${params.slug}` },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: `https://hayk-trip-hub.lovable.app/p/${params.slug}` }],
   }),
   component: DynamicPage,
 });

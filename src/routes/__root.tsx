@@ -83,11 +83,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "StayLand — Stays, tours and experiences in Armenia" },
-      { name: "description", content: "Book Armenian hotels, guesthouses, cabins, villas, apartments and local tours in one place." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "StayLand — Stays and tours in Armenia" },
-      { property: "og:description", content: "Armenian stays and experiences, listed by local hosts." },
+      { title: "StayLand — Կացարաններ, տուրեր և փորձառություններ Հայաստանում" },
+      { name: "description", content: "Ամրագրեք հայկական հյուրատներ, տնակներ, վիլաներ, բնակարաններ և տեղական տուրեր մեկ տեղում։" },
+      { name: "author", content: "StayLand" },
+      { property: "og:title", content: "StayLand — Կացարաններ և տուրեր Հայաստանում" },
+      { property: "og:description", content: "Հայկական կացարաններ և փորձառություններ՝ տեղական տանտերերից։" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -114,7 +114,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="hy">
       <head>
         <HeadContent />
       </head>

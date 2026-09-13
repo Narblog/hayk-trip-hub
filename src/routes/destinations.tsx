@@ -8,17 +8,19 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/destinations")({
   head: () => ({
     meta: [
-      { title: "Destinations in Armenia — StayLand" },
+      { title: "Ուղղություններ Հայաստանում — StayLand" },
       {
         name: "description",
         content:
-          "Explore Armenia by destination — Dilijan, Tsaghkadzor, Sevan, Jermuk, Gyumri, Goris, Garni and Yerevan. See how many stays are available in each.",
+          "Բացահայտեք Հայաստանը ըստ ուղղությունների՝ Դիլիջան, Ծաղկաձոր, Սևան, Ջերմուկ, Գյումրի, Գորիս, Գառնի և Երևան։ Տեսեք, թե քանի կացարան կա յուրաքանչյուրում։",
       },
-      { property: "og:title", content: "Explore Armenia — StayLand destinations" },
-      { property: "og:description", content: "Browse Armenian towns and regions and find stays in each." },
+      { property: "og:title", content: "Բացահայտեք Հայաստանը — StayLand ուղղություններ" },
+      { property: "og:description", content: "Դիտեք Հայաստանի քաղաքներն ու շրջանները և գտեք կացարաններ յուրաքանչյուրում։" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/destinations" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/destinations" }],
   }),
   component: DestinationsPage,
 });
