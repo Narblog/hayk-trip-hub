@@ -38,17 +38,19 @@ export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(schema),
   head: () => ({
     meta: [
-      { title: "Search stays in Armenia — StayLand" },
+      { title: "Փնտրել կացարան Հայաստանում — StayLand" },
       {
         name: "description",
         content:
-          "Search guesthouses, cabins, cottages and apartments across Armenia by dates, guests, price, amenities and map location.",
+          "Փնտրեք հյուրատներ, տնակներ, քոթեջներ և բնակարաններ ամբողջ Հայաստանում՝ ըստ ամսաթվերի, հյուրերի, գնի և հարմարությունների։",
       },
-      { property: "og:title", content: "Search stays in Armenia — StayLand" },
-      { property: "og:description", content: "Find available stays across Armenia and contact owners directly." },
+      { property: "og:title", content: "Փնտրել կացարան Հայաստանում — StayLand" },
+      { property: "og:description", content: "Գտեք ազատ կացարաններ ամբողջ Հայաստանում և կապվեք տանտերերի հետ ուղիղ։" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/search" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/search" }],
   }),
   component: SearchPage,
 });

@@ -4,17 +4,19 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/terms")({
   head: () => ({
     meta: [
-      { title: "Terms of use — StayLand Armenia" },
+      { title: "Օգտագործման պայմաններ — StayLand Հայաստան" },
       {
         name: "description",
         content:
-          "How StayLand works: listings, hosts, reviews and payments. StayLand charges no booking commission — guests contact Armenian hosts directly.",
+          "Ինչպես է աշխատում StayLand-ը՝ հայտարարություններ, տանտերեր, կարծիքներ և վճարումներ։ StayLand-ը չի գանձում ամրագրման միջնորդավճար։",
       },
-      { property: "og:title", content: "StayLand terms of use" },
-      { property: "og:description", content: "Rules for guests and hosts on the StayLand Armenia marketplace." },
+      { property: "og:title", content: "StayLand օգտագործման պայմաններ" },
+      { property: "og:description", content: "Կանոններ հյուրերի և տանտերերի համար StayLand Հայաստան հարթակում։" },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/terms" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/terms" }],
   }),
   component: TermsPage,
 });

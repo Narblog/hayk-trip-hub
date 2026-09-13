@@ -11,14 +11,18 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/tours")({
   head: () => ({
     meta: [
-      { title: "Tours and experiences in Armenia — StayLand" },
+      { title: "Տուրեր և փորձառություններ Հայաստանում — StayLand" },
       {
         name: "description",
-        content: "Day trips, hikes, wine routes and cultural experiences hosted by local Armenian guides.",
+        content: "Օրվա տուրեր, արշավներ, գինու երթուղիներ և մշակութային փորձառություններ տեղական հայ գիդերի ուղեկցությամբ։",
       },
-      { property: "og:title", content: "Tours and experiences in Armenia" },
-      { property: "og:description", content: "Book Armenian tours led by local guides." },
+      { property: "og:title", content: "Տուրեր և փորձառություններ Հայաստանում" },
+      { property: "og:description", content: "Ամրագրեք հայկական տուրեր տեղական գիդերի ուղեկցությամբ։" },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/tours" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/tours" }],
   }),
   component: ToursPage,
 });

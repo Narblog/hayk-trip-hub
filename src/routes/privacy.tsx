@@ -4,17 +4,19 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy policy — StayLand Armenia" },
+      { title: "Գաղտնիության քաղաքականություն — StayLand Հայաստան" },
       {
         name: "description",
         content:
-          "What StayLand collects, how anonymous listing analytics work, and how travellers and hosts control their data.",
+          "Ինչ տվյալներ է հավաքում StayLand-ը, ինչպես են աշխատում անանուն վիճակագրությունները և ինչպես են օգտատերերը կառավարում իրենց տվյալները։",
       },
-      { property: "og:title", content: "StayLand privacy policy" },
-      { property: "og:description", content: "Minimal data, anonymous analytics, no selling of personal data." },
+      { property: "og:title", content: "StayLand գաղտնիության քաղաքականություն" },
+      { property: "og:description", content: "Նվազագույն տվյալներ, անանուն վիճակագրություն, անձնական տվյալների չվաճառք։" },
       { property: "og:type", content: "article" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/privacy" },
       { name: "twitter:card", content: "summary" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/privacy" }],
   }),
   component: PrivacyPage,
 });

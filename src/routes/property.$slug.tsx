@@ -22,13 +22,15 @@ const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap
 export const Route = createFileRoute("/property/$slug")({
   head: ({ params }) => ({
     meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — stay in Armenia | StayLand` },
-      { name: "description", content: "Photos, amenities, availability and host contact details for this Armenian stay." },
-      { property: "og:title", content: "Stay in Armenia — StayLand" },
-      { property: "og:description", content: "Photos, amenities and availability for this Armenian stay." },
+      { title: `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand` },
+      { name: "description", content: "Լուսանկարներ, հարմարություններ, հասանելիություն և տանտիրոջ կոնտակտային տվյալներ այս կացարանի համար։" },
+      { property: "og:title", content: "Կացարան Հայաստանում — StayLand" },
+      { property: "og:description", content: "Լուսանկարներ, հարմարություններ և հասանելիություն այս կացարանի համար։" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: `https://hayk-trip-hub.lovable.app/property/${params.slug}` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: `https://hayk-trip-hub.lovable.app/property/${params.slug}` }],
   }),
   component: PropertyPage,
 });
