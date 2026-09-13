@@ -28,17 +28,19 @@ import promoTours from "@/assets/promo-tours.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "StayLand — Find your perfect stay in Armenia" },
+      { title: "StayLand — Գտիր քո իդեալական հանգիստը Հայաստանում" },
       {
         name: "description",
         content:
-          "Discover guesthouses, cabins, cottages and unforgettable experiences across Armenia. Contact owners directly — no booking commission.",
+          "Բացահայտիր Հայաստանի լավագույն հյուրատները, տնակներն ու անմոռանալի փորձառությունները։ Կապվիր տանտիրոջ հետ ուղիղ՝ առանց միջնորդավճարի։",
       },
-      { property: "og:title", content: "StayLand — Stays and experiences in Armenia" },
-      { property: "og:description", content: "Guesthouses, cabins and tours across Armenia. Contact owners directly." },
+      { property: "og:title", content: "StayLand — Կացարաններ և փորձառություններ Հայաստանում" },
+      { property: "og:description", content: "Հյուրատներ, տնակներ և տուրեր ամբողջ Հայաստանում։ Կապվիր տանտիրոջ հետ ուղիղ։" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/" }],
   }),
   component: Home,
 });

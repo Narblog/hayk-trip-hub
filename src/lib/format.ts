@@ -2,16 +2,18 @@ import type { Lang } from "./i18n";
 
 const LOCALES: Record<Lang, string> = { hy: "hy-AM", ru: "ru-RU", en: "en-US" };
 
+// Deterministic across server and client (Intl currency formatting differs
+// between Node and browsers → React hydration mismatch).
+function groupThousands(n: number) {
+  return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 export function formatPrice(amount: number, currency = "AMD", lang: Lang = "hy") {
-  try {
-    return new Intl.NumberFormat(LOCALES[lang], {
-      style: "currency",
-      currency,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  } catch {
-    return `${Math.round(amount).toLocaleString()} ${currency}`;
+  const num = groupThousands(amount);
+  if (currency === "AMD") {
+    return lang === "en" ? `AMD ${num}` : `${num} ֏`;
   }
+  return `${num} ${currency}`;
 }
 
 export function toISODate(d: Date) {

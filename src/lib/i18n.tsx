@@ -2131,7 +2131,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY) as Lang | null;
-    if (stored && stored in dicts) setLangState(stored);
+    if (stored && stored in dicts) {
+      setLangState(stored);
+      document.documentElement.lang = stored;
+    }
   }, []);
 
   const value = useMemo<I18nValue>(() => {
