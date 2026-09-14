@@ -225,7 +225,7 @@ function Home() {
         {/* Stays grid */}
         <section className="mt-12">
           <SectionHead title={t("home.stays")} sub={t("home.staysSub")} />
-          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
             {isPending ? null : grid.map((p) => <PropertyCard key={p.id} p={p} compact />)}
           </div>
           {isPending ? <CardGridSkeleton count={16} /> : null}

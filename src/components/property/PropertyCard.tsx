@@ -63,11 +63,11 @@ export function PropertyCard({
               <span className="font-normal text-muted-foreground">{t("reviews.new")}</span>
             )}
           </span>
-          <div className="absolute inset-x-0 bottom-0 p-4">
+          <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
             <p className="eyebrow text-background/85">
               {localized(city, "name") || p.city_code} · {localized(type, "name") || p.property_type}
             </p>
-            <h3 className="mt-1 line-clamp-2 font-display text-xl leading-snug text-background">{p.name}</h3>
+            <h3 className="mt-1 line-clamp-2 font-display text-sm leading-snug text-background sm:text-xl">{p.name}</h3>
           </div>
           <div className="absolute left-3 top-12 flex flex-col items-start gap-1.5">
             {p.is_featured ? (
@@ -85,7 +85,7 @@ export function PropertyCard({
       </Link>
       <FavoriteButton propertyId={p.id} className="absolute right-3 top-3 z-20" />
 
-      <div className={compact ? "space-y-2 p-4" : "space-y-3 p-5"}>
+      <div className={compact ? "space-y-2 p-4" : "space-y-3 p-3 sm:p-5"}>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <MapPin className="size-3.5" /> {localized(city, "name") || p.city_code}
@@ -101,9 +101,9 @@ export function PropertyCard({
         </div>
 
         <div className="flex items-end justify-between border-t border-border/70 pt-3">
-          <p className="text-sm">
+          <p className="text-xs sm:text-sm">
             <span className="mr-1 text-xs text-muted-foreground">{t("card.from")}</span>
-            <span className="font-display text-xl text-brand">
+            <span className="font-display text-base text-brand sm:text-xl">
               {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
             </span>
             <span className="ml-1 text-xs text-muted-foreground">/ {t("card.perNight")}</span>
@@ -112,7 +112,7 @@ export function PropertyCard({
             <Link
               to="/property/$slug"
               params={{ slug: p.slug }}
-              className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold transition-colors hover:border-brand hover:text-brand"
+              className="hidden rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold transition-colors hover:border-brand hover:text-brand sm:inline-block"
             >
               {t("card.view")}
             </Link>
