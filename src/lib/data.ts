@@ -12,6 +12,9 @@ export type ListingStatus =
 export type SearchResult = {
   id: string;
   name: string;
+  name_hy?: string | null;
+  name_ru?: string | null;
+  name_en?: string | null;
   slug: string;
   property_type: string;
   city_code: string | null;
@@ -141,6 +144,9 @@ export const propertyQuery = (slug: string) =>
 export type SimilarProperty = {
   id: string;
   name: string;
+  name_hy?: string | null;
+  name_ru?: string | null;
+  name_en?: string | null;
   slug: string;
   city_code: string | null;
   price_per_night: number;
@@ -161,7 +167,7 @@ export const similarPropertiesQuery = (
     queryFn: async () => {
       let q = supabase
         .from("properties")
-        .select("id,name,slug,city_code,price_per_night,currency,rating,review_count,main_image_url")
+        .select("id,name,name_hy,name_ru,name_en,slug,city_code,price_per_night,currency,rating,review_count,main_image_url")
         .eq("status", "APPROVED")
         .eq("is_active", true)
         .order("rating", { ascending: false })
@@ -196,7 +202,7 @@ async function collection(
 ) {
   let q = supabase
     .from("properties")
-    .select("id,name,slug,property_type,city_code,region_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url,is_demo,is_featured")
+    .select("id,name,name_hy,name_ru,name_en,slug,property_type,city_code,region_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url,is_demo,is_featured")
     .eq("status", "APPROVED")
     .eq("is_active", true)
     .limit(limit);
@@ -250,7 +256,7 @@ export const favoritesQuery = (userId: string | null) =>
     queryFn: async () => {
       const { data, error } = await supabase
         .from("favorites")
-        .select("property_id, properties(id,name,slug,property_type,city_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url)")
+        .select("property_id, properties(id,name,name_hy,name_ru,name_en,slug,property_type,city_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url)")
         .eq("user_id", userId!);
       if (error) throw error;
       return data ?? [];

@@ -68,7 +68,7 @@ function SimilarStays({ cityCode, regionCode, excludeId }: { cityCode: string | 
               {sp.main_image_url ? (
                 <img
                   src={sp.main_image_url}
-                  alt={sp.name}
+                  alt={localized(sp, "name") || sp.name}
                   loading="lazy"
                   className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -78,7 +78,7 @@ function SimilarStays({ cityCode, regionCode, excludeId }: { cityCode: string | 
                 <FavoriteButton propertyId={sp.id} />
               </div>
               <div className="absolute inset-x-3 bottom-3 text-background">
-                <p className="line-clamp-1 text-sm font-semibold">{sp.name}</p>
+                <p className="line-clamp-1 text-sm font-semibold">{localized(sp, "name") || sp.name}</p>
                 <p className="mt-0.5 flex items-center justify-between text-xs opacity-90">
                   <span>{localized(ref?.cities.find((c) => c.code === sp.city_code), "name") || sp.city_code}</span>
                   {sp.review_count > 0 ? (
@@ -190,7 +190,8 @@ function PropertyPage() {
     );
 
   const p = data as unknown as {
-    id: string; name: string; description: string | null; city_code: string | null; region_code: string | null;
+    id: string; name: string; name_hy: string | null; name_ru: string | null; name_en: string | null;
+    description: string | null; description_hy: string | null; description_ru: string | null; description_en: string | null; city_code: string | null; region_code: string | null;
     property_type: string | null;
     price_per_night: number; currency: string; max_guests: number; bedrooms: number;
     bathrooms: number; rating: number; review_count: number; main_image_url: string | null;
@@ -239,11 +240,14 @@ function PropertyPage() {
     setActiveImage(closestIndex);
   }
 
+  const title = localized(p, "name") || p.name;
+  const descText = localized(p, "description") || p.description;
+
   async function sharePage() {
     const url = window.location.href;
     try {
       if (navigator.share) {
-        await navigator.share({ title: p.name, url });
+        await navigator.share({ title, url });
       } else {
         await navigator.clipboard.writeText(url);
         toast.success(t("property.linkCopied"));
@@ -256,8 +260,8 @@ function PropertyPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LodgingBusiness",
-    name: p.name,
-    description: p.description ?? undefined,
+    name: title,
+    description: descText ?? undefined,
     image: gallery.slice(0, 5),
     address: {
       "@type": "PostalAddress",
@@ -293,7 +297,7 @@ function PropertyPage() {
             key={url + i}
             data-gallery-slide
             src={url}
-            alt={p.name}
+            alt={title}
             loading={i === 0 ? "eager" : "lazy"}
             onClick={() => setLightbox(i)}
             className="aspect-4/3 w-[88%] shrink-0 snap-center rounded-3xl object-cover"
@@ -315,7 +319,7 @@ function PropertyPage() {
             >
               <img
                 src={url}
-                alt={p.name}
+                alt={title}
                 loading={i === 0 ? "eager" : "lazy"}
                 className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -349,7 +353,7 @@ function PropertyPage() {
             </button>
           </div>
           <div className="relative flex min-h-0 flex-1 items-center justify-center">
-            <img src={gallery[lightbox]} alt={p.name} className="max-h-full max-w-full rounded-2xl object-contain" />
+            <img src={gallery[lightbox]} alt={title} className="max-h-full max-w-full rounded-2xl object-contain" />
             {gallery.length > 1 ? (
               <>
                 <button
@@ -396,13 +400,13 @@ function PropertyPage() {
           </>
         ) : null}
         <span aria-hidden>/</span>
-        <span className="text-foreground">{p.name}</span>
+        <span className="text-foreground">{title}</span>
       </nav>
 
       <div className="mt-4 grid gap-10 lg:grid-cols-[1fr_22rem]">
         <div>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-            <h1 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">{p.name}</h1>
+            <h1 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">{title}</h1>
             <div className="-ml-3 flex shrink-0 items-center gap-1 sm:ml-0">
               <FavoriteButton propertyId={p.id} label={t("property.save")} />
               <button
@@ -432,8 +436,8 @@ function PropertyPage() {
             </span>
           </div>
 
-          {p.description ? (
-            <p className="mt-4 whitespace-pre-line leading-relaxed text-muted-foreground">{p.description}</p>
+          {descText ? (
+            <p className="mt-4 whitespace-pre-line leading-relaxed text-muted-foreground">{descText}</p>
           ) : null}
 
           <div aria-hidden="true" className="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 text-brand">
@@ -482,7 +486,7 @@ function PropertyPage() {
         <aside className="h-fit overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
           <BookingRequestCard
             propertyId={p.id}
-            propertyTitle={p.name}
+            propertyTitle={title}
             maxGuests={Number(p.max_guests) || 2}
             fallbackPrice={Number(p.price_per_night)}
             currency={p.currency ?? "AMD"}

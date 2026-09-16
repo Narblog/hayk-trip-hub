@@ -502,6 +502,9 @@ export type Database = {
           created_at: string
           currency: string
           description: string | null
+          description_en: string | null
+          description_hy: string | null
+          description_ru: string | null
           extra_info: string | null
           house_rules: string | null
           id: string
@@ -513,6 +516,9 @@ export type Database = {
           main_image_url: string | null
           max_guests: number
           name: string
+          name_en: string | null
+          name_hy: string | null
+          name_ru: string | null
           owner_id: string | null
           price_per_night: number
           property_type: string
@@ -544,6 +550,9 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          description_en?: string | null
+          description_hy?: string | null
+          description_ru?: string | null
           extra_info?: string | null
           house_rules?: string | null
           id?: string
@@ -555,6 +564,9 @@ export type Database = {
           main_image_url?: string | null
           max_guests?: number
           name: string
+          name_en?: string | null
+          name_hy?: string | null
+          name_ru?: string | null
           owner_id?: string | null
           price_per_night?: number
           property_type: string
@@ -586,6 +598,9 @@ export type Database = {
           created_at?: string
           currency?: string
           description?: string | null
+          description_en?: string | null
+          description_hy?: string | null
+          description_ru?: string | null
           extra_info?: string | null
           house_rules?: string | null
           id?: string
@@ -597,6 +612,9 @@ export type Database = {
           main_image_url?: string | null
           max_guests?: number
           name?: string
+          name_en?: string | null
+          name_hy?: string | null
+          name_ru?: string | null
           owner_id?: string | null
           price_per_night?: number
           property_type?: string
@@ -1440,6 +1458,9 @@ export type Database = {
           main_image_url: string
           max_guests: number
           name: string
+          name_en: string
+          name_hy: string
+          name_ru: string
           price_per_night: number
           property_type: string
           rating: number

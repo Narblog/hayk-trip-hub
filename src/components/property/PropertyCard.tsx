@@ -9,6 +9,9 @@ import { useI18n } from "@/lib/i18n";
 export type PropertyCardData = {
   id: string;
   name: string;
+  name_hy?: string | null;
+  name_ru?: string | null;
+  name_en?: string | null;
   slug: string;
   property_type: string;
   city_code: string | null;
@@ -35,6 +38,7 @@ export function PropertyCard({
   const { t, lang, localized } = useI18n();
   const { data: ref } = useQuery(refDataQuery());
   const city = ref?.cities.find((c) => c.code === p.city_code);
+  const title = localized(p, "name") || p.name;
   const type = ref?.types.find((x) => x.code === p.property_type);
 
   return (
@@ -48,7 +52,7 @@ export function PropertyCard({
           {p.main_image_url ? (
             <img
               src={p.main_image_url}
-              alt={p.name}
+              alt={title}
               loading="lazy"
               width={1000}
               height={1250}
@@ -76,7 +80,7 @@ export function PropertyCard({
               {localized(city, "name") || p.city_code} · {localized(type, "name") || p.property_type}
             </p>
             <h3 className="line-clamp-2 font-display text-sm leading-snug text-background drop-shadow sm:mt-1 sm:text-xl">
-              {p.name}
+              {title}
             </h3>
           </div>
 
@@ -165,7 +169,7 @@ export function PropertyCard({
         <Link
           to="/property/$slug"
           params={{ slug: p.slug }}
-          aria-label={p.name}
+          aria-label={title}
           className="absolute inset-0 z-10"
         />
       ) : null}
