@@ -11,6 +11,7 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
   const { t, lang, localized } = useI18n();
   const { data: ref } = useQuery(refDataQuery());
   const city = ref?.cities.find((c) => c.code === p.city_code);
+  const title = localized(p, "name") || p.name;
   const type = ref?.types.find((x) => x.code === p.property_type);
 
   return (
@@ -23,7 +24,7 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
         {p.main_image_url ? (
           <img
             src={p.main_image_url}
-            alt={p.name}
+            alt={title}
             loading="lazy"
             className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -36,7 +37,7 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
             {localized(city, "name") || p.city_code} · {localized(type, "name") || p.property_type}
           </p>
           <Link to="/property/$slug" params={{ slug: p.slug }}>
-            <h3 className="mt-0.5 line-clamp-2 font-display text-base leading-snug">{p.name}</h3>
+            <h3 className="mt-0.5 line-clamp-2 font-display text-base leading-snug">{title}</h3>
           </Link>
         </div>
         <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
