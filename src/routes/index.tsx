@@ -129,10 +129,7 @@ function Home() {
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
-  const pool = [
-    ...((data?.recent ?? []) as PropertyCardData[]),
-    ...((data?.all ?? []) as PropertyCardData[]),
-  ];
+  const pool = (data?.recent ?? []) as PropertyCardData[];
   const seen = new Set<string>();
   const grid: PropertyCardData[] = [];
   for (const p of pool) {
@@ -147,7 +144,13 @@ function Home() {
       {/* Hero + search */}
       <section className="relative z-30">
         <div className="absolute inset-0 overflow-hidden">
-          <img src={heroImage} alt="Armenian mountain landscape at sunrise" className="size-full object-cover" />
+          <img
+            src={heroImage}
+            alt="Armenian mountain landscape at sunrise"
+            fetchPriority="high"
+            decoding="async"
+            className="size-full object-cover"
+          />
           <div className="hero-fade absolute inset-0" />
         </div>
         <div className="container-page relative z-10 pb-12 pt-16 text-center md:pb-16 md:pt-24">
