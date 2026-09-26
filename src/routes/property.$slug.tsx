@@ -299,6 +299,8 @@ function PropertyPage() {
             src={url}
             alt={title}
             loading={i === 0 ? "eager" : "lazy"}
+            {...(i === 0 ? { fetchPriority: "high" as const } : {})}
+            decoding="async"
             onClick={() => setLightbox(i)}
             className="aspect-4/3 w-[88%] shrink-0 snap-center rounded-3xl object-cover"
           />
@@ -321,6 +323,8 @@ function PropertyPage() {
                 src={url}
                 alt={title}
                 loading={i === 0 ? "eager" : "lazy"}
+                {...(i === 0 ? { fetchPriority: "high" as const } : {})}
+                decoding="async"
                 className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             </button>

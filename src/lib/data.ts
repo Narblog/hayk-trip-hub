@@ -218,33 +218,14 @@ async function collection(
 export const homeQuery = () =>
   queryOptions({
     queryKey: ["home"],
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 30,
     queryFn: async () => {
-      const [recommended, guesthouses, cabins, hotels, recent, all, tours, cities] = await Promise.all([
-        collection({ featured: true }),
-        collection({ types: ["guesthouse"] }),
-        collection({ types: ["cabin", "glamping", "cottage"] }),
-        collection({ types: ["hotel", "resort"] }),
-        collection({ recent: true }, 12),
-        collection({}, 32),
-        supabase
-          .from("tours")
-          .select("id,name,slug,category,city_code,price,currency,duration_hours,main_image_url,rating,review_count")
-          .eq("status", "APPROVED")
-          .limit(6),
-        supabase.from("cities").select("*").eq("is_popular", true).order("sort_order"),
+      const [recommended, recent] = await Promise.all([
+        collection({ featured: true }, 12),
+        collection({ recent: true }, 32),
       ]);
-      if (tours.error) throw tours.error;
-      if (cities.error) throw cities.error;
-      return {
-        recommended,
-        guesthouses,
-        cabins,
-        hotels,
-        recent,
-        all,
-        tours: tours.data ?? [],
-        cities: cities.data ?? [],
-      };
+      return { recommended, recent };
     },
   });
 
