@@ -119,8 +119,8 @@ export function BookingRequestCard({
   }, [propertyId]);
 
   const guests = adults + children;
-  const { data: quote } = useQuery(quoteQuery(propertyId, guests));
-  const { data: availability } = useQuery(availabilityQuery(propertyId));
+  const { data: quote, isError: isQuoteError } = useQuery(quoteQuery(propertyId, guests));
+  const { data: availability, isError: isAvailError } = useQuery(availabilityQuery(propertyId));
   const { data: bookings } = useQuery(propertyBookingsQuery(propertyId));
 
   const tracked = sentRanges.filter((r) => r.id && r.token);
@@ -267,7 +267,7 @@ export function BookingRequestCard({
   }
 
 
-  const canOpen = nights > 0 && !rangeConflict && !alreadySent;
+  const canOpen = nights > 0 && !rangeConflict && !alreadySent && !isQuoteError && !isAvailError;
 
   return (
     <>
@@ -309,6 +309,7 @@ export function BookingRequestCard({
 
         {rangeConflict ? <p className="mt-3 text-sm text-destructive">{t("book.errUnavailable")}</p> : null}
         {!rangeConflict && alreadySent ? <p className="mt-3 text-sm text-destructive">{t("book.errDuplicate")}</p> : null}
+        {(isQuoteError || isAvailError) ? <p className="mt-3 text-sm text-destructive">{t("error.friendly")}</p> : null}
 
         <Button type="button" className="mt-4 h-12 w-full rounded-full" disabled={!canOpen} onClick={() => { setError(null); setOpen(true); }}>
           {t("book.openModal")}

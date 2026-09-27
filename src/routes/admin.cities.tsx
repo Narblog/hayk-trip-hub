@@ -51,11 +51,10 @@ function AdminCitiesPage() {
     if (!file || !user) return;
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop() ?? "jpg";
-      const path = `${user.id}/cities/${crypto.randomUUID()}.${ext}`;
+      const { blob, path } = await processImage(file, user.id, { prefix: "cities" });
       const { error } = await supabase.storage
         .from("property-images")
-        .upload(path, file, { cacheControl: "3600", upsert: false });
+        .upload(path, blob, { cacheControl: "3600", upsert: false });
       if (error) throw error;
       const { data: signed, error: signErr } = await supabase.storage
         .from("property-images")

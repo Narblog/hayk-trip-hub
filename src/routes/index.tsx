@@ -127,14 +127,6 @@ function Home() {
   const { t } = useI18n();
   const { data, isPending, isError, refetch } = useQuery(homeQuery());
 
-  if (isError) {
-    return (
-      <div className="container-page py-16">
-        <ErrorState onRetry={() => refetch()} />
-      </div>
-    );
-  }
-
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
   const pool = (data?.recent ?? []) as PropertyCardData[];
@@ -229,17 +221,31 @@ function Home() {
             search={{ guests: 2, page: 1, featured: true }}
           />
           <div className="mt-5">
-            {isPending ? <CardGridSkeleton count={4} /> : <PropertyCarousel items={recommended} />}
+            {isError ? (
+              <ErrorState message={t("error.friendly")} onRetry={() => void refetch()} />
+            ) : isPending ? (
+              <CardGridSkeleton count={4} />
+            ) : (
+              <PropertyCarousel items={recommended} />
+            )}
           </div>
         </section>
 
         {/* Stays grid */}
         <section className="mt-12">
           <SectionHead title={t("home.stays")} sub={t("home.staysSub")} />
-          <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
-            {isPending ? null : grid.map((p) => <PropertyCard key={p.id} p={p} compact />)}
-          </div>
-          {isPending ? <CardGridSkeleton count={16} /> : null}
+          {isError ? (
+            <div className="mt-5">
+              <ErrorState message={t("error.friendly")} onRetry={() => void refetch()} />
+            </div>
+          ) : (
+            <>
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+                {isPending ? null : grid.map((p) => <PropertyCard key={p.id} p={p} compact />)}
+              </div>
+              {isPending ? <CardGridSkeleton count={16} /> : null}
+            </>
+          )}
           <div className="mt-7 flex justify-center">
             <Link
               to="/search"

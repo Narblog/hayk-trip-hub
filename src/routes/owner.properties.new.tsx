@@ -86,10 +86,10 @@ function NewPropertyPage() {
     try {
       const added: { url: string; path: string }[] = [];
       for (const file of Array.from(files)) {
-        const ext = file.name.split(".").pop() ?? "jpg";
-        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-        const { error } = await supabase.storage.from("property-images").upload(path, file, {
-          cacheControl: "3600",
+        const { blob, path, contentType } = await processImage(file, user.id);
+        const { error } = await supabase.storage.from("property-images").upload(path, blob, {
+          cacheControl: "31536000",
+          contentType,
           upsert: false,
         });
         if (error) throw error;

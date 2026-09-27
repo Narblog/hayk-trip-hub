@@ -1,6 +1,17 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+function retryTransientFailure(failureCount: number, error: unknown) {
+  if (failureCount >= 3) return false;
+  const candidate = error as { status?: number; code?: string } | null;
+  const status = candidate?.status;
+  if (status === 400 || status === 401 || status === 403 || status === 404) return false;
+  return candidate?.code !== "PGRST116";
+}
+
+const retryDelay = (attempt: number) => Math.min(600 * 2 ** attempt, 3000);
+import { processImage } from "./images";
+
 export type ListingStatus =
   | "DRAFT"
   | "PENDING_REVIEW"
@@ -130,6 +141,8 @@ export const maxGuestsQuery = () =>
 export const propertyQuery = (slug: string) =>
   queryOptions({
     queryKey: ["property", slug],
+    retry: retryTransientFailure,
+    retryDelay,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("properties")
@@ -220,6 +233,8 @@ export const homeQuery = () =>
     queryKey: ["home"],
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
+    retry: retryTransientFailure,
+    retryDelay,
     queryFn: async () => {
       const [recommended, recent] = await Promise.all([
         collection({ featured: true }, 12),
@@ -413,9 +428,8 @@ export const propertyHostQuery = (propertyId: string | undefined) =>
   });
 
 export async function uploadAvatar(userId: string, file: File) {
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const path = `${userId}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: true });
+  const { blob, path } = await processImage(file, userId, { prefix: "avatars", maxWidthOrHeight: 400 });
+  const { error } = await supabase.storage.from("avatars").upload(path, blob, { cacheControl: "3600", upsert: true });
   if (error) throw error;
   const { data } = await supabase.storage.from("avatars").createSignedUrl(path, 60 * 60 * 24 * 365 * 5);
   const url = data?.signedUrl;

@@ -13,13 +13,21 @@ export function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
   const today = new Date();
   const todayKey = iso(today);
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
-  const { data } = useQuery(availabilityQuery(propertyId));
+  const { data, isPending, isError, refetch } = useQuery(availabilityQuery(propertyId));
 
   const blocked = useMemo(() => {
     const set = new Set<string>();
     for (const row of data ?? []) if (row.status !== "AVAILABLE") set.add(row.date);
     return set;
   }, [data]);
+
+  if (isPending) return <div className="animate-pulse rounded-2xl bg-surface h-64 w-full" />;
+  if (isError) return (
+    <div className="flex flex-col items-center gap-2 py-8 rounded-2xl border border-dashed border-border">
+      <p className="text-sm text-muted-foreground">{t("error.title")}</p>
+      <Button variant="outline" size="sm" onClick={() => refetch()}>{t("error.retry")}</Button>
+    </div>
+  );
 
   const locale = lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB";
   const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);

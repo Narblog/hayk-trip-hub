@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { CarFront, ChevronLeft, ChevronRight, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
 import { toast } from "sonner";
-import { EmptyState, ErrorState, InlineLoader } from "@/components/common/states";
+import { EmptyState, ErrorState, PropertyPageSkeleton } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
 import { BookingRequestCard } from "@/components/property/BookingRequestCard";
@@ -177,8 +177,20 @@ function PropertyPage() {
     if (propertyId) void trackPropertyEvent(propertyId, "property_view");
   }, [propertyId]);
 
-  if (isPending) return <InlineLoader />;
-  if (isError || isRefError) return <div className="container-page py-16"><ErrorState onRetry={() => { refetch(); refetchRef(); }} /></div>;
+  if (isPending) return <PropertyPageSkeleton />;
+  if (isError || isRefError) {
+    return (
+      <div className="container-page py-16">
+        <ErrorState
+          message={t("error.friendly")}
+          onRetry={() => {
+            void refetch();
+            void refetchRef();
+          }}
+        />
+      </div>
+    );
+  }
   if (!data)
     return (
       <div className="container-page py-16">
