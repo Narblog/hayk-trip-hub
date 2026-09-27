@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { processImage } from "./images";
 
 export type ListingStatus =
   | "DRAFT"
@@ -413,9 +414,8 @@ export const propertyHostQuery = (propertyId: string | undefined) =>
   });
 
 export async function uploadAvatar(userId: string, file: File) {
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const path = `${userId}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("avatars").upload(path, file, { cacheControl: "3600", upsert: true });
+  const { blob, path } = await processImage(file, userId, { prefix: "avatars", maxWidthOrHeight: 400 });
+  const { error } = await supabase.storage.from("avatars").upload(path, blob, { cacheControl: "3600", upsert: true });
   if (error) throw error;
   const { data } = await supabase.storage.from("avatars").createSignedUrl(path, 60 * 60 * 24 * 365 * 5);
   const url = data?.signedUrl;

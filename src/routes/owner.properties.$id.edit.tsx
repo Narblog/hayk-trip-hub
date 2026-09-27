@@ -144,9 +144,8 @@ function EditPropertyPage() {
     try {
       const added: Photo[] = [];
       for (const file of Array.from(files)) {
-        const ext = file.name.split(".").pop() ?? "jpg";
-        const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-        const { error } = await supabase.storage.from("property-images").upload(path, file, { cacheControl: "3600" });
+        const { blob, path } = await processImage(file, user.id);
+        const { error } = await supabase.storage.from("property-images").upload(path, blob, { cacheControl: "3600" });
         if (error) throw error;
         const { data: signed, error: signErr } = await supabase.storage
           .from("property-images")
