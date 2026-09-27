@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { adminCitiesQuery, adminDeleteCity, adminUpsertCity, refDataQuery, type CityInput } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
+import { processImage } from "@/lib/images";
 
 export const Route = createFileRoute("/admin/cities")({
   head: () => ({

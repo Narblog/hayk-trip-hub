@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/auth";
 import { refDataQuery } from "@/lib/data";
 import { slugify } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { processImage } from "@/lib/images";
 
 export const Route = createFileRoute("/owner/tours/new")({
   head: () => ({

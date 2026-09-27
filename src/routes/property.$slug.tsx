@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { CarFront, ChevronLeft, ChevronRight, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
 import { toast } from "sonner";
-import { EmptyState, InlineLoader } from "@/components/common/states";
+import { EmptyState, ErrorState, InlineLoader } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
 import { AvailabilityCalendar } from "@/components/property/AvailabilityCalendar";
 import { BookingRequestCard } from "@/components/property/BookingRequestCard";
@@ -39,7 +39,7 @@ type Img = { id: string; image_url: string; is_cover: boolean | null; sort_order
 
 function SimilarStays({ cityCode, regionCode, excludeId }: { cityCode: string | null; regionCode: string | null; excludeId: string | null }) {
   const { t, lang, localized } = useI18n();
-  const { data: ref } = useQuery(refDataQuery());
+  const { data: ref, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
   const { data } = useQuery(similarPropertiesQuery(cityCode, regionCode, excludeId));
   const items = (data ?? []) as SimilarProperty[];
   if (!items.length) return null;
@@ -99,7 +99,7 @@ function SimilarStays({ cityCode, regionCode, excludeId }: { cityCode: string | 
 
 function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cityCode: string | null }) {
   const { t, lang, localized } = useI18n();
-  const { data: ref } = useQuery(refDataQuery());
+  const { data: ref, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
   const { data } = useQuery(relatedToursQuery(regionCode, cityCode));
   const tours = data ?? [];
   if (!tours.length) return null;
@@ -164,8 +164,8 @@ function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cit
 function PropertyPage() {
   const { slug } = Route.useParams();
   const { t, lang, localized } = useI18n();
-  const { data, isPending } = useQuery(propertyQuery(slug));
-  const { data: ref } = useQuery(refDataQuery());
+  const { data, isPending, isError, refetch } = useQuery(propertyQuery(slug));
+  const { data: ref, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
   const [activeImage, setActiveImage] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
@@ -178,6 +178,7 @@ function PropertyPage() {
   }, [propertyId]);
 
   if (isPending) return <InlineLoader />;
+  if (isError || isRefError) return <div className="container-page py-16"><ErrorState onRetry={() => { refetch(); refetchRef(); }} /></div>;
   if (!data)
     return (
       <div className="container-page py-16">
