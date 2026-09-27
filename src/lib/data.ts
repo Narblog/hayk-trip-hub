@@ -245,6 +245,46 @@ export const homeQuery = () =>
   });
 
 // ---------- favorites ----------
+const GUEST_FAV_KEY = "stayland-guest-favorites";
+
+export function getGuestFavoriteIds(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(GUEST_FAV_KEY);
+    const parsed = raw ? (JSON.parse(raw) as unknown) : [];
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+export function toggleGuestFavorite(propertyId: string, on: boolean): string[] {
+  const ids = getGuestFavoriteIds();
+  const next = on ? Array.from(new Set([...ids, propertyId])) : ids.filter((id) => id !== propertyId);
+  try {
+    window.localStorage.setItem(GUEST_FAV_KEY, JSON.stringify(next));
+  } catch {
+    // storage unavailable — keep in-memory result
+  }
+  return next;
+}
+
+export const guestFavoritesQuery = (ids: string[]) =>
+  queryOptions({
+    queryKey: ["guest-favorites", ids.slice().sort().join(",")],
+    enabled: ids.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("properties")
+        .select("id,name,name_hy,name_ru,name_en,slug,property_type,city_code,price_per_night,currency,max_guests,bedrooms,rating,review_count,main_image_url")
+        .in("id", ids)
+        .eq("status", "APPROVED")
+        .eq("is_active", true);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
 export const favoritesQuery = (userId: string | null) =>
   queryOptions({
     queryKey: ["favorites", userId],
