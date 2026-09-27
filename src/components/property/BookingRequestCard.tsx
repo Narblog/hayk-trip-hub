@@ -309,6 +309,7 @@ export function BookingRequestCard({
 
         {rangeConflict ? <p className="mt-3 text-sm text-destructive">{t("book.errUnavailable")}</p> : null}
         {!rangeConflict && alreadySent ? <p className="mt-3 text-sm text-destructive">{t("book.errDuplicate")}</p> : null}
+        {(isQuoteError || isAvailError) ? <p className="mt-3 text-sm text-destructive">{t("error.friendly")}</p> : null}
 
         <Button type="button" className="mt-4 h-12 w-full rounded-full" disabled={!canOpen} onClick={() => { setError(null); setOpen(true); }}>
           {t("book.openModal")}

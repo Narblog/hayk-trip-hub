@@ -29,8 +29,9 @@ export function CardGridSkeleton({ count = 8 }: { count?: number }) {
 }
 
 export function PropertyPageSkeleton() {
+  const { t } = useI18n();
   return (
-    <div className="container-page py-8" aria-label="Loading property">
+    <div className="container-page py-8" aria-label={t("common.loading")} aria-busy="true">
       <Skeleton className="aspect-4/3 w-full rounded-2xl sm:h-[26rem] sm:aspect-auto" />
       <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="space-y-4">
