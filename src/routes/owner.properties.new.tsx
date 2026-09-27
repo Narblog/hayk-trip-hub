@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { refDataQuery } from "@/lib/data";
 import { slugify } from "@/lib/format";
+import { processImage } from "@/lib/images";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/owner/properties/new")({
