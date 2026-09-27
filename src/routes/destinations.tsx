@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { MapPin } from "lucide-react";
-import { CardGridSkeleton, EmptyState } from "@/components/common/states";
+import { CardGridSkeleton, EmptyState, ErrorState } from "@/components/common/states";
 import { destinationsQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 
@@ -27,8 +27,9 @@ export const Route = createFileRoute("/destinations")({
 
 function DestinationsPage() {
   const { t, localized } = useI18n();
-  const { data, isPending } = useQuery(destinationsQuery());
+  const { data, isPending, isError, refetch } = useQuery(destinationsQuery());
 
+  if (isError) return <div className="container-page py-16"><ErrorState onRetry={() => refetch()} /></div>;
   const items = (data ?? []).slice().sort((a, b) => {
     if (a.is_popular !== b.is_popular) return a.is_popular ? -1 : 1;
     return b.stays - a.stays;

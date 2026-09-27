@@ -1,5 +1,15 @@
 import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+
+function retryTransientFailure(failureCount: number, error: unknown) {
+  if (failureCount >= 3) return false;
+  const candidate = error as { status?: number; code?: string } | null;
+  const status = candidate?.status;
+  if (status === 400 || status === 401 || status === 403 || status === 404) return false;
+  return candidate?.code !== "PGRST116";
+}
+
+const retryDelay = (attempt: number) => Math.min(600 * 2 ** attempt, 3000);
 import { processImage } from "./images";
 
 export type ListingStatus =
@@ -131,6 +141,8 @@ export const maxGuestsQuery = () =>
 export const propertyQuery = (slug: string) =>
   queryOptions({
     queryKey: ["property", slug],
+    retry: retryTransientFailure,
+    retryDelay,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("properties")
@@ -221,6 +233,8 @@ export const homeQuery = () =>
     queryKey: ["home"],
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 30,
+    retry: retryTransientFailure,
+    retryDelay,
     queryFn: async () => {
       const [recommended, recent] = await Promise.all([
         collection({ featured: true }, 12),

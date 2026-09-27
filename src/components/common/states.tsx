@@ -28,6 +28,27 @@ export function CardGridSkeleton({ count = 8 }: { count?: number }) {
   );
 }
 
+export function PropertyPageSkeleton() {
+  return (
+    <div className="container-page py-8" aria-label="Loading property">
+      <Skeleton className="aspect-4/3 w-full rounded-2xl sm:h-[26rem] sm:aspect-auto" />
+      <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-3/4" />
+          <Skeleton className="h-4 w-1/2" />
+          <Skeleton className="h-24 w-full" />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Skeleton key={index} className="h-20 rounded-xl" />
+            ))}
+          </div>
+        </div>
+        <Skeleton className="h-72 rounded-2xl" />
+      </div>
+    </div>
+  );
+}
+
 export function InlineLoader({ label }: { label?: string }) {
   const { t } = useI18n();
   return (
