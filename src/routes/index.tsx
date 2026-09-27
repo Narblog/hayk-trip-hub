@@ -9,7 +9,7 @@ import {
   CarFront,
   Gift,
 } from "lucide-react";
-import { CardGridSkeleton } from "@/components/common/states";
+import { CardGridSkeleton, ErrorState } from "@/components/common/states";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
@@ -125,7 +125,15 @@ function Vibes() {
 
 function Home() {
   const { t } = useI18n();
-  const { data, isPending } = useQuery(homeQuery());
+  const { data, isPending, isError, refetch } = useQuery(homeQuery());
+
+  if (isError) {
+    return (
+      <div className="container-page py-16">
+        <ErrorState onRetry={() => refetch()} />
+      </div>
+    );
+  }
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
