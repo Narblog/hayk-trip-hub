@@ -13,13 +13,28 @@ export function AvailabilityCalendar({ propertyId }: { propertyId: string }) {
   const today = new Date();
   const todayKey = iso(today);
   const [cursor, setCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
-  const { data } = useQuery(availabilityQuery(propertyId));
+  const { data, isPending, isError, refetch } = useQuery(availabilityQuery(propertyId));
 
   const blocked = useMemo(() => {
+
+  if (isPending) return <div className="animate-pulse rounded-2xl bg-surface h-64" />;
+  if (isError) return <Button variant="outline" size="sm" onClick={() => refetch()}>{t("error.retry")}</Button>;
     const set = new Set<string>();
+
+  if (isPending) return <div className="animate-pulse rounded-2xl bg-surface h-64" />;
+  if (isError) return <Button variant="outline" size="sm" onClick={() => refetch()}>{t("error.retry")}</Button>;
     for (const row of data ?? []) if (row.status !== "AVAILABLE") set.add(row.date);
+
+  if (isPending) return <div className="animate-pulse rounded-2xl bg-surface h-64" />;
+  if (isError) return <Button variant="outline" size="sm" onClick={() => refetch()}>{t("error.retry")}</Button>;
     return set;
+
+  if (isPending) return <div className="animate-pulse rounded-2xl bg-surface h-64" />;
+  if (isError) return <Button variant="outline" size="sm" onClick={() => refetch()}>{t("error.retry")}</Button>;
   }, [data]);
+
+  if (isPending) return <div className="animate-pulse rounded-2xl bg-surface h-64" />;
+  if (isError) return <Button variant="outline" size="sm" onClick={() => refetch()}>{t("error.retry")}</Button>;
 
   const locale = lang === "hy" ? "hy-AM" : lang === "ru" ? "ru-RU" : "en-GB";
   const first = new Date(cursor.getFullYear(), cursor.getMonth(), 1);
