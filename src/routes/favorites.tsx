@@ -4,7 +4,7 @@ import { CardGridSkeleton, EmptyState } from "@/components/common/states";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-import { favoritesQuery } from "@/lib/data";
+import { favoritesQuery, getGuestFavoriteIds, guestFavoritesQuery } from "@/lib/data";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/favorites")({
@@ -21,23 +21,17 @@ export const Route = createFileRoute("/favorites")({
 
 function FavoritesPage() {
   const { t } = useI18n();
-  const { user } = useAuth();
-  const { data, isPending } = useQuery(favoritesQuery(user?.id ?? null));
+  const { user, loading } = useAuth();
+  const guestIds = user ? [] : getGuestFavoriteIds();
+  const fav = useQuery(favoritesQuery(user?.id ?? null));
+  const guestFav = useQuery(guestFavoritesQuery(guestIds));
 
-  if (!user)
-    return (
-      <div className="container-page py-16">
-        <EmptyState title={t("fav.title")} description={t("fav.empty")}>
-          <Button asChild>
-            <Link to="/auth">{t("nav.login")}</Link>
-          </Button>
-        </EmptyState>
-      </div>
-    );
-
-  const items = (data ?? [])
-    .map((r) => (r as unknown as { properties: PropertyCardData | null }).properties)
-    .filter(Boolean) as PropertyCardData[];
+  const isPending = loading || (user ? fav.isPending : guestFav.isPending);
+  const items: PropertyCardData[] = user
+    ? ((fav.data ?? [])
+        .map((r) => (r as unknown as { properties: PropertyCardData | null }).properties)
+        .filter(Boolean) as PropertyCardData[])
+    : ((guestFav.data ?? []) as unknown as PropertyCardData[]);
 
   return (
     <div className="container-page py-10">
@@ -52,7 +46,7 @@ function FavoritesPage() {
             </Button>
           </EmptyState>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
             {items.map((p) => (
               <PropertyCard key={p.id} p={p} />
             ))}

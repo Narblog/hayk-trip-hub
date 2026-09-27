@@ -1,21 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { toggleFavorite } from "@/lib/data";
+import { getGuestFavoriteIds, toggleFavorite, toggleGuestFavorite } from "@/lib/data";
 
 export function FavoriteButton({ propertyId, className = "", label }: { propertyId: string; className?: string; label?: string }) {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const qc = useQueryClient();
+  const favKey = ["favorite-ids", user?.id ?? "guest"];
 
   const { data: ids = [] } = useQuery({
-    queryKey: ["favorite-ids", user?.id],
-    enabled: !!user,
+    queryKey: favKey,
     queryFn: async () => {
-      const { data, error } = await supabase.from("favorites").select("property_id").eq("user_id", user!.id);
+      if (!user) return getGuestFavoriteIds();
+      const { data, error } = await supabase.from("favorites").select("property_id").eq("user_id", user.id);
       if (error) throw error;
       return (data ?? []).map((r) => r.property_id);
     },
@@ -24,10 +23,15 @@ export function FavoriteButton({ propertyId, className = "", label }: { property
   const active = ids.includes(propertyId);
 
   const mutation = useMutation({
-    mutationFn: () => toggleFavorite(user!.id, propertyId, !active),
+    mutationFn: async () => {
+      if (!user) return toggleGuestFavorite(propertyId, !active);
+      await toggleFavorite(user.id, propertyId, !active);
+      return null;
+    },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["favorite-ids", user?.id] });
-      qc.invalidateQueries({ queryKey: ["favorites", user?.id] });
+      qc.invalidateQueries({ queryKey: favKey });
+      qc.invalidateQueries({ queryKey: ["favorites", user?.id ?? null] });
+      qc.invalidateQueries({ queryKey: ["guest-favorites"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -40,10 +44,6 @@ export function FavoriteButton({ propertyId, className = "", label }: { property
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (!user) {
-          navigate({ to: "/auth" });
-          return;
-        }
         mutation.mutate();
       }}
       className={
