@@ -102,7 +102,11 @@ export function DatePicker({
           </span>
         </button>
       </PopoverTrigger>
-      <PopoverContent align="start" className={cn("w-[19rem] p-3", className)}>
+      <PopoverContent
+        align="start"
+        collisionPadding={12}
+        className={cn("w-[min(19rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] p-3", className)}
+      >
         <div className="flex items-center justify-between gap-2">
           <button
             type="button"

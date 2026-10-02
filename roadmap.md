@@ -4,3 +4,4 @@
 - [x] Add resilient retries to home and property queries.
 - [x] Add localized loading fallbacks and actionable error states.
 - [ ] Verify upload output, mobile/desktop states, diagnostics, and metadata.
+- [x] Stabilize the property page layout on iPhone-sized screens.
