@@ -202,6 +202,13 @@ function EditPropertyPage() {
         .update({
           name: form.name.trim(),
           description: form.description || null,
+          // Clear stale translations when the host edits the text so the live wording shows.
+          ...(form.name.trim() !== (property?.name ?? "")
+            ? { name_hy: null, name_ru: null, name_en: null }
+            : {}),
+          ...((form.description || null) !== (property?.description ?? null)
+            ? { description_hy: null, description_ru: null, description_en: null }
+            : {}),
           property_type: form.property_type,
           city_code: form.city_code,
           region_code: form.region_code || city?.region_code || null,
