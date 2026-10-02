@@ -26,7 +26,8 @@ function FavoritesPage() {
   const fav = useQuery(favoritesQuery(user?.id ?? null));
   const guestFav = useQuery(guestFavoritesQuery(guestIds));
 
-  const isPending = loading || (user ? fav.isPending : guestFav.isPending);
+  const isPending =
+    loading || (user ? fav.isPending : guestIds.length > 0 && guestFav.isPending);
   const items: PropertyCardData[] = user
     ? ((fav.data ?? [])
         .map((r) => (r as unknown as { properties: PropertyCardData | null }).properties)
