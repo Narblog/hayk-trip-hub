@@ -39,7 +39,7 @@ type Img = { id: string; image_url: string; is_cover: boolean | null; sort_order
 
 function SimilarStays({ cityCode, regionCode, excludeId }: { cityCode: string | null; regionCode: string | null; excludeId: string | null }) {
   const { t, lang, localized } = useI18n();
-  const { data: ref, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
+  const { data: ref, isPending: isRefPending, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
   const { data } = useQuery(similarPropertiesQuery(cityCode, regionCode, excludeId));
   const items = (data ?? []) as SimilarProperty[];
   if (!items.length) return null;
@@ -177,7 +177,7 @@ function PropertyPage() {
     if (propertyId) void trackPropertyEvent(propertyId, "property_view");
   }, [propertyId]);
 
-  if (isPending) return <PropertyPageSkeleton />;
+  if (isPending || isRefPending) return <PropertyPageSkeleton />;
   if (isError || isRefError) {
     return (
       <div className="container-page py-16">
@@ -298,12 +298,12 @@ function PropertyPage() {
   };
 
   return (
-    <div className="container-page py-8">
+    <div className="container-page min-w-0 py-5 sm:py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div
         ref={galleryRef}
         onScroll={updateActiveImage}
-        className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 sm:mx-0 sm:hidden"
+        className="scrollbar-none -mx-4 flex min-w-0 snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain px-4 sm:mx-0 sm:hidden"
       >
         {gallery.map((url, i) => (
           <img
@@ -315,7 +315,7 @@ function PropertyPage() {
             {...(i === 0 ? { fetchPriority: "high" as const } : {})}
             decoding="async"
             onClick={() => setLightbox(i)}
-            className="aspect-4/3 w-[88%] shrink-0 snap-center rounded-3xl object-cover"
+            className="aspect-4/3 w-full shrink-0 snap-center rounded-2xl object-cover"
           />
         ))}
       </div>
@@ -402,7 +402,7 @@ function PropertyPage() {
         </div>
       ) : null}
 
-      <nav aria-label="Breadcrumb" className="mt-6 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+      <nav aria-label="Breadcrumb" className="mt-5 flex min-w-0 flex-wrap items-center gap-1.5 break-words text-xs text-muted-foreground sm:mt-6">
         <Link to="/" className="hover:text-brand">{t("nav.home")}</Link>
         {regionName ? (
           <>
@@ -420,10 +420,10 @@ function PropertyPage() {
         <span className="text-foreground">{title}</span>
       </nav>
 
-      <div className="mt-4 grid gap-10 lg:grid-cols-[1fr_22rem]">
-        <div>
+      <div className="mt-4 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-10">
+        <div className="min-w-0">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-            <h1 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">{title}</h1>
+            <h1 className="min-w-0 break-words font-display text-2xl font-semibold leading-tight sm:text-3xl">{title}</h1>
             <div className="-ml-3 flex shrink-0 items-center gap-1 sm:ml-0">
               <FavoriteButton propertyId={p.id} label={t("property.save")} />
               <button
@@ -439,7 +439,7 @@ function PropertyPage() {
 
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><MapPin className="size-4" /> {locationLine}</span>
+            <span className="flex min-w-0 items-start gap-1.5 break-words"><MapPin className="mt-0.5 size-4 shrink-0" /> {locationLine}</span>
             {p.review_count > 0 ? (
               <a href="#reviews" className="flex items-center gap-1.5 hover:text-brand">
                 <Star className="size-4 fill-gold text-gold" /> {Number(p.rating).toFixed(1)} ({p.review_count} {t("property.reviews").toLowerCase()})
@@ -454,7 +454,7 @@ function PropertyPage() {
           </div>
 
           {descText ? (
-            <p className="mt-4 whitespace-pre-line leading-relaxed text-muted-foreground">{descText}</p>
+            <p className="mt-4 min-w-0 whitespace-pre-line break-words leading-relaxed text-muted-foreground">{descText}</p>
           ) : null}
 
           <div aria-hidden="true" className="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 text-brand">
@@ -466,11 +466,11 @@ function PropertyPage() {
           {amenityList.length ? (
             <section className="mt-4">
               <h2 className="font-display text-xl font-semibold">{t("property.amenities")}</h2>
-              <div className="mt-4 flex flex-wrap gap-2.5">
+              <div className="mt-4 flex min-w-0 flex-wrap gap-2.5">
                 {amenityList.map((a) => (
-                  <span key={a.code} className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-sm">
+                  <span key={a.code} className="flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-sm">
                     <AmenityIcon icon={a.icon} className="size-4.5 text-brand" />
-                    {localized(a, "name")}
+                    <span className="min-w-0 break-words">{localized(a, "name")}</span>
                   </span>
                 ))}
               </div>
@@ -500,7 +500,7 @@ function PropertyPage() {
 
 
 
-        <aside className="h-fit overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card lg:sticky lg:top-24">
+        <aside className="h-fit min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-card sm:p-5 lg:sticky lg:top-24">
           <BookingRequestCard
             propertyId={p.id}
             propertyTitle={title}
