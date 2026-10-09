@@ -136,7 +136,7 @@ function Home() {
     if (recommendedIds.has(p.id) || seen.has(p.id)) continue;
     seen.add(p.id);
     grid.push(p);
-    if (grid.length === 16) break;
+    if (grid.length === 24) break;
   }
 
   return (
@@ -279,23 +279,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Why StayLand */}
-        <section className="mt-12">
-          <SectionHead eyebrow={t("home.whyEyebrow")} title={t("home.why")} />
-          <div className="mt-5 grid gap-4 md:grid-cols-3">
-            {[
-              { icon: ShieldCheck, title: t("home.trust1"), sub: t("home.trust1sub") },
-              { icon: PhoneCall, title: t("home.trust2"), sub: t("home.trust2sub") },
-              { icon: CalendarCheck, title: t("home.trust3"), sub: t("home.trust3sub") },
-            ].map((f) => (
-              <div key={f.title} className="rounded-2xl border border-border/70 bg-card p-5 shadow-card">
-                <f.icon className="size-5 text-brand" />
-                <h3 className="mt-3 font-display text-lg">{f.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{f.sub}</p>
-              </div>
-            ))}
-          </div>
-        </section>
       </div>
     </div>
   );
