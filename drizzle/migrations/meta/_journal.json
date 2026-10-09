@@ -8,6 +8,13 @@
       "when": 1791573999005,
       "tag": "0000_bind_avatars_read_to_owner",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791574098820,
+      "tag": "0001_scope_pricing_public_read",
+      "breakpoints": true
     }
   ]
 }
