@@ -165,7 +165,7 @@ function PropertyPage() {
   const { slug } = Route.useParams();
   const { t, lang, localized } = useI18n();
   const { data, isPending, isError, refetch } = useQuery(propertyQuery(slug));
-  const { data: ref, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
+  const { data: ref, isPending: isRefPending, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
   const [activeImage, setActiveImage] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
