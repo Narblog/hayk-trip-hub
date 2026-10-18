@@ -1363,3 +1363,72 @@ export async function bookingByToken(bookingId: string, token: string) {
   if (error) throw error;
   return (data ?? [])[0] ?? null;
 }
+
+// ---------- social links (platform_settings.social_links) ----------
+export type SocialLinks = {
+  instagram: string;
+  facebook: string;
+  telegram: string;
+};
+
+type SocialKey = keyof SocialLinks;
+
+/**
+ * Accepts a full URL, a bare domain ("instagram.com/stayland") or a plain
+ * handle ("@stayland") and always returns a clickable https URL — or "" when
+ * nothing usable was typed.
+ */
+export function normalizeSocialUrl(value: string, key: SocialKey): string {
+  const raw = (value ?? "").trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const handle = raw.replace(/^@/, "").replace(/\/+$/, "");
+  if (!handle) return "";
+  // A dotted value is treated as a domain (t.me/stayland, facebook.com/...).
+  if (handle.includes(".")) return `https://${handle}`;
+  const home: Record<SocialKey, string> = {
+    instagram: "https://instagram.com/",
+    facebook: "https://facebook.com/",
+    telegram: "https://t.me/",
+  };
+  return `${home[key]}${handle}`;
+}
+
+export const socialLinksQuery = () =>
+  queryOptions({
+    queryKey: ["platform-settings", "social_links"],
+    queryFn: async (): Promise<SocialLinks> => {
+      const { data, error } = await supabase
+        .from("platform_settings")
+        .select("value")
+        .eq("key", "social_links")
+        .maybeSingle();
+      if (error) throw error;
+      const value = (data?.value ?? {}) as Partial<Record<SocialKey, string | null>>;
+      return {
+        instagram: value.instagram ?? "",
+        facebook: value.facebook ?? "",
+        telegram: value.telegram ?? "",
+      };
+    },
+  });
+
+export async function adminSaveSocialLinks(adminId: string, links: SocialLinks) {
+  const value: SocialLinks = {
+    instagram: normalizeSocialUrl(links.instagram, "instagram"),
+    facebook: normalizeSocialUrl(links.facebook, "facebook"),
+    telegram: normalizeSocialUrl(links.telegram, "telegram"),
+  };
+  const { error } = await supabase
+    .from("platform_settings")
+    .upsert({ key: "social_links", value, updated_at: new Date().toISOString() });
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "social_links.updated",
+    target_type: "platform_settings",
+    target_id: null,
+    notes: "social_links",
+  });
+  return value;
+}

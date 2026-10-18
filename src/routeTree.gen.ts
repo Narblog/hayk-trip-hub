@@ -26,6 +26,7 @@ import { Route as AccountNotificationsRouteImport } from './routes/account.notif
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
+import { Route as AdminSocialRouteImport } from './routes/admin.social'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
 import { Route as OwnerAnalyticsRouteImport } from './routes/owner.analytics'
 import { Route as OwnerBookingsRouteImport } from './routes/owner.bookings'
@@ -126,6 +127,11 @@ const AdminPagesRoute = AdminPagesRouteImport.update({
   path: '/admin/pages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSocialRoute = AdminSocialRouteImport.update({
+  id: '/admin/social',
+  path: '/admin/social',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OwnerIndexRoute = OwnerIndexRouteImport.update({
   id: '/owner/',
   path: '/owner/',
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
+  '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
   '/owner/bookings': typeof OwnerBookingsRoute
   '/owner/calendar': typeof OwnerCalendarRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
+  '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
   '/owner/bookings': typeof OwnerBookingsRoute
   '/owner/calendar': typeof OwnerCalendarRoute
@@ -282,6 +290,7 @@ export interface FileRoutesById {
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/pages': typeof AdminPagesRoute
+  '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
   '/owner/bookings': typeof OwnerBookingsRoute
   '/owner/calendar': typeof OwnerCalendarRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
+    | '/admin/social'
     | '/owner/analytics'
     | '/owner/bookings'
     | '/owner/calendar'
@@ -350,6 +360,7 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
+    | '/admin/social'
     | '/owner/analytics'
     | '/owner/bookings'
     | '/owner/calendar'
@@ -383,6 +394,7 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/pages'
+    | '/admin/social'
     | '/owner/analytics'
     | '/owner/bookings'
     | '/owner/calendar'
@@ -417,6 +429,7 @@ export interface RootRouteChildren {
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
   AdminPagesRoute: typeof AdminPagesRoute
+  AdminSocialRoute: typeof AdminSocialRoute
   OwnerAnalyticsRoute: typeof OwnerAnalyticsRoute
   OwnerBookingsRoute: typeof OwnerBookingsRoute
   OwnerCalendarRoute: typeof OwnerCalendarRoute
@@ -556,6 +569,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/social': {
+      id: '/admin/social'
+      path: '/admin/social'
+      fullPath: '/admin/social'
+      preLoaderRoute: typeof AdminSocialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/': {
       id: '/owner/'
       path: '/owner'
@@ -673,6 +693,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
   AdminPagesRoute: AdminPagesRoute,
+  AdminSocialRoute: AdminSocialRoute,
   OwnerAnalyticsRoute: OwnerAnalyticsRoute,
   OwnerBookingsRoute: OwnerBookingsRoute,
   OwnerCalendarRoute: OwnerCalendarRoute,
