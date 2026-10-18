@@ -15,6 +15,13 @@
       "when": 1791574098820,
       "tag": "0001_scope_pricing_public_read",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792306690958,
+      "tag": "0002_add_social_links_setting",
+      "breakpoints": true
     }
   ]
 }
