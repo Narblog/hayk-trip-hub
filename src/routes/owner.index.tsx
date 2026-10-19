@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CalendarClock, CheckCircle2, Eye, Wallet } from "lucide-react";
+import { CalendarClock, CheckCircle2, Eye, Percent, Wallet } from "lucide-react";
 import { InlineLoader } from "@/components/common/states";
 import { OwnerShell } from "@/components/owner/OwnerShell";
 import { StatusBadge } from "@/components/common/StatusBadge";

@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { BookingStatusPill } from "@/components/booking/BookingStatusPill";
 import { useAuth } from "@/lib/auth";
-import { cancelBooking, ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
+import { cancelBooking, commissionPercentQuery, ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
