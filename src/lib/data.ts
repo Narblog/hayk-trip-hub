@@ -1432,3 +1432,34 @@ export async function adminSaveSocialLinks(adminId: string, links: SocialLinks) 
   });
   return value;
 }
+
+export const commissionPercentQuery = () =>
+  queryOptions({
+    queryKey: ["platform-settings", "commission_percent"],
+    queryFn: async (): Promise<number> => {
+      const { data, error } = await supabase
+        .from("platform_settings")
+        .select("value")
+        .eq("key", "commission_percent")
+        .maybeSingle();
+      if (error) throw error;
+      const n = Number(data?.value ?? 10);
+      return Number.isFinite(n) && n >= 0 && n <= 100 ? n : 10;
+    },
+  });
+
+export async function adminSaveCommissionPercent(adminId: string, percent: number) {
+  const value = Math.min(100, Math.max(0, Math.round(percent * 100) / 100));
+  const { error } = await supabase
+    .from("platform_settings")
+    .upsert({ key: "commission_percent", value, updated_at: new Date().toISOString() });
+  if (error) throw error;
+  await supabase.from("admin_actions").insert({
+    admin_id: adminId,
+    action: "commission_percent.updated",
+    target_type: "platform_settings",
+    target_id: null,
+    notes: `commission_percent=${value}`,
+  });
+  return value;
+}
