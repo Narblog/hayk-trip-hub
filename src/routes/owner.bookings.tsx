@@ -42,6 +42,7 @@ function OwnerBookingsPage() {
   const [reason, setReason] = useState("");
 
   const bookings = useQuery(ownerBookingsQuery(user?.id ?? null));
+  const commission = useQuery(commissionPercentQuery());
 
   const respond = useMutation({
     mutationFn: (input: { bookingId: string; action: "ACCEPT" | "DECLINE" }) =>
@@ -89,6 +90,9 @@ function OwnerBookingsPage() {
   const pending = all.filter((b) => b.status === "PENDING").length;
   const accepted = all.filter((b) => b.status === "ACCEPTED").length;
   const revenue = monthRevenue(all);
+  const commissionPct = commission.data ?? 0;
+  const commissionAmt = Math.round((revenue * commissionPct) / 100);
+  const netRevenue = revenue - commissionAmt;
 
   return (
     <OwnerShell>
