@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { CalendarClock, CheckCircle2, Eye, Wallet } from "lucide-react";
+import { CalendarClock, CheckCircle2, Eye, Percent, Wallet } from "lucide-react";
 import { InlineLoader } from "@/components/common/states";
 import { OwnerShell } from "@/components/owner/OwnerShell";
 import { StatusBadge } from "@/components/common/StatusBadge";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import {
   becomeOwner,
+  commissionPercentQuery,
   ownerBookingsQuery,
   ownerPropertiesQuery,
   ownerStatsQuery,
@@ -50,9 +51,12 @@ function OwnerDashboard() {
   const { data: props, isPending } = useQuery(ownerPropertiesQuery(user?.id ?? null));
   const { data: tours = [], isPending: toursPending } = useQuery(ownerToursQuery(user?.id ?? null));
   const { data: ownerBookings = [] } = useQuery(ownerBookingsQuery(user?.id ?? null));
+  const { data: commissionPct = 0 } = useQuery(commissionPercentQuery());
   const pendingBookings = ownerBookings.filter((b) => b.status === "PENDING").length;
   const acceptedBookings = ownerBookings.filter((b) => b.status === "ACCEPTED").length;
   const revenue = monthRevenue(ownerBookings);
+  const commission = Math.round((revenue * commissionPct) / 100);
+  const netRevenue = revenue - commission;
 
   if (!user)
     return (
@@ -100,11 +104,13 @@ function OwnerDashboard() {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <StatCard icon={<CalendarClock className="size-4" />} tone="gold" label={t("owner.pending")} value={String(pendingBookings)} />
         <StatCard icon={<CheckCircle2 className="size-4" />} tone="brand" label={t("owner.approved")} value={String(acceptedBookings)} />
-        <StatCard icon={<Wallet className="size-4" />} tone="brand" label={t("owner.monthRevenue")} value={formatPrice(revenue, "AMD", lang)} />
         <StatCard icon={<Eye className="size-4" />} tone="muted" label={t("owner.views")} value={String(stats?.views ?? 0)} />
+        <StatCard icon={<Wallet className="size-4" />} tone="brand" label={t("owner.monthRevenue")} value={formatPrice(revenue, "AMD", lang)} />
+        <StatCard icon={<Percent className="size-4" />} tone="gold" label={`${t("owner.commission")} (${commissionPct}%)`} value={formatPrice(commission, "AMD", lang)} />
+        <StatCard icon={<Wallet className="size-4" />} tone="brand" label={t("owner.netRevenue")} value={formatPrice(netRevenue, "AMD", lang)} />
       </div>
 
       <div className="mt-8 flex items-center justify-between gap-3">

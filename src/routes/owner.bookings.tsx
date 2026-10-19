@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CalendarClock, CalendarDays, Check, CheckCircle2, Mail, MapPin, Phone, User, Users, Wallet, X } from "lucide-react";
+import { CalendarClock, CalendarDays, Check, CheckCircle2, Mail, MapPin, Percent, Phone, User, Users, Wallet, X } from "lucide-react";
 import { OwnerShell } from "@/components/owner/OwnerShell";
 import { StatCard, monthRevenue } from "@/routes/owner.index";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EmptyState, InlineLoader } from "@/components/common/states";
 import { BookingStatusPill } from "@/components/booking/BookingStatusPill";
 import { useAuth } from "@/lib/auth";
-import { cancelBooking, ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
+import { cancelBooking, commissionPercentQuery, ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 
@@ -42,6 +42,7 @@ function OwnerBookingsPage() {
   const [reason, setReason] = useState("");
 
   const bookings = useQuery(ownerBookingsQuery(user?.id ?? null));
+  const commission = useQuery(commissionPercentQuery());
 
   const respond = useMutation({
     mutationFn: (input: { bookingId: string; action: "ACCEPT" | "DECLINE" }) =>
@@ -89,16 +90,21 @@ function OwnerBookingsPage() {
   const pending = all.filter((b) => b.status === "PENDING").length;
   const accepted = all.filter((b) => b.status === "ACCEPTED").length;
   const revenue = monthRevenue(all);
+  const commissionPct = commission.data ?? 0;
+  const commissionAmt = Math.round((revenue * commissionPct) / 100);
+  const netRevenue = revenue - commissionAmt;
 
   return (
     <OwnerShell>
       <h1 className="font-display text-3xl font-semibold">{t("book.ownerTitle")}</h1>
       <p className="mt-1 text-muted-foreground">{t("book.ownerSub")}</p>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <StatCard icon={<CalendarClock className="size-4" />} tone="gold" label={t("owner.pending")} value={String(pending)} />
         <StatCard icon={<CheckCircle2 className="size-4" />} tone="brand" label={t("owner.approved")} value={String(accepted)} />
         <StatCard icon={<Wallet className="size-4" />} tone="brand" label={t("owner.monthRevenue")} value={formatPrice(revenue, "AMD", lang)} />
+        <StatCard icon={<Percent className="size-4" />} tone="gold" label={`${t("owner.commission")} (${commissionPct}%)`} value={formatPrice(commissionAmt, "AMD", lang)} />
+        <StatCard icon={<Wallet className="size-4" />} tone="brand" label={t("owner.netRevenue")} value={formatPrice(netRevenue, "AMD", lang)} />
       </div>
 
       <div className="mt-5 flex flex-wrap gap-1.5 rounded-2xl border border-border bg-card p-1.5">

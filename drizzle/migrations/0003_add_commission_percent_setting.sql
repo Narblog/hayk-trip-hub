@@ -1,0 +1,1 @@
+INSERT INTO public.platform_settings (key, value) VALUES ('commission_percent', '10'::jsonb) ON CONFLICT (key) DO NOTHING;

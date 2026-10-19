@@ -25,6 +25,7 @@ import { Route as AccountBookingsRouteImport } from './routes/account.bookings'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
+import { Route as AdminCommissionRouteImport } from './routes/admin.commission'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminSocialRouteImport } from './routes/admin.social'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
@@ -120,6 +121,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminCitiesRoute = AdminCitiesRouteImport.update({
   id: '/admin/cities',
   path: '/admin/cities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCommissionRoute = AdminCommissionRouteImport.update({
+  id: '/admin/commission',
+  path: '/admin/commission',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
+  '/admin/commission': typeof AdminCommissionRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
@@ -254,6 +261,7 @@ export interface FileRoutesByTo {
   '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
+  '/admin/commission': typeof AdminCommissionRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
@@ -289,6 +297,7 @@ export interface FileRoutesById {
   '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
+  '/admin/commission': typeof AdminCommissionRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
@@ -325,6 +334,7 @@ export interface FileRouteTypes {
     | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
+    | '/admin/commission'
     | '/admin/pages'
     | '/admin/social'
     | '/owner/analytics'
@@ -359,6 +369,7 @@ export interface FileRouteTypes {
     | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
+    | '/admin/commission'
     | '/admin/pages'
     | '/admin/social'
     | '/owner/analytics'
@@ -393,6 +404,7 @@ export interface FileRouteTypes {
     | '/account/bookings'
     | '/account/notifications'
     | '/admin/cities'
+    | '/admin/commission'
     | '/admin/pages'
     | '/admin/social'
     | '/owner/analytics'
@@ -428,6 +440,7 @@ export interface RootRouteChildren {
   AccountBookingsRoute: typeof AccountBookingsRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
+  AdminCommissionRoute: typeof AdminCommissionRoute
   AdminPagesRoute: typeof AdminPagesRoute
   AdminSocialRoute: typeof AdminSocialRoute
   OwnerAnalyticsRoute: typeof OwnerAnalyticsRoute
@@ -562,6 +575,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/commission': {
+      id: '/admin/commission'
+      path: '/admin/commission'
+      fullPath: '/admin/commission'
+      preLoaderRoute: typeof AdminCommissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/pages': {
       id: '/admin/pages'
       path: '/admin/pages'
@@ -692,6 +712,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountBookingsRoute: AccountBookingsRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
+  AdminCommissionRoute: AdminCommissionRoute,
   AdminPagesRoute: AdminPagesRoute,
   AdminSocialRoute: AdminSocialRoute,
   OwnerAnalyticsRoute: OwnerAnalyticsRoute,
