@@ -29,6 +29,13 @@
       "when": 1792388079797,
       "tag": "0003_add_commission_percent_setting",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792528067935,
+      "tag": "0004_create_packages",
+      "breakpoints": true
     }
   ]
 }
