@@ -368,6 +368,68 @@ export type Database = {
         }
         Relationships: []
       }
+      packages: {
+        Row: {
+          check_in: string
+          check_out: string
+          created_at: string
+          currency: string
+          description: string | null
+          icon: string
+          id: string
+          image_url: string | null
+          includes: string[]
+          is_active: boolean
+          price: number
+          property_id: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          check_in: string
+          check_out: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          icon?: string
+          id?: string
+          image_url?: string | null
+          includes?: string[]
+          is_active?: boolean
+          price?: number
+          property_id?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          check_in?: string
+          check_out?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          icon?: string
+          id?: string
+          image_url?: string | null
+          includes?: string[]
+          is_active?: boolean
+          price?: number
+          property_id?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "packages_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pages: {
         Row: {
           content_en: string

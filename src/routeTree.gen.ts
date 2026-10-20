@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DestinationsRouteImport } from './routes/destinations'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as HelpRouteImport } from './routes/help'
+import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -26,6 +27,7 @@ import { Route as AccountNotificationsRouteImport } from './routes/account.notif
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
 import { Route as AdminCommissionRouteImport } from './routes/admin.commission'
+import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
 import { Route as AdminPagesRouteImport } from './routes/admin.pages'
 import { Route as AdminSocialRouteImport } from './routes/admin.social'
 import { Route as OwnerIndexRouteImport } from './routes/owner.index'
@@ -71,6 +73,11 @@ const FavoritesRoute = FavoritesRouteImport.update({
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesRoute = PackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -126,6 +133,11 @@ const AdminCitiesRoute = AdminCitiesRouteImport.update({
 const AdminCommissionRoute = AdminCommissionRouteImport.update({
   id: '/admin/commission',
   path: '/admin/commission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPackagesRoute = AdminPackagesRouteImport.update({
+  id: '/admin/packages',
+  path: '/admin/packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPagesRoute = AdminPagesRouteImport.update({
@@ -218,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
   '/help': typeof HelpRoute
+  '/packages': typeof PackagesRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -227,6 +240,7 @@ export interface FileRoutesByFullPath {
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/commission': typeof AdminCommissionRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
@@ -253,6 +267,7 @@ export interface FileRoutesByTo {
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
   '/help': typeof HelpRoute
+  '/packages': typeof PackagesRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -262,6 +277,7 @@ export interface FileRoutesByTo {
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/commission': typeof AdminCommissionRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
@@ -289,6 +305,7 @@ export interface FileRoutesById {
   '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
   '/help': typeof HelpRoute
+  '/packages': typeof PackagesRoute
   '/privacy': typeof PrivacyRoute
   '/search': typeof SearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -298,6 +315,7 @@ export interface FileRoutesById {
   '/account/notifications': typeof AccountNotificationsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/commission': typeof AdminCommissionRoute
+  '/admin/packages': typeof AdminPackagesRoute
   '/admin/pages': typeof AdminPagesRoute
   '/admin/social': typeof AdminSocialRoute
   '/owner/analytics': typeof OwnerAnalyticsRoute
@@ -326,6 +344,7 @@ export interface FileRouteTypes {
     | '/destinations'
     | '/favorites'
     | '/help'
+    | '/packages'
     | '/privacy'
     | '/search'
     | '/sitemap.xml'
@@ -335,6 +354,7 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/commission'
+    | '/admin/packages'
     | '/admin/pages'
     | '/admin/social'
     | '/owner/analytics'
@@ -361,6 +381,7 @@ export interface FileRouteTypes {
     | '/destinations'
     | '/favorites'
     | '/help'
+    | '/packages'
     | '/privacy'
     | '/search'
     | '/sitemap.xml'
@@ -370,6 +391,7 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/commission'
+    | '/admin/packages'
     | '/admin/pages'
     | '/admin/social'
     | '/owner/analytics'
@@ -396,6 +418,7 @@ export interface FileRouteTypes {
     | '/destinations'
     | '/favorites'
     | '/help'
+    | '/packages'
     | '/privacy'
     | '/search'
     | '/sitemap.xml'
@@ -405,6 +428,7 @@ export interface FileRouteTypes {
     | '/account/notifications'
     | '/admin/cities'
     | '/admin/commission'
+    | '/admin/packages'
     | '/admin/pages'
     | '/admin/social'
     | '/owner/analytics'
@@ -432,6 +456,7 @@ export interface RootRouteChildren {
   DestinationsRoute: typeof DestinationsRoute
   FavoritesRoute: typeof FavoritesRoute
   HelpRoute: typeof HelpRoute
+  PackagesRoute: typeof PackagesRoute
   PrivacyRoute: typeof PrivacyRoute
   SearchRoute: typeof SearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -441,6 +466,7 @@ export interface RootRouteChildren {
   AccountNotificationsRoute: typeof AccountNotificationsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
   AdminCommissionRoute: typeof AdminCommissionRoute
+  AdminPackagesRoute: typeof AdminPackagesRoute
   AdminPagesRoute: typeof AdminPagesRoute
   AdminSocialRoute: typeof AdminSocialRoute
   OwnerAnalyticsRoute: typeof OwnerAnalyticsRoute
@@ -503,6 +529,13 @@ declare module '@tanstack/react-router' {
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -580,6 +613,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/commission'
       fullPath: '/admin/commission'
       preLoaderRoute: typeof AdminCommissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/packages': {
+      id: '/admin/packages'
+      path: '/admin/packages'
+      fullPath: '/admin/packages'
+      preLoaderRoute: typeof AdminPackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/pages': {
@@ -704,6 +744,7 @@ const rootRouteChildren: RootRouteChildren = {
   DestinationsRoute: DestinationsRoute,
   FavoritesRoute: FavoritesRoute,
   HelpRoute: HelpRoute,
+  PackagesRoute: PackagesRoute,
   PrivacyRoute: PrivacyRoute,
   SearchRoute: SearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -713,6 +754,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountNotificationsRoute: AccountNotificationsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
   AdminCommissionRoute: AdminCommissionRoute,
+  AdminPackagesRoute: AdminPackagesRoute,
   AdminPagesRoute: AdminPagesRoute,
   AdminSocialRoute: AdminSocialRoute,
   OwnerAnalyticsRoute: OwnerAnalyticsRoute,
