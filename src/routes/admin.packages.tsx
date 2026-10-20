@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/auth";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 import { processImage } from "@/lib/images";
+import { TreePine } from "lucide-react";
 import {
   PACKAGE_ICONS,
   adminPackagesQuery,
@@ -229,7 +230,7 @@ function AdminPackagesPage() {
         <div className="space-y-3">
           {list.data?.length === 0 ? <p className="text-sm text-muted-foreground">Դեռ փաթեթներ չկան։</p> : null}
           {list.data?.map((p) => {
-            const Icon = PACKAGE_ICONS[p.icon] ?? PACKAGE_ICONS.tree;
+            const Icon = PACKAGE_ICONS[p.icon] ?? TreePine;
             return (
               <div key={p.id} className="flex min-w-0 items-center gap-3 rounded-2xl border border-border bg-card p-3">
                 <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><Icon className="size-5" /></span>
