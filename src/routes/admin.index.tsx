@@ -145,6 +145,9 @@ function AdminPage() {
           <Button asChild variant="outline" size="sm">
             <Link to="/admin/commission">{t("admin.commissionManage")}</Link>
           </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/admin/packages">{t("admin.packagesManage")}</Link>
+          </Button>
         </div>
 
       </div>
