@@ -7,6 +7,7 @@ import { EmptyState, ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { TreePine } from "lucide-react";
 import { PACKAGE_ICONS, packageNights, packagesQuery, type PackageRow } from "@/lib/packages";
 
 export const Route = createFileRoute("/packages")({
@@ -31,7 +32,7 @@ const MONTHS: Record<string, string[]> = {
 
 function shortDate(iso: string, lang: string) {
   const [, m, d] = iso.split("-").map(Number);
-  return `${d} ${(MONTHS[lang] ?? MONTHS.en)[m - 1]}`;
+  return `${d} ${(MONTHS[lang] ?? MONTHS["en"] ?? [])[(m ?? 1) - 1] ?? ""}`;
 }
 
 function PackagesPage() {
@@ -71,7 +72,7 @@ function PackagesPage() {
 
 function PackageCard({ p }: { p: PackageRow }) {
   const { t, lang } = useI18n();
-  const Icon = PACKAGE_ICONS[p.icon] ?? PACKAGE_ICONS.tree;
+  const Icon = PACKAGE_ICONS[p.icon] ?? TreePine;
   const img = p.image_url || p.property?.main_image_url;
   const nights = packageNights(p);
 

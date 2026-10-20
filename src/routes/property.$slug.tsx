@@ -20,9 +20,9 @@ import { useI18n } from "@/lib/i18n";
 const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
 export const Route = createFileRoute("/property/$slug")({
-  validateSearch: (s: Record<string, unknown>): { checkIn?: string; checkOut?: string } => {
+  validateSearch: (s: Record<string, unknown>): { checkIn?: string | undefined; checkOut?: string | undefined } => {
     const ok = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
-    return { checkIn: ok(s.checkIn), checkOut: ok(s.checkOut) };
+    return { checkIn: ok(s["checkIn"]), checkOut: ok(s["checkOut"]) };
   },
   head: ({ params }) => ({
     meta: [
