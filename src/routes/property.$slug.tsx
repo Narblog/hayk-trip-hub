@@ -20,6 +20,10 @@ import { useI18n } from "@/lib/i18n";
 const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
 export const Route = createFileRoute("/property/$slug")({
+  validateSearch: (s: Record<string, unknown>): { checkIn?: string; checkOut?: string } => {
+    const ok = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
+    return { checkIn: ok(s.checkIn), checkOut: ok(s.checkOut) };
+  },
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand` },
@@ -163,6 +167,7 @@ function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cit
 
 function PropertyPage() {
   const { slug } = Route.useParams();
+  const pkgDates = Route.useSearch();
   const { t, lang, localized } = useI18n();
   const { data, isPending, isError, refetch } = useQuery(propertyQuery(slug));
   const { data: ref, isPending: isRefPending, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
@@ -507,6 +512,8 @@ function PropertyPage() {
             maxGuests={Number(p.max_guests) || 2}
             fallbackPrice={Number(p.price_per_night)}
             currency={p.currency ?? "AMD"}
+            initialCheckIn={pkgDates.checkIn}
+            initialCheckOut={pkgDates.checkOut}
             embedded
           />
 

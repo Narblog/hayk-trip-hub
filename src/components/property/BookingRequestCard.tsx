@@ -90,6 +90,8 @@ export function BookingRequestCard({
   fallbackPrice,
   currency,
   embedded = false,
+  initialCheckIn,
+  initialCheckOut,
 }: {
   propertyId: string;
   propertyTitle?: string;
@@ -97,10 +99,12 @@ export function BookingRequestCard({
   fallbackPrice: number;
   currency: string;
   embedded?: boolean;
+  initialCheckIn?: string | undefined;
+  initialCheckOut?: string | undefined;
 }) {
   const { t, lang } = useI18n();
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [checkIn, setCheckIn] = useState(initialCheckIn ?? "");
+  const [checkOut, setCheckOut] = useState(initialCheckOut ?? "");
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);

@@ -42,6 +42,7 @@ export function Header() {
   const navItems = [
     { to: "/search" as const, label: t("nav.stays") },
     { to: "/tours" as const, label: t("nav.toursExperiences") },
+    { to: "/packages" as const, label: t("nav.packages") },
     { to: "/destinations" as const, label: t("nav.destinations") },
   ];
 
