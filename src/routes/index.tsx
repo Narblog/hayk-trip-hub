@@ -7,11 +7,12 @@ import {
   Gift,
 } from "lucide-react";
 import { CardGridSkeleton, ErrorState } from "@/components/common/states";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { PackageCard } from "@/components/package/PackageCard";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
 import { SearchBar } from "@/components/search/SearchBar";
 import { homeQuery } from "@/lib/data";
+import { packagesQuery } from "@/lib/packages";
 import { useI18n } from "@/lib/i18n";
 import heroImage from "@/assets/hero-armenia.jpg";
 import vibeForest from "@/assets/vibe-forest.jpg";
@@ -172,28 +173,13 @@ function Home() {
                 <CarFront className="size-4" />
                 {t("home.tabTours")}
               </Link>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
-                  >
-                    <Gift className="size-4" />
-                    {t("home.tabPackages")}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-72 rounded-2xl" side="bottom" align="center">
-                  <div className="flex items-start gap-3">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
-                      <Gift className="size-4" />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold">{t("home.packagesSoonTitle")}</p>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t("home.packagesSoonSub")}</p>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <Link
+                to="/packages"
+                className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
+              >
+                <Gift className="size-4" />
+                {t("home.tabPackages")}
+              </Link>
             </div>
             <div className="text-left">
               <SearchBar />
