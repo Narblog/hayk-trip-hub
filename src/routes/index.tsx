@@ -54,7 +54,7 @@ function SectionHead({
   eyebrow?: string | undefined;
   title: string;
   sub?: string | undefined;
-  to?: "/search" | "/tours" | "/destinations" | undefined;
+  to?: "/search" | "/tours" | "/destinations" | "/packages" | undefined;
   linkLabel?: string | undefined;
   search?: Record<string, unknown> | undefined;
 }) {
@@ -124,6 +124,8 @@ function Vibes() {
 function Home() {
   const { t } = useI18n();
   const { data, isPending, isError, refetch } = useQuery(homeQuery());
+  const packagesQ = useQuery(packagesQuery());
+  const homePackages = (packagesQ.data ?? []).slice(0, 3);
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
@@ -192,6 +194,22 @@ function Home() {
       <div className="container-page relative z-0 pb-10">
         {/* Vibe chips */}
         <Vibes />
+
+        {/* Packages */}
+        {homePackages.length > 0 ? (
+          <section className="mt-10">
+            <SectionHead
+              eyebrow={t("packages.eyebrow")}
+              title={t("packages.title")}
+              sub={t("packages.sub")}
+              to="/packages"
+              linkLabel={t("home.seeAll")}
+            />
+            <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {homePackages.map((p) => <PackageCard key={p.id} p={p} />)}
+            </div>
+          </section>
+        ) : null}
 
         {/* Recommended carousel */}
         <section className="mt-10">
