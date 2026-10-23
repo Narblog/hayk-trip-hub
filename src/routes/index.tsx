@@ -7,11 +7,12 @@ import {
   Gift,
 } from "lucide-react";
 import { CardGridSkeleton, ErrorState } from "@/components/common/states";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { PackageCard } from "@/components/package/PackageCard";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
 import { SearchBar } from "@/components/search/SearchBar";
 import { homeQuery } from "@/lib/data";
+import { packagesQuery } from "@/lib/packages";
 import { useI18n } from "@/lib/i18n";
 import heroImage from "@/assets/hero-armenia.jpg";
 import vibeForest from "@/assets/vibe-forest.jpg";
@@ -53,7 +54,7 @@ function SectionHead({
   eyebrow?: string | undefined;
   title: string;
   sub?: string | undefined;
-  to?: "/search" | "/tours" | "/destinations" | undefined;
+  to?: "/search" | "/tours" | "/destinations" | "/packages" | undefined;
   linkLabel?: string | undefined;
   search?: Record<string, unknown> | undefined;
 }) {
@@ -123,6 +124,8 @@ function Vibes() {
 function Home() {
   const { t } = useI18n();
   const { data, isPending, isError, refetch } = useQuery(homeQuery());
+  const packagesQ = useQuery(packagesQuery());
+  const homePackages = (packagesQ.data ?? []).slice(0, 3);
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
@@ -172,28 +175,13 @@ function Home() {
                 <CarFront className="size-4" />
                 {t("home.tabTours")}
               </Link>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
-                  >
-                    <Gift className="size-4" />
-                    {t("home.tabPackages")}
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-72 rounded-2xl" side="bottom" align="center">
-                  <div className="flex items-start gap-3">
-                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
-                      <Gift className="size-4" />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold">{t("home.packagesSoonTitle")}</p>
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t("home.packagesSoonSub")}</p>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
+              <Link
+                to="/packages"
+                className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
+              >
+                <Gift className="size-4" />
+                {t("home.tabPackages")}
+              </Link>
             </div>
             <div className="text-left">
               <SearchBar />
@@ -206,6 +194,22 @@ function Home() {
       <div className="container-page relative z-0 pb-10">
         {/* Vibe chips */}
         <Vibes />
+
+        {/* Packages */}
+        {homePackages.length > 0 ? (
+          <section className="mt-10">
+            <SectionHead
+              eyebrow={t("packages.eyebrow")}
+              title={t("packages.title")}
+              sub={t("packages.sub")}
+              to="/packages"
+              linkLabel={t("home.seeAll")}
+            />
+            <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {homePackages.map((p) => <PackageCard key={p.id} p={p} />)}
+            </div>
+          </section>
+        ) : null}
 
         {/* Recommended carousel */}
         <section className="mt-10">

@@ -52,6 +52,56 @@ export const packagesQuery = () =>
     },
   });
 
+export const packageQuery = (id: string) =>
+  queryOptions({
+    queryKey: ["packages", "detail", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("packages")
+        .select(SELECT)
+        .eq("id", id)
+        .eq("is_active", true)
+        .maybeSingle();
+      if (error) throw error;
+      return (data ?? null) as unknown as PackageRow | null;
+    },
+  });
+
+export async function createPackageBookingRequest(input: {
+  packageId: string;
+  adults: number;
+  children: number;
+  infants: number;
+  name: string;
+  phone: string;
+  email: string;
+  message: string;
+}) {
+  const { data, error } = await supabase.rpc("create_package_booking_request", {
+    p_package_id: input.packageId,
+    p_adults: input.adults,
+    p_children: input.children,
+    p_infants: input.infants,
+    p_name: input.name,
+    p_phone: input.phone,
+    p_email: input.email,
+    p_message: input.message,
+  });
+  if (error) throw error;
+  const row = (data ?? [])[0];
+  if (!row) throw new Error("BOOKING_FAILED");
+  if (typeof window !== "undefined" && row.guest_token) {
+    const store = JSON.parse(window.localStorage.getItem("stayland.bookings") ?? "[]") as {
+      id: string;
+      reference: string;
+      token: string;
+    }[];
+    store.unshift({ id: row.booking_id, reference: row.reference, token: row.guest_token });
+    window.localStorage.setItem("stayland.bookings", JSON.stringify(store.slice(0, 20)));
+  }
+  return row as { booking_id: string; reference: string; guest_token: string };
+}
+
 export const adminPackagesQuery = () =>
   queryOptions({
     queryKey: ["packages", "admin"],
