@@ -70,7 +70,7 @@ function PackagesPage() {
   );
 }
 
-function PackageCard({ p }: { p: PackageRow }) {
+export function PackageCard({ p }: { p: PackageRow }) {
   const { t, lang } = useI18n();
   const Icon = PACKAGE_ICONS[p.icon] ?? TreePine;
   const img = p.image_url || p.property?.main_image_url;
@@ -109,13 +109,11 @@ function PackageCard({ p }: { p: PackageRow }) {
           </ul>
         ) : null}
         <div className="mt-auto pt-5">
-          {p.property ? (
-            <Button asChild className="w-full">
-              <Link to="/property/$slug" params={{ slug: p.property.slug }} search={{ checkIn: p.check_in, checkOut: p.check_out }}>
-                {t("book.openModal")}
-              </Link>
-            </Button>
-          ) : null}
+          <Button asChild className="w-full">
+            <Link to="/package/$id" params={{ id: p.id }}>
+              {t("packages.book")}
+            </Link>
+          </Button>
         </div>
       </div>
     </article>
