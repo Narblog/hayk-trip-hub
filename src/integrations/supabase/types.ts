@@ -1421,6 +1421,23 @@ export type Database = {
           reference: string
         }[]
       }
+      create_package_booking_request: {
+        Args: {
+          p_adults: number
+          p_children: number
+          p_email: string
+          p_infants: number
+          p_message: string
+          p_name: string
+          p_package_id: string
+          p_phone: string
+        }
+        Returns: {
+          booking_id: string
+          guest_token: string
+          reference: string
+        }[]
+      }
       increment_property_view: {
         Args: { p_property_id: string }
         Returns: undefined
