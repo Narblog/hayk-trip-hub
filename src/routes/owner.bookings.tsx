@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CalendarClock, CalendarDays, Check, CheckCircle2, Mail, MapPin, Percent, Phone, User, Users, Wallet, X } from "lucide-react";
+import { CalendarClock, CalendarDays, Check, CheckCircle2, Mail, MapPin, Percent, Phone, Snowflake, User, Users, Wallet, X } from "lucide-react";
 import { OwnerShell } from "@/components/owner/OwnerShell";
 import { StatCard, monthRevenue } from "@/routes/owner.index";
 import { Button } from "@/components/ui/button";
@@ -140,6 +140,11 @@ function OwnerBookingsPage() {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="font-display text-lg font-semibold">{b.properties?.name}</p>
+                      {b.package_id ? (
+                        <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-brand-soft px-2.5 py-0.5 text-[11px] font-semibold text-brand">
+                          <Snowflake className="size-3" /> {t("book.packageBadge")}{b.packages?.title ? ` · ${b.packages.title}` : ""}
+                        </span>
+                      ) : null}
                       {b.properties?.city_code ? (
                         <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted-foreground">
                           <MapPin className="size-3.5 shrink-0" /> {b.properties.city_code}
