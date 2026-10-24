@@ -141,6 +141,7 @@ export type Database = {
           nightly_price: number
           nights: number
           owner_id: string | null
+          package_id: string | null
           price_change_note: string | null
           property_id: string
           reference: string
@@ -170,6 +171,7 @@ export type Database = {
           nightly_price: number
           nights: number
           owner_id?: string | null
+          package_id?: string | null
           price_change_note?: string | null
           property_id: string
           reference: string
@@ -199,6 +201,7 @@ export type Database = {
           nightly_price?: number
           nights?: number
           owner_id?: string | null
+          package_id?: string | null
           price_change_note?: string | null
           property_id?: string
           reference?: string
@@ -208,6 +211,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "booking_requests_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "packages"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "booking_requests_property_id_fkey"
             columns: ["property_id"]

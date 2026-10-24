@@ -1228,11 +1228,13 @@ export type BookingRow = {
   status: BookingStatus;
   decline_reason: string | null;
   created_at: string;
+  package_id: string | null;
   properties?: { name: string; slug: string; main_image_url: string | null; city_code: string | null } | null;
+  packages?: { title: string } | null;
 };
 
 const BOOKING_COLUMNS =
-  "id, reference, property_id, guest_name, guest_phone, guest_email, message, check_in, check_out, nights, adults, children, infants, nightly_price, total_price, confirmed_total_price, price_change_note, currency, status, decline_reason, created_at, properties(name, slug, main_image_url, city_code)";
+  "id, reference, property_id, guest_name, guest_phone, guest_email, message, check_in, check_out, nights, adults, children, infants, nightly_price, total_price, confirmed_total_price, price_change_note, currency, status, decline_reason, created_at, package_id, properties(name, slug, main_image_url, city_code), packages(title)";
 
 export const ownerBookingsQuery = (userId: string | null) =>
   queryOptions({
