@@ -1,0 +1,1 @@
+ALTER TABLE public.packages ADD COLUMN IF NOT EXISTS image_urls text[] NOT NULL DEFAULT '{}'; COMMENT ON COLUMN public.packages.image_urls IS 'Admin-uploaded additional photos for the package detail gallery.';

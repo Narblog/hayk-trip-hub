@@ -388,6 +388,7 @@ export type Database = {
           icon: string
           id: string
           image_url: string | null
+          image_urls: string[]
           includes: string[]
           is_active: boolean
           price: number
@@ -405,6 +406,7 @@ export type Database = {
           icon?: string
           id?: string
           image_url?: string | null
+          image_urls?: string[]
           includes?: string[]
           is_active?: boolean
           price?: number
@@ -422,6 +424,7 @@ export type Database = {
           icon?: string
           id?: string
           image_url?: string | null
+          image_urls?: string[]
           includes?: string[]
           is_active?: boolean
           price?: number
