@@ -156,6 +156,16 @@ function PackageDetailPage() {
 
           {p.description ? <p className="mt-5 break-words text-sm leading-relaxed text-muted-foreground sm:text-base">{p.description}</p> : null}
 
+          {p.image_urls?.length ? (
+            <div className="mt-6 grid min-w-0 grid-cols-2 gap-3">
+              {p.image_urls.map((url, i) => (
+                <a key={`${url}-${i}`} href={url} target="_blank" rel="noopener noreferrer" aria-label={`${p.title} · ${i + 1}`}>
+                  <img src={url} alt={`${p.title} · ${i + 1}`} loading="lazy" decoding="async" width={800} height={600} className="aspect-[4/3] w-full rounded-lg object-cover" />
+                </a>
+              ))}
+            </div>
+          ) : null}
+
           {p.includes.length ? (
             <div className="mt-6">
               <h2 className="font-display text-lg font-semibold">{t("packages.includesTitle")}</h2>
@@ -215,7 +225,7 @@ function PackageBookingCard({ packageId, price, currency, nights }: { packageId:
     } catch (err) {
       const raw = err instanceof Error ? err.message : "";
       const key = Object.keys(ERRORS).find((k) => raw.includes(k));
-      setError(t(key ? ERRORS[key]! : "book.errGeneric"));
+      setError(t((key ? ERRORS[key] : undefined) ?? "book.errGeneric"));
     } finally {
       setSending(false);
     }

@@ -1236,6 +1236,17 @@ export type BookingRow = {
 const BOOKING_COLUMNS =
   "id, reference, property_id, guest_name, guest_phone, guest_email, message, check_in, check_out, nights, adults, children, infants, nightly_price, total_price, confirmed_total_price, price_change_note, currency, status, decline_reason, created_at, package_id, properties(name, slug, main_image_url, city_code), packages(title)";
 
+export const adminBookingsQuery = () =>
+  queryOptions({
+    queryKey: ["admin-bookings"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("booking_requests")
+        .select(BOOKING_COLUMNS).order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as BookingRow[];
+    },
+  });
+
 export const ownerBookingsQuery = (userId: string | null) =>
   queryOptions({
     queryKey: ["owner-bookings", userId],

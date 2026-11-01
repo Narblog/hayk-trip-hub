@@ -23,6 +23,7 @@ export type PackageRow = {
   currency: string;
   includes: string[];
   image_url: string | null;
+  image_urls: string[];
   is_active: boolean;
   sort_order: number;
   property?: { name: string; slug: string; main_image_url: string | null; city_code: string | null } | null;

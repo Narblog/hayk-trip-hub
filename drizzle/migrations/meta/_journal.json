@@ -50,6 +50,13 @@
       "when": 1792823938379,
       "tag": "0006_link_bookings_to_packages",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793521075963,
+      "tag": "0007_add_package_photo_gallery",
+      "breakpoints": true
     }
   ]
 }

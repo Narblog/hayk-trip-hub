@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - Optimize owner-uploaded property photos in the browser before storage upload (max 1920px, WebP when supported) to avoid sending oversized originals.
+- Package galleries use `packages.image_urls` alongside the existing cover image so older package cards remain compatible while detail pages show admin-uploaded photos.
+- The admin booking overview reads the shared booking selection through existing admin-scoped RLS, not through privileged clients, to preserve guest privacy.

@@ -35,10 +35,12 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
-      { title: "Admin — StayLand Armenia" },
-      { name: "description", content: "Moderate listings, owners and tours across the StayLand Armenia platform." },
-      { property: "og:title", content: "Admin — StayLand" },
-      { property: "og:description", content: "Platform moderation overview." },
+      { title: "Ադմին պանել — StayLand Հայաստան" },
+      { name: "description", content: "Կացարանների, տուրերի, փաթեթների և ամրագրումների կառավարում։" },
+      { property: "og:title", content: "Ադմին պանել — StayLand" },
+      { property: "og:description", content: "StayLand-ի հայտարարությունների և ամրագրումների կառավարում։" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AdminPage,
@@ -132,7 +134,10 @@ function AdminPage() {
     <div className="container-page py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-3xl font-semibold">{t("admin.overview")}</h1>
-        <div className="flex gap-2">
+        <div className="flex min-w-0 flex-wrap gap-2">
+          <Button asChild variant="outline" size="sm">
+            <Link to="/admin/bookings">{t("admin.bookingsManage")}</Link>
+          </Button>
           <Button asChild variant="outline" size="sm">
             <Link to="/admin/cities">{t("admin.manageCities")}</Link>
           </Button>
