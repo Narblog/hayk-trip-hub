@@ -25,6 +25,7 @@ import { Route as AccountIndexRouteImport } from './routes/account.index'
 import { Route as AccountBookingsRouteImport } from './routes/account.bookings'
 import { Route as AccountNotificationsRouteImport } from './routes/account.notifications'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminCitiesRouteImport } from './routes/admin.cities'
 import { Route as AdminCommissionRouteImport } from './routes/admin.commission'
 import { Route as AdminPackagesRouteImport } from './routes/admin.packages'
@@ -124,6 +125,11 @@ const AccountNotificationsRoute = AccountNotificationsRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBookingsRoute = AdminBookingsRouteImport.update({
+  id: '/admin/bookings',
+  path: '/admin/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCitiesRoute = AdminCitiesRouteImport.update({
@@ -244,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/tours': typeof ToursRoute
   '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/commission': typeof AdminCommissionRoute
   '/admin/packages': typeof AdminPackagesRoute
@@ -282,6 +289,7 @@ export interface FileRoutesByTo {
   '/tours': typeof ToursRoute
   '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/commission': typeof AdminCommissionRoute
   '/admin/packages': typeof AdminPackagesRoute
@@ -321,6 +329,7 @@ export interface FileRoutesById {
   '/tours': typeof ToursRoute
   '/account/bookings': typeof AccountBookingsRoute
   '/account/notifications': typeof AccountNotificationsRoute
+  '/admin/bookings': typeof AdminBookingsRoute
   '/admin/cities': typeof AdminCitiesRoute
   '/admin/commission': typeof AdminCommissionRoute
   '/admin/packages': typeof AdminPackagesRoute
@@ -361,6 +370,7 @@ export interface FileRouteTypes {
     | '/tours'
     | '/account/bookings'
     | '/account/notifications'
+    | '/admin/bookings'
     | '/admin/cities'
     | '/admin/commission'
     | '/admin/packages'
@@ -399,6 +409,7 @@ export interface FileRouteTypes {
     | '/tours'
     | '/account/bookings'
     | '/account/notifications'
+    | '/admin/bookings'
     | '/admin/cities'
     | '/admin/commission'
     | '/admin/packages'
@@ -437,6 +448,7 @@ export interface FileRouteTypes {
     | '/tours'
     | '/account/bookings'
     | '/account/notifications'
+    | '/admin/bookings'
     | '/admin/cities'
     | '/admin/commission'
     | '/admin/packages'
@@ -476,6 +488,7 @@ export interface RootRouteChildren {
   ToursRoute: typeof ToursRoute
   AccountBookingsRoute: typeof AccountBookingsRoute
   AccountNotificationsRoute: typeof AccountNotificationsRoute
+  AdminBookingsRoute: typeof AdminBookingsRoute
   AdminCitiesRoute: typeof AdminCitiesRoute
   AdminCommissionRoute: typeof AdminCommissionRoute
   AdminPackagesRoute: typeof AdminPackagesRoute
@@ -612,6 +625,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/bookings': {
+      id: '/admin/bookings'
+      path: '/admin/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AdminBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/cities': {
@@ -772,6 +792,7 @@ const rootRouteChildren: RootRouteChildren = {
   ToursRoute: ToursRoute,
   AccountBookingsRoute: AccountBookingsRoute,
   AccountNotificationsRoute: AccountNotificationsRoute,
+  AdminBookingsRoute: AdminBookingsRoute,
   AdminCitiesRoute: AdminCitiesRoute,
   AdminCommissionRoute: AdminCommissionRoute,
   AdminPackagesRoute: AdminPackagesRoute,
