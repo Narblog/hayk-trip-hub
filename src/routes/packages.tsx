@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import heroImg from "@/assets/packages-hero.jpg";
+import winterCottage from "@/assets/package-winter-1.jpg";
+import winterDinner from "@/assets/package-winter-2.jpg";
+import winterTerrace from "@/assets/package-winter-3.jpg";
 import { PackageCard } from "@/components/package/PackageCard";
 import { EmptyState, ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -52,6 +55,14 @@ function PackagesPage() {
           </div>
         )}
       </div>
+      <section className="container-page pb-8 sm:pb-12">
+        <h2 className="font-display text-2xl font-semibold">{t("packages.galleryTitle")}</h2>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {[winterCottage, winterDinner, winterTerrace].map((src, i) => (
+            <img key={src} src={src} alt={t("packages.galleryTitle")} loading="lazy" decoding="async" width={800} height={600} className={`aspect-[4/3] w-full rounded-lg object-cover ${i === 2 ? "col-span-2 sm:col-span-1" : ""}`} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

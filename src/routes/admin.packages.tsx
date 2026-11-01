@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-import { ImagePlus, Pencil, Trash2 } from "lucide-react";
+import { ImagePlus, Pencil, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +50,7 @@ const empty: PackageInput = {
   currency: "AMD",
   includes: [],
   image_url: null,
+  image_urls: [],
   is_active: true,
   sort_order: 0,
 };
@@ -97,16 +98,20 @@ function AdminPackagesPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  async function upload(file: File | undefined) {
-    if (!file || !user) return;
+  async function upload(files: FileList | null) {
+    if (!files?.length || !user) return;
     setUploading(true);
     try {
+      const urls: string[] = [];
+      for (const file of Array.from(files)) {
       const { blob, path, contentType } = await processImage(file, user.id, { prefix: "packages" });
       const { error } = await supabase.storage.from("property-images").upload(path, blob, { contentType, upsert: false });
       if (error) throw error;
       const { data, error: e2 } = await supabase.storage.from("property-images").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
       if (e2 || !data) throw e2 ?? new Error("sign failed");
-      setForm((f) => ({ ...f, image_url: data.signedUrl }));
+      urls.push(data.signedUrl);
+      }
+      setForm((f) => ({ ...f, image_url: f.image_url || urls[0] || null, image_urls: [...f.image_urls, ...urls] }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
@@ -130,7 +135,7 @@ function AdminPackagesPage() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
-        <div className="h-fit space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-5">
+        <div className="h-fit min-w-0 space-y-4 rounded-lg border border-border bg-card p-4 sm:p-5">
           <h2 className="font-semibold">{editId ? "Խմբագրել փաթեթը" : "Նոր փաթեթ"}</h2>
 
           <div className="space-y-1.5">
@@ -142,15 +147,17 @@ function AdminPackagesPage() {
             <Label>Պատկերակ</Label>
             <div className="flex flex-wrap gap-2">
               {Object.entries(PACKAGE_ICONS).map(([key, Icon]) => (
-                <button
+                <Button
                   key={key}
                   type="button"
                   aria-label={key}
+                  variant="outline"
+                  size="icon"
                   onClick={() => setForm({ ...form, icon: key })}
                   className={`grid size-10 place-items-center rounded-full border transition ${form.icon === key ? "border-primary bg-primary text-primary-foreground" : "border-border hover:bg-secondary"}`}
                 >
                   <Icon className="size-5" />
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -205,14 +212,23 @@ function AdminPackagesPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Նկար (եթե չկա՝ կօգտագործվի հյուրատան նկարը)</Label>
-            <div className="flex items-center gap-3">
-              {form.image_url ? <img src={form.image_url} alt="" className="h-14 w-20 rounded-md object-cover" /> : null}
+            <Label>Ձմեռային նկարներ</Label>
+            <div className="flex flex-wrap items-center gap-3">
               <Button type="button" variant="outline" size="sm" disabled={uploading} onClick={() => fileRef.current?.click()}>
                 <ImagePlus className="size-4" /> {uploading ? "..." : "Վերբեռնել"}
               </Button>
-              {form.image_url ? <Button type="button" variant="ghost" size="sm" onClick={() => setForm({ ...form, image_url: null })}>Հեռացնել</Button> : null}
-              <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => void upload(e.target.files?.[0])} />
+              <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={(e) => void upload(e.target.files)} />
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {Array.from(new Set([form.image_url, ...form.image_urls].filter((url): url is string => !!url))).map((url, i) => (
+                <div key={url} className="relative aspect-square min-w-0">
+                  <img src={url} alt={`Նկար ${i + 1}`} className="size-full rounded-md object-cover" />
+                  <Button size="icon" variant="secondary" className="absolute right-1 top-1 size-7" aria-label={`Հեռացնել նկար ${i + 1}`} onClick={() => setForm((f) => {
+                    const remaining = f.image_urls.filter((x) => x !== url);
+                    return { ...f, image_urls: remaining, image_url: f.image_url === url ? remaining[0] ?? null : f.image_url };
+                  })}><X className="size-3.5" /></Button>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -223,7 +239,7 @@ function AdminPackagesPage() {
 
           <div className="flex justify-end gap-2">
             {editId ? <Button variant="ghost" onClick={reset}>Չեղարկել</Button> : null}
-            <Button disabled={!canSave || save.isPending} onClick={() => save.mutate()}>Պահպանել</Button>
+            <Button disabled={!canSave || save.isPending || uploading} onClick={() => save.mutate()}>Պահպանել</Button>
           </div>
         </div>
 
