@@ -13,10 +13,10 @@ import { isPackageBooking } from "@/lib/booking-kind";
 
 export const Route = createFileRoute("/admin/bookings")({
   head: () => ({ meta: [
-    { title: "Ամրագրումներ — StayLand ադմին" },
-    { name: "description", content: "Կացարանների և ամանորյա փաթեթների ամրագրումների վերահսկում։" },
-    { property: "og:title", content: "Ամրագրումներ — StayLand ադմին" },
-    { property: "og:description", content: "Կացարանների և ամանորյա փաթեթների հայտերը մեկ տեղում։" },
+    { title: "Ամանորյա ամրագրումներ — StayLand ադմին" },
+    { name: "description", content: "Ամանորյա փաթեթների ամրագրումների վերահսկում։" },
+    { property: "og:title", content: "Ամանորյա ամրագրումներ — StayLand ադմին" },
+    { property: "og:description", content: "Միայն ամանորյա փաթեթների հայտերը։" },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),
