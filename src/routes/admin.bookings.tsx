@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/auth";
 import { adminBookingsQuery, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { isPackageBooking } from "@/lib/booking-kind";
 
 export const Route = createFileRoute("/admin/bookings")({
   head: () => ({ meta: [
@@ -30,7 +31,7 @@ function AdminBookingsPage() {
   const [packagesOnly, setPackagesOnly] = useState(false);
   if (loading) return <InlineLoader />;
   if (!isAdmin) return <div className="container-page py-16 text-center text-muted-foreground">{t("error.title")}</div>;
-  const rows = (q.data ?? []).filter((b) => (status === "ALL" || b.status === status) && (!packagesOnly || !!b.package_id));
+  const rows = (q.data ?? []).filter((b) => (status === "ALL" || b.status === status) && (!packagesOnly || isPackageBooking(b)));
   return (
     <div className="container-page min-w-0 py-8 sm:py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -49,7 +50,7 @@ function AdminBookingsPage() {
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <h2 className="break-words font-display text-lg font-semibold">{b.properties?.name}</h2>
-                {b.package_id ? <p className="mt-1 flex items-start gap-2 text-sm font-semibold text-brand"><Snowflake className="mt-0.5 size-4 shrink-0" /><span className="min-w-0 break-words">{t("book.packageBadge")}{b.packages?.title ? ` · ${b.packages.title}` : ""}</span></p> : null}
+                {isPackageBooking(b) ? <p className="mt-1 flex items-start gap-2 text-sm font-semibold text-brand"><Snowflake className="mt-0.5 size-4 shrink-0" /><span className="min-w-0 break-words">{t("book.packageBadge")}{b.packages?.title ? ` · ${b.packages.title}` : ""}</span></p> : null}
                 <p className="mt-1 text-xs text-muted-foreground">{t("book.reference")} {b.reference}</p>
               </div>
               <BookingStatusPill status={b.status} />
