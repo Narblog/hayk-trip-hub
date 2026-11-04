@@ -14,6 +14,7 @@ import { useAuth } from "@/lib/auth";
 import { cancelBooking, commissionPercentQuery, ownerBookingsQuery, respondBooking, type BookingRow, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { isPackageBooking } from "@/lib/booking-kind";
 
 export const Route = createFileRoute("/owner/bookings")({
   head: () => ({
@@ -140,7 +141,7 @@ function OwnerBookingsPage() {
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="font-display text-lg font-semibold">{b.properties?.name}</p>
-                      {b.package_id ? (
+                      {isPackageBooking(b) ? (
                         <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-brand-soft px-2.5 py-0.5 text-[11px] font-semibold text-brand">
                           <Snowflake className="size-3" /> {t("book.packageBadge")}{b.packages?.title ? ` · ${b.packages.title}` : ""}
                         </span>

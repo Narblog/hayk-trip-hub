@@ -134,7 +134,7 @@ function AdminPackagesPage() {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
         <div className="h-fit min-w-0 space-y-4 rounded-lg border border-border bg-card p-4 sm:p-5">
           <h2 className="font-semibold">{editId ? "Խմբագրել փաթեթը" : "Նոր փաթեթ"}</h2>
 
