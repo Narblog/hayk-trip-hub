@@ -4,7 +4,7 @@ import heroImg from "@/assets/packages-hero.jpg";
 import winterCottage from "@/assets/package-winter-1.jpg";
 import winterDinner from "@/assets/package-winter-2.jpg";
 import winterTerrace from "@/assets/package-winter-3.jpg";
-import { PackageCard } from "@/components/package/PackageCard";
+import { PackageFeatureCard } from "@/components/package/PackageFeatureCard";
 import { EmptyState, ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useI18n } from "@/lib/i18n";
@@ -42,16 +42,16 @@ function PackagesPage() {
 
       <div className="container-page py-8 sm:py-12">
         {q.isPending ? (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-96 rounded-2xl" />)}
+          <div className="space-y-6">
+            {Array.from({ length: 2 }).map((_, i) => <Skeleton key={i} className="h-[28rem] w-full rounded-2xl" />)}
           </div>
         ) : q.isError ? (
           <ErrorState message={t("error.friendly")} onRetry={() => q.refetch()} />
         ) : q.data.length === 0 ? (
           <EmptyState title={t("packages.empty")} />
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {q.data.map((p) => <PackageCard key={p.id} p={p} />)}
+          <div className="space-y-6">
+            {q.data.map((p, i) => <PackageFeatureCard key={p.id} p={p} flip={i % 2 === 1} />)}
           </div>
         )}
       </div>
