@@ -8,3 +8,4 @@
 - [x] Complete editable package photo galleries and included-service descriptions.
 - [x] Add admin bookings page and navigation with clear New Year package badges.
 - [x] Verify the package management and booking display on desktop/mobile.
+- [x] Show only New Year bookings in the admin page and full-width package cards on the packages page.
