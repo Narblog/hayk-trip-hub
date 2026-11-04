@@ -35,7 +35,7 @@ function AdminBookingsPage() {
     <div className="container-page min-w-0 py-8 sm:py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="font-display text-2xl font-semibold sm:text-3xl">{t("admin.bookingsManage")}</h1>
-        <Button asChild variant="outline" size="sm"><Link to="/admin"><ArrowLeft className="size-4" />{t("nav.admin")}</Link></Button>
+        <Button asChild variant="outline" size="sm"><Link to="/admin"><ArrowLeft className="size-4" />{t("nav.adminDashboard")}</Link></Button>
       </div>
       <div className="mt-5 flex flex-wrap gap-2">
         {(["ALL", "PENDING", "ACCEPTED", "DECLINED", "CANCELLED", "COMPLETED"] as const).map((f) => (
