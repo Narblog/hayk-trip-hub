@@ -26,6 +26,7 @@ const ERRORS: Record<string, string> = {
   TOO_MANY_GUESTS: "book.errGuests",
   INVALID_DATES: "book.errPast",
   INVALID_CONTACT: "book.errName",
+  PROPERTY_UNAVAILABLE: "packages.unavailable",
 };
 
 function Stepper({
@@ -214,9 +215,11 @@ export function BookingRequestCard({
       setOpen(false);
       setDone(true);
     } catch (err) {
-      const raw = err instanceof Error ? err.message : "";
+      const e2 = err as { message?: string; details?: string; hint?: string; code?: string } | null;
+      const raw = [e2?.message, e2?.details, e2?.hint, e2?.code].filter(Boolean).join(" ");
+      console.error("Booking request failed", err);
       const key = Object.keys(ERRORS).find((k) => raw.includes(k));
-      setError(t(key ? ERRORS[key]! : "book.errGeneric"));
+      setError(key ? t(ERRORS[key]!) : `${t("book.errGeneric")}${raw ? ` (${raw.slice(0, 120)})` : ""}`);
     } finally {
       setSending(false);
     }
