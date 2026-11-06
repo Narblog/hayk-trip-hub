@@ -13,10 +13,10 @@ import { isPackageBooking } from "@/lib/booking-kind";
 
 export const Route = createFileRoute("/admin/bookings")({
   head: () => ({ meta: [
-    { title: "Ամանորյա ամրագրումներ — StayLand ադմին" },
-    { name: "description", content: "Ամանորյա փաթեթների ամրագրումների վերահսկում։" },
-    { property: "og:title", content: "Ամանորյա ամրագրումներ — StayLand ադմին" },
-    { property: "og:description", content: "Միայն ամանորյա փաթեթների հայտերը։" },
+    { title: "Ամրագրումներ — StayLand ադմին" },
+    { name: "description", content: "Բոլոր ամրագրման հայտերի վերահսկում։" },
+    { property: "og:title", content: "Ամրագրումներ — StayLand ադմին" },
+    { property: "og:description", content: "Բոլոր ամրագրման հայտերը։" },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),
@@ -28,9 +28,10 @@ function AdminBookingsPage() {
   const { t, lang } = useI18n();
   const q = useQuery({ ...adminBookingsQuery(), enabled: isAdmin });
   const [status, setStatus] = useState<BookingStatus | "ALL">("ALL");
+  const [packagesOnly, setPackagesOnly] = useState(false);
   if (loading) return <InlineLoader />;
   if (!isAdmin) return <div className="container-page py-16 text-center text-muted-foreground">{t("error.title")}</div>;
-  const rows = (q.data ?? []).filter((b) => (status === "ALL" || b.status === status) && isPackageBooking(b));
+  const rows = (q.data ?? []).filter((b) => (status === "ALL" || b.status === status) && (!packagesOnly || isPackageBooking(b)));
   return (
     <div className="container-page min-w-0 py-8 sm:py-10">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -41,6 +42,7 @@ function AdminBookingsPage() {
         {(["ALL", "PENDING", "ACCEPTED", "DECLINED", "CANCELLED", "COMPLETED"] as const).map((f) => (
           <Button key={f} size="sm" variant={status === f ? "default" : "outline"} onClick={() => setStatus(f)}>{f === "ALL" ? t("book.filterAll") : t(`bstatus.${f}`)}</Button>
         ))}
+        <Button size="sm" variant={packagesOnly ? "default" : "outline"} onClick={() => setPackagesOnly((v) => !v)}><Snowflake className="size-4" />{t("book.packageBadge")}</Button>
       </div>
       <div className="mt-5 space-y-4">
         {q.isPending ? <InlineLoader /> : q.isError ? <ErrorState message={t("error.friendly")} onRetry={() => q.refetch()} /> : !rows.length ? <EmptyState icon={<Snowflake className="size-7" />} title={t("admin.bookingsEmpty")} /> : rows.map((b) => (
