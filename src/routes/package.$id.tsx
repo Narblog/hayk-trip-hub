@@ -266,7 +266,7 @@ function PackageBookingCard({ packageId, price, currency, nights }: { packageId:
 function PackageGallery({ images, title }: { images: string[]; title: string }) {
   const [i, setI] = useState(0);
   const [startX, setStartX] = useState<number | null>(null);
-  if (!images.length) return <div className="h-48 w-full rounded-2xl bg-muted sm:h-64" />;
+  if (!images.length) return null;
   const n = images.length;
   const go = (d: number) => setI((x) => (x + d + n) % n);
   return (
