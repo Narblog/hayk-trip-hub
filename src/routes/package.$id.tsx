@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarCheck, CalendarDays, Check, Minus, Moon, Plus, TreePine, Users } from "lucide-react";
+import { CalendarCheck, CalendarDays, Check, ChevronLeft, ChevronRight, Minus, Moon, Plus, TreePine, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +9,7 @@ import { EmptyState, ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
-import { PACKAGE_ICONS, createPackageBookingRequest, packageNights, packageQuery } from "@/lib/packages";
+import { PACKAGE_ICONS, guestRange, createPackageBookingRequest, packageNights, packageQuery } from "@/lib/packages";
 
 export const Route = createFileRoute("/package/$id")({
   loader: ({ params }) => {
@@ -114,34 +114,28 @@ function PackageDetailPage() {
   }
 
   const Icon = PACKAGE_ICONS[p.icon] ?? TreePine;
-  const img = p.image_url || p.property?.main_image_url;
+  const images = Array.from(new Set([p.image_url, ...(p.image_urls ?? []), p.property?.main_image_url].filter((u): u is string => !!u)));
+  const guests = guestRange(p);
   const nights = packageNights(p);
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        {img ? (
-          <img src={img} alt={p.title} fetchPriority="high" decoding="async" className="h-72 w-full object-cover sm:h-96" />
-        ) : (
-          <div className="h-72 w-full bg-muted sm:h-96" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent" />
-        <span className="absolute left-4 top-4 grid size-12 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg sm:left-8 sm:top-8">
-          <Icon className="size-6" />
-        </span>
-        <div className="container-page absolute inset-x-0 bottom-0 pb-6 sm:pb-8">
-          <h1 className="max-w-3xl break-words font-display text-2xl font-semibold text-background sm:text-4xl">{p.title}</h1>
-          {p.property ? (
-            <Link
-              to="/property/$slug"
-              params={{ slug: p.property.slug }}
-              className="mt-1 inline-block text-sm text-background/85 underline-offset-4 hover:underline"
-            >
-              {p.property.name}
-            </Link>
-          ) : null}
+      <div className="container-page min-w-0 pt-4 sm:pt-8">
+        <PackageGallery images={images} title={p.title} />
+        <div className="mt-4 flex min-w-0 items-start gap-3">
+          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
+            <Icon className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <h1 className="break-words font-display text-2xl font-semibold sm:text-3xl">{p.title}</h1>
+            {p.property ? (
+              <Link to="/property/$slug" params={{ slug: p.property.slug }} className="text-sm text-muted-foreground underline-offset-4 hover:underline">
+                {p.property.name}
+              </Link>
+            ) : null}
+          </div>
         </div>
-      </section>
+      </div>
 
       <div className="container-page grid gap-6 py-6 sm:py-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="min-w-0">
@@ -152,19 +146,15 @@ function PackageDetailPage() {
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5">
               <Moon className="size-4" /> {nights} {t("packages.nights")}
             </span>
+            {guests ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5">
+                <Users className="size-4" /> {guests} {t("packages.guests")}
+              </span>
+            ) : null}
           </div>
 
           {p.description ? <p className="mt-5 break-words text-sm leading-relaxed text-muted-foreground sm:text-base">{p.description}</p> : null}
 
-          {p.image_urls?.length ? (
-            <div className="mt-6 grid min-w-0 grid-cols-2 gap-3">
-              {p.image_urls.map((url, i) => (
-                <a key={`${url}-${i}`} href={url} target="_blank" rel="noopener noreferrer" aria-label={`${p.title} · ${i + 1}`}>
-                  <img src={url} alt={`${p.title} · ${i + 1}`} loading="lazy" decoding="async" width={800} height={600} className="aspect-[4/3] w-full rounded-lg object-cover" />
-                </a>
-              ))}
-            </div>
-          ) : null}
 
           {p.includes.length ? (
             <div className="mt-6">
@@ -270,5 +260,51 @@ function PackageBookingCard({ packageId, price, currency, nights }: { packageId:
       </Button>
       <p className="mt-3 text-xs text-muted-foreground">{t("book.disclaimer")}</p>
     </form>
+  );
+}
+
+function PackageGallery({ images, title }: { images: string[]; title: string }) {
+  const [i, setI] = useState(0);
+  const [startX, setStartX] = useState<number | null>(null);
+  if (!images.length) return <div className="aspect-[16/10] w-full rounded-2xl bg-muted sm:aspect-[16/8]" />;
+  const n = images.length;
+  const go = (d: number) => setI((x) => (x + d + n) % n);
+  return (
+    <div className="min-w-0">
+      <div
+        className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted sm:aspect-[16/8]"
+        onTouchStart={(e) => setStartX(e.touches[0].clientX)}
+        onTouchEnd={(e) => {
+          if (startX === null) return;
+          const dx = e.changedTouches[0].clientX - startX;
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+          setStartX(null);
+        }}
+      >
+        <img src={images[i]} alt={`${title} · ${i + 1}`} fetchPriority={i === 0 ? "high" : "auto"} decoding="async" className="h-full w-full object-cover" />
+        {n > 1 ? (
+          <>
+            <button type="button" aria-label="Previous" onClick={() => go(-1)} className="absolute left-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-background/85 shadow">
+              <ChevronLeft className="size-5" />
+            </button>
+            <button type="button" aria-label="Next" onClick={() => go(1)} className="absolute right-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-background/85 shadow">
+              <ChevronRight className="size-5" />
+            </button>
+            <span className="absolute bottom-3 right-3 rounded-full bg-foreground/70 px-2.5 py-1 text-xs text-background">
+              {i + 1} / {n}
+            </span>
+          </>
+        ) : null}
+      </div>
+      {n > 1 ? (
+        <div className="mt-2 flex min-w-0 gap-2 overflow-x-auto pb-1">
+          {images.map((url, k) => (
+            <button key={url} type="button" onClick={() => setI(k)} aria-label={`${title} · ${k + 1}`} className={`h-14 w-20 shrink-0 overflow-hidden rounded-lg border-2 sm:h-16 sm:w-24 ${k === i ? "border-primary" : "border-transparent opacity-70"}`}>
+              <img src={url} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
