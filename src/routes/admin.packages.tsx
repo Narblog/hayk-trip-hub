@@ -53,6 +53,8 @@ const empty: PackageInput = {
   image_urls: [],
   is_active: true,
   sort_order: 0,
+  min_guests: null,
+  max_guests: null,
 };
 
 function AdminPackagesPage() {
@@ -187,6 +189,17 @@ function AdminPackagesPage() {
           {form.check_in && form.check_out ? (
             <p className="text-xs text-muted-foreground">{packageNights(form)} գիշեր</p>
           ) : null}
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Անձանց քանակ (նվազ.)</Label>
+              <Input type="number" min={1} placeholder="15" value={form.min_guests ?? ""} onChange={(e) => setForm({ ...form, min_guests: e.target.value ? Number(e.target.value) : null })} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Անձանց քանակ (առավել.)</Label>
+              <Input type="number" min={1} placeholder="20" value={form.max_guests ?? ""} onChange={(e) => setForm({ ...form, max_guests: e.target.value ? Number(e.target.value) : null })} />
+            </div>
+          </div>
 
           <div className="grid grid-cols-[minmax(0,1fr)_6rem] gap-3">
             <div className="space-y-1.5">
