@@ -273,10 +273,10 @@ function PackageGallery({ images, title }: { images: string[]; title: string }) 
     <div className="min-w-0">
       <div
         className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted sm:aspect-[16/8]"
-        onTouchStart={(e) => setStartX(e.touches[0].clientX)}
+        onTouchStart={(e) => setStartX(e.touches[0]?.clientX ?? null)}
         onTouchEnd={(e) => {
           if (startX === null) return;
-          const dx = e.changedTouches[0].clientX - startX;
+          const dx = (e.changedTouches[0]?.clientX ?? startX) - startX;
           if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
           setStartX(null);
         }}
