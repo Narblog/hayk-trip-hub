@@ -57,6 +57,13 @@
       "when": 1793521075963,
       "tag": "0007_add_package_photo_gallery",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794078552933,
+      "tag": "0008_package_guest_range",
+      "breakpoints": true
     }
   ]
 }

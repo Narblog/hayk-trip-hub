@@ -391,6 +391,8 @@ export type Database = {
           image_urls: string[]
           includes: string[]
           is_active: boolean
+          max_guests: number | null
+          min_guests: number | null
           price: number
           property_id: string | null
           sort_order: number
@@ -409,6 +411,8 @@ export type Database = {
           image_urls?: string[]
           includes?: string[]
           is_active?: boolean
+          max_guests?: number | null
+          min_guests?: number | null
           price?: number
           property_id?: string | null
           sort_order?: number
@@ -427,6 +431,8 @@ export type Database = {
           image_urls?: string[]
           includes?: string[]
           is_active?: boolean
+          max_guests?: number | null
+          min_guests?: number | null
           price?: number
           property_id?: string | null
           sort_order?: number

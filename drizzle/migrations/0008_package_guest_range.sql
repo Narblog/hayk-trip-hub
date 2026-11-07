@@ -1,0 +1,1 @@
+ALTER TABLE public.packages ADD COLUMN IF NOT EXISTS min_guests integer NULL CHECK (min_guests IS NULL OR min_guests > 0), ADD COLUMN IF NOT EXISTS max_guests integer NULL CHECK (max_guests IS NULL OR max_guests > 0);
