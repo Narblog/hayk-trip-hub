@@ -114,7 +114,7 @@ function PackageDetailPage() {
   }
 
   const Icon = PACKAGE_ICONS[p.icon] ?? TreePine;
-  const images = Array.from(new Set([p.image_url, ...(p.image_urls ?? []), p.property?.main_image_url].filter((u): u is string => !!u)));
+  const images = Array.from(new Set([p.image_url, ...(p.image_urls ?? [])].filter((u): u is string => !!u)));
   const guests = guestRange(p);
   const nights = packageNights(p);
 
@@ -266,13 +266,13 @@ function PackageBookingCard({ packageId, price, currency, nights }: { packageId:
 function PackageGallery({ images, title }: { images: string[]; title: string }) {
   const [i, setI] = useState(0);
   const [startX, setStartX] = useState<number | null>(null);
-  if (!images.length) return <div className="aspect-[16/10] w-full rounded-2xl bg-muted sm:aspect-[16/8]" />;
+  if (!images.length) return null;
   const n = images.length;
   const go = (d: number) => setI((x) => (x + d + n) % n);
   return (
     <div className="min-w-0">
       <div
-        className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-muted sm:aspect-[16/8]"
+        className="relative h-56 w-full overflow-hidden rounded-2xl bg-muted sm:h-72 lg:h-80"
         onTouchStart={(e) => setStartX(e.touches[0]?.clientX ?? null)}
         onTouchEnd={(e) => {
           if (startX === null) return;
