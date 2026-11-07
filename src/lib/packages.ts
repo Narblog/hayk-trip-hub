@@ -26,6 +26,8 @@ export type PackageRow = {
   image_urls: string[];
   is_active: boolean;
   sort_order: number;
+  min_guests: number | null;
+  max_guests: number | null;
   property?: { name: string; slug: string; main_image_url: string | null; city_code: string | null } | null;
 };
 
@@ -129,7 +131,7 @@ export const packagePropertyOptionsQuery = () =>
 
 export async function savePackage(id: string | null, input: PackageInput) {
   if (input.check_out <= input.check_in) throw new Error("check_out");
-  const row = { ...input, price: Number(input.price) || 0 };
+  const row = { ...input, price: Number(input.price) || 0, min_guests: input.min_guests || null, max_guests: input.max_guests || null };
   const { error } = id
     ? await supabase.from("packages").update(row).eq("id", id)
     : await supabase.from("packages").insert(row);
@@ -139,4 +141,10 @@ export async function savePackage(id: string | null, input: PackageInput) {
 export async function deletePackage(id: string) {
   const { error } = await supabase.from("packages").delete().eq("id", id);
   if (error) throw error;
+}
+
+export function guestRange(p: { min_guests: number | null; max_guests: number | null }) {
+  const a = p.min_guests, b = p.max_guests;
+  if (a && b && a !== b) return `${a}-${b}`;
+  return a || b ? String(a || b) : null;
 }

@@ -7,7 +7,7 @@ import {
   Gift,
 } from "lucide-react";
 import { CardGridSkeleton, ErrorState } from "@/components/common/states";
-import { PackageCard } from "@/components/package/PackageCard";
+import { PackageMiniCarousel } from "@/components/package/PackageMiniCarousel";
 import { PropertyCard, type PropertyCardData } from "@/components/property/PropertyCard";
 import { PropertyCarousel } from "@/components/property/PropertyCarousel";
 import { SearchBar } from "@/components/search/SearchBar";
@@ -125,7 +125,7 @@ function Home() {
   const { t } = useI18n();
   const { data, isPending, isError, refetch } = useQuery(homeQuery());
   const packagesQ = useQuery(packagesQuery());
-  const homePackages = (packagesQ.data ?? []).slice(0, 3);
+  const homePackages = packagesQ.data ?? [];
 
   const recommended = ((data?.recommended ?? []) as PropertyCardData[]).slice(0, 12);
   const recommendedIds = new Set(recommended.map((p) => p.id));
@@ -205,9 +205,7 @@ function Home() {
               to="/packages"
               linkLabel={t("home.seeAll")}
             />
-            <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {homePackages.map((p) => <PackageCard key={p.id} p={p} />)}
-            </div>
+            <PackageMiniCarousel items={homePackages} />
           </section>
         ) : null}
 
