@@ -64,6 +64,13 @@
       "when": 1794078552933,
       "tag": "0008_package_guest_range",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794118352865,
+      "tag": "0009_seed_demo_guesthouses",
+      "breakpoints": true
     }
   ]
 }
