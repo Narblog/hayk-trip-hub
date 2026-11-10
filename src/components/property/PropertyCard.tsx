@@ -97,18 +97,20 @@ export function PropertyCard({
         }
       >
         {/* mobile-only meta row (moved off the image) */}
-        <div className="flex flex-wrap items-center gap-1.5 sm:hidden">
-          {p.is_featured ? (
-            <span className="truncate rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-semibold text-brand-foreground">
-              {t("card.featured")}
-            </span>
-          ) : null}
-          {showAvailable ? (
-            <span className="truncate rounded-full bg-success px-1.5 py-0.5 text-[10px] font-semibold text-success-foreground">
-              {t("card.available")}
-            </span>
-          ) : null}
-        </div>
+        {p.is_featured || showAvailable ? (
+          <div className="flex flex-wrap items-center gap-1.5 sm:hidden">
+            {p.is_featured ? (
+              <span className="truncate rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-semibold text-brand-foreground">
+                {t("card.featured")}
+              </span>
+            ) : null}
+            {showAvailable ? (
+              <span className="truncate rounded-full bg-success px-1.5 py-0.5 text-[10px] font-semibold text-success-foreground">
+                {t("card.available")}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground sm:text-xs">
           <span className="flex min-w-0 items-center gap-1">
