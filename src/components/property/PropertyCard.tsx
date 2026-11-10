@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BedDouble, MapPin, Star, Users } from "lucide-react";
+import { BedDouble, MapPin, Users } from "lucide-react";
 import { FavoriteButton } from "./FavoriteButton";
 import { refDataQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
@@ -61,19 +61,6 @@ export function PropertyCard({
           ) : null}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-foreground/55 to-transparent sm:h-2/5" />
 
-          {/* rating badge — desktop only */}
-          <span className="absolute left-3 top-3 hidden items-center gap-1 rounded-full bg-card/90 px-2.5 py-1 text-xs font-semibold backdrop-blur sm:flex">
-            {p.review_count > 0 ? (
-              <>
-                <Star className="size-3 fill-gold text-gold" />
-                {Number(p.rating).toFixed(1)}
-                <span className="font-normal text-muted-foreground">({p.review_count})</span>
-              </>
-            ) : (
-              <span className="font-normal text-muted-foreground">{t("reviews.new")}</span>
-            )}
-          </span>
-
           {/* title overlay — keep only the name on mobile */}
           <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
             <p className="eyebrow hidden text-background/85 sm:block">
@@ -85,7 +72,7 @@ export function PropertyCard({
           </div>
 
           {/* featured / available tags — desktop only on image */}
-          <div className="absolute left-3 top-12 hidden flex-col items-start gap-1.5 sm:flex">
+          <div className="absolute left-3 top-3 hidden flex-col items-start gap-1.5 sm:flex">
             {p.is_featured ? (
               <span className="rounded-full bg-brand px-2.5 py-1 text-[11px] font-semibold text-brand-foreground shadow-card">
                 {t("card.featured")}
@@ -111,13 +98,6 @@ export function PropertyCard({
       >
         {/* mobile-only meta row (moved off the image) */}
         <div className="flex flex-wrap items-center gap-1.5 sm:hidden">
-          {p.review_count > 0 ? (
-            <span className="flex items-center gap-1 rounded-full bg-surface px-1.5 py-0.5 text-[11px] font-semibold">
-              <Star className="size-3 fill-gold text-gold" />
-              {Number(p.rating).toFixed(1)}
-              <span className="font-normal text-muted-foreground">({p.review_count})</span>
-            </span>
-          ) : null}
           {p.is_featured ? (
             <span className="truncate rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-semibold text-brand-foreground">
               {t("card.featured")}
