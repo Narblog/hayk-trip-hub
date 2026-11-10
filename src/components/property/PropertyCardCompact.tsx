@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Star, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { FavoriteButton } from "./FavoriteButton";
 import type { PropertyCardData } from "./PropertyCard";
 import { refDataQuery } from "@/lib/data";
@@ -41,12 +41,6 @@ export function PropertyCardCompact({ p }: { p: PropertyCardData }) {
           </Link>
         </div>
         <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
-          {p.review_count > 0 ? (
-            <span className="flex items-center gap-1 font-semibold text-foreground">
-              <Star className="size-3 fill-gold text-gold" />
-              {Number(p.rating).toFixed(1)}
-            </span>
-          ) : null}
           <span className="flex items-center gap-1">
             <Users className="size-3.5" /> {p.max_guests}
           </span>
