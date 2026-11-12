@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
@@ -103,27 +102,6 @@ export function FilterPanel({
           step={5000}
           onValueChange={([min, max]) => onChange({ minPrice: min ?? PRICE_MIN, maxPrice: max ?? PRICE_MAX })}
         />
-      </Group>
-
-      <Group title={t("filters.rating")}>
-        <div className="flex flex-wrap gap-1.5">
-          {[0, 4, 4.5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => onChange({ minRating: n })}
-              className={`flex items-center gap-1 ${pill(values.minRating === n)}`}
-            >
-              {n === 0 ? (
-                t("filters.any")
-              ) : (
-                <>
-                  <Star className="size-3 fill-gold text-gold" /> {n}+
-                </>
-              )}
-            </button>
-          ))}
-        </div>
       </Group>
 
       <Group title={t("filters.bedrooms")}>
