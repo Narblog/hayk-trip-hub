@@ -58,7 +58,7 @@ export function Header() {
     >
       <div className="container-page flex h-16 items-center justify-between gap-2 md:h-20 md:gap-4">
         <div className="flex items-center gap-8">
-          <Logo inverted={transparent} className={transparent ? "h-11 md:h-12" : "h-9"} />
+          <Logo inverted={transparent} className={transparent ? "h-10 drop-shadow-[0_1px_4px_rgba(0,0,0,0.45)]" : "h-9"} />
           <nav className="hidden items-center gap-1.5 md:flex">
             {navItems.map((item) => (
               <Link
