@@ -67,12 +67,12 @@ export function Header() {
                 activeOptions={{ exact: item.to === "/" }}
                 className={`whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors ${
                   transparent
-                    ? "text-foreground/90 hover:bg-background/70 hover:text-foreground"
+                    ? "text-background [text-shadow:0_1px_6px_rgba(0,0,0,0.55)] hover:bg-background/20"
                     : "text-muted-foreground hover:bg-surface hover:text-foreground"
                 }`}
                 activeProps={{
                   className: transparent
-                    ? "bg-background/80 text-foreground shadow-sm"
+                    ? "bg-background/25 text-background shadow-sm backdrop-blur-sm"
                     : "text-foreground bg-surface",
                 }}
               >
@@ -82,7 +82,7 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${transparent ? "text-background [&_svg]:drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)]" : ""}`}>
           <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex" aria-label={t("nav.favorites")}>
             <Link to="/favorites">
               <Heart className="size-4" />
