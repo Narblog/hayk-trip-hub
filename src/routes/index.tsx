@@ -159,15 +159,6 @@ function Home() {
           <div className="hero-fade absolute inset-0" />
         </div>
         <div className="container-page relative z-10 flex min-h-[80vh] flex-col justify-center pb-14 pt-24 md:min-h-[88vh] md:pb-20 md:pt-28">
-          {/* guests badge */}
-          <div className="absolute right-2 top-20 hidden rounded-2xl border border-background/30 bg-foreground/25 px-5 py-4 text-background backdrop-blur-md lg:block">
-            <p className="flex items-center gap-2 font-display text-2xl leading-none">
-              <Users className="size-5" /> 100+
-            </p>
-            <p className="mt-1.5 text-xs text-background/85">{t("hero.badgeSub")}</p>
-            <p className="mt-1.5 text-sm tracking-widest text-gold">★★★★★</p>
-          </div>
-
           <h1 className="max-w-3xl font-display text-[1.7rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-6xl md:leading-[1.1]">
             {t("hero.l1")} {t("hero.l2a")}
             <span className="text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]">{t("hero.hl")}</span>
