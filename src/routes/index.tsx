@@ -165,6 +165,7 @@ function Home() {
               <Users className="size-5" /> 100+
             </p>
             <p className="mt-1.5 text-xs text-background/85">{t("hero.badgeSub")}</p>
+            <p className="mt-1.5 text-sm tracking-widest text-gold">★★★★★</p>
           </div>
 
           <h1 className="max-w-3xl font-display text-[1.7rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-6xl md:leading-[1.1]">
@@ -173,29 +174,10 @@ function Home() {
             {t("hero.l2b")}
           </h1>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base">{t("hero.subtitle")}</p>
+          <span className="mt-2 block h-0.5 w-24 rounded-full bg-gold" />
 
           <div className="mt-8 max-w-4xl md:mt-10">
           <div className="mx-auto max-w-full rounded-3xl border border-border/70 bg-card/95 shadow-search backdrop-blur md:max-w-4xl">
-            <div className="scrollbar-none mx-auto flex w-full items-center justify-start gap-1 overflow-x-auto px-1.5 pt-2 sm:w-fit sm:justify-center sm:px-2">
-              <span className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-brand bg-card px-3 py-2 text-[0.8125rem] font-semibold text-foreground sm:px-5 sm:py-2.5 sm:text-sm">
-                <HomeIcon className="size-4 text-brand" />
-                {t("home.tabStays")}
-              </span>
-              <Link
-                to="/tours"
-                className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
-              >
-                <CarFront className="size-4" />
-                {t("home.tabTours")}
-              </Link>
-              <Link
-                to="/packages"
-                className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-transparent px-3 py-2 text-[0.8125rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:px-5 sm:py-2.5 sm:text-sm"
-              >
-                <Gift className="size-4" />
-                {t("home.tabPackages")}
-              </Link>
-            </div>
             <div className="text-left">
               <SearchBar />
             </div>
@@ -203,24 +185,24 @@ function Home() {
           </div>
 
           {/* trust badges */}
-          <div className="mt-8 grid max-w-4xl grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
+          <div className="mx-auto mt-10 grid w-full max-w-2xl grid-cols-4 divide-x divide-background/20 rounded-3xl border border-background/20 bg-foreground/35 py-3 backdrop-blur-md">
             {[
               { icon: ShieldCheck, label: t("hero.trust1") },
               { icon: Headphones, label: t("hero.trust2") },
               { icon: BadgePercent, label: t("hero.trust3") },
               { icon: MapIcon, label: t("hero.trust4") },
             ].map((b) => (
-              <div
-                key={b.label}
-                className="flex items-center gap-2.5 rounded-2xl border border-background/25 bg-foreground/25 px-3.5 py-3 backdrop-blur-md"
-              >
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gold/20">
+              <div key={b.label} className="flex min-w-0 flex-col items-center gap-1.5 px-1.5 text-center">
+                <span className="grid size-9 place-items-center rounded-full bg-background/15">
                   <b.icon className="size-4.5 text-gold" />
                 </span>
-                <span className="text-xs font-semibold leading-tight text-background sm:text-sm">{b.label}</span>
+                <span className="text-[0.65rem] font-semibold leading-tight text-background sm:text-xs">{b.label}</span>
               </div>
             ))}
           </div>
+          <p className="absolute bottom-8 right-6 hidden -rotate-6 font-display text-xl italic leading-snug text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] xl:block">
+            Հայաստան…<br />մի վայր, որտեղ<br />սկսվում է հանգիստը ♡
+          </p>
         </div>
       </section>
 
