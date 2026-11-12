@@ -13,10 +13,10 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:title", content: "StayLand գաղտնիության քաղաքականություն" },
       { property: "og:description", content: "Նվազագույն տվյալներ, անանուն վիճակագրություն, անձնական տվյալների չվաճառք։" },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/privacy" },
+      { property: "og:url", content: "https://www.stayland.am/privacy" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/privacy" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/privacy" }],
   }),
   component: PrivacyPage,
 });

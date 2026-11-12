@@ -20,10 +20,10 @@ export const Route = createFileRoute("/tour/$slug")({
       { property: "og:title", content: "Տուր Հայաստանում — StayLand" },
       { property: "og:description", content: "Տուրի մանրամասները, տևողությունը և գինը։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: `https://hayk-trip-hub.lovable.app/tour/${params.slug}` },
+      { property: "og:url", content: `https://www.stayland.am/tour/${params.slug}` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: `https://hayk-trip-hub.lovable.app/tour/${params.slug}` }],
+    links: [{ rel: "canonical", href: `https://www.stayland.am/tour/${params.slug}` }],
   }),
   component: TourPage,
 });

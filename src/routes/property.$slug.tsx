@@ -31,10 +31,10 @@ export const Route = createFileRoute("/property/$slug")({
       { property: "og:title", content: "Կացարան Հայաստանում — StayLand" },
       { property: "og:description", content: "Լուսանկարներ, հարմարություններ և հասանելիություն այս կացարանի համար։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: `https://hayk-trip-hub.lovable.app/property/${params.slug}` },
+      { property: "og:url", content: `https://www.stayland.am/property/${params.slug}` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: `https://hayk-trip-hub.lovable.app/property/${params.slug}` }],
+    links: [{ rel: "canonical", href: `https://www.stayland.am/property/${params.slug}` }],
   }),
   component: PropertyPage,
 });

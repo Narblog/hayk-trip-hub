@@ -9,9 +9,9 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "StayLand-ի մասին" },
       { property: "og:description", content: "Հայկական հյուրընկալություն՝ ներկայացված հենց տանտերերի կողմից։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/about" },
+      { property: "og:url", content: "https://www.stayland.am/about" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/about" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/about" }],
   }),
   component: AboutPage,
 });

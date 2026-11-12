@@ -14,10 +14,10 @@ export const Route = createFileRoute("/help")({
       { property: "og:title", content: "StayLand օգնություն և կապ" },
       { property: "og:description", content: "Աջակցություն ճանապարհորդներին և տանտերերին StayLand Հայաստանում։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/help" },
+      { property: "og:url", content: "https://www.stayland.am/help" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/help" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/help" }],
   }),
   component: HelpPage,
 });
