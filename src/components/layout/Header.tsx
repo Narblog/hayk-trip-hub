@@ -40,6 +40,7 @@ export function Header() {
   const unread = notifications.filter((n) => !n.is_read).length;
 
   const navItems = [
+    { to: "/" as const, label: t("nav.home") },
     { to: "/search" as const, label: t("nav.stays") },
     { to: "/tours" as const, label: t("nav.toursExperiences") },
     { to: "/packages" as const, label: t("nav.packages") },
@@ -47,23 +48,33 @@ export function Header() {
   ];
 
   return (
+    <>
     <header
-      className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
+      className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
         transparent
-          ? "border-transparent bg-background/75"
-          : "border-border/70 bg-background/90 shadow-card"
-      } backdrop-blur-xl`}
+          ? "border-transparent bg-transparent"
+          : "border-border/70 bg-background/90 shadow-card backdrop-blur-xl"
+      }`}
     >
       <div className="container-page flex h-16 items-center justify-between gap-2 md:h-20 md:gap-4">
         <div className="flex items-center gap-8">
           <Logo />
-          <nav className="hidden items-center gap-2 md:flex">
+          <nav className="hidden items-center gap-1.5 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface hover:text-foreground"
-                activeProps={{ className: "text-foreground bg-surface" }}
+                activeOptions={{ exact: item.to === "/" }}
+                className={`whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors ${
+                  transparent
+                    ? "text-foreground/90 hover:bg-background/70 hover:text-foreground"
+                    : "text-muted-foreground hover:bg-surface hover:text-foreground"
+                }`}
+                activeProps={{
+                  className: transparent
+                    ? "bg-background/80 text-foreground shadow-sm"
+                    : "text-foreground bg-surface",
+                }}
               >
                 {item.label}
               </Link>
@@ -72,10 +83,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="hidden rounded-full lg:inline-flex">
-            <Link to="/owner/properties/new">{t("nav.listProperty")}</Link>
+          <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex" aria-label={t("nav.favorites")}>
+            <Link to="/favorites">
+              <Heart className="size-4" />
+            </Link>
           </Button>
           <LanguageSwitcher compact />
+          <Button asChild size="sm" className="hidden rounded-full bg-brand px-4 text-brand-foreground hover:bg-brand/90 sm:inline-flex">
+            <Link to="/owner/properties/new">{t("nav.listProperty")}</Link>
+          </Button>
 
           {user ? (
             <>
@@ -239,5 +255,7 @@ export function Header() {
         </div>
       </div>
     </header>
+    {pathname === "/" ? null : <div className="h-16 md:h-20" aria-hidden="true" />}
+    </>
   );
 }
