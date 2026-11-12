@@ -9,7 +9,7 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        const origin = new URL(request.url).origin;
+        const origin = "https://www.stayland.am";
         const staticPaths = ["/", "/search", "/tours", "/destinations", "/about", "/help", "/terms", "/privacy"];
 
         const [{ data: properties }, { data: tours }, { data: pages }] = await Promise.all([
