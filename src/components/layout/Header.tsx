@@ -48,11 +48,12 @@ export function Header() {
   ];
 
   return (
+    <>
     <header
-      className={`top-0 z-50 w-full border-b transition-all duration-300 ${
+      className={`fixed top-0 z-50 w-full border-b transition-all duration-300 ${
         transparent
-          ? "absolute border-transparent bg-transparent"
-          : "sticky border-border/70 bg-background/90 shadow-card backdrop-blur-xl"
+          ? "border-transparent bg-transparent"
+          : "border-border/70 bg-background/90 shadow-card backdrop-blur-xl"
       }`}
     >
       <div className="container-page flex h-16 items-center justify-between gap-2 md:h-20 md:gap-4">
@@ -64,7 +65,7 @@ export function Header() {
                 key={item.to}
                 to={item.to}
                 activeOptions={{ exact: item.to === "/" }}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                className={`whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium transition-colors ${
                   transparent
                     ? "text-foreground/90 hover:bg-background/70 hover:text-foreground"
                     : "text-muted-foreground hover:bg-surface hover:text-foreground"
@@ -254,5 +255,7 @@ export function Header() {
         </div>
       </div>
     </header>
+    {pathname === "/" ? null : <div className="h-16 md:h-20" aria-hidden="true" />}
+    </>
   );
 }
