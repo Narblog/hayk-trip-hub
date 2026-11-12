@@ -17,10 +17,10 @@ export const Route = createFileRoute("/destinations")({
       { property: "og:title", content: "Բացահայտեք Հայաստանը — StayLand ուղղություններ" },
       { property: "og:description", content: "Դիտեք Հայաստանի քաղաքներն ու շրջանները և գտեք կացարաններ յուրաքանչյուրում։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/destinations" },
+      { property: "og:url", content: "https://www.stayland.am/destinations" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/destinations" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/destinations" }],
   }),
   component: DestinationsPage,
 });

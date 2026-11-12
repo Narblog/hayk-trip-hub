@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://hayk-trip-hub.lovable.app/sitemap.xml
+Sitemap: https://www.stayland.am/sitemap.xml

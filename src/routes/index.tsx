@@ -40,10 +40,10 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "StayLand — Կացարաններ և փորձառություններ Հայաստանում" },
       { property: "og:description", content: "Հյուրատներ, տնակներ և տուրեր ամբողջ Հայաստանում։ Կապվիր տանտիրոջ հետ ուղիղ։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/" },
+      { property: "og:url", content: "https://www.stayland.am/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/" }],
   }),
   component: Home,
 });

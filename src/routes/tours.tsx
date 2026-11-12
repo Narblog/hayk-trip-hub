@@ -19,10 +19,10 @@ export const Route = createFileRoute("/tours")({
       { property: "og:title", content: "Տուրեր և փորձառություններ Հայաստանում" },
       { property: "og:description", content: "Ամրագրեք հայկական տուրեր տեղական գիդերի ուղեկցությամբ։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/tours" },
+      { property: "og:url", content: "https://www.stayland.am/tours" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/tours" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/tours" }],
   }),
   component: ToursPage,
 });

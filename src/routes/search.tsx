@@ -47,10 +47,10 @@ export const Route = createFileRoute("/search")({
       { property: "og:title", content: "Փնտրել կացարան Հայաստանում — StayLand" },
       { property: "og:description", content: "Գտեք ազատ կացարաններ ամբողջ Հայաստանում և կապվեք տանտերերի հետ ուղիղ։" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/search" },
+      { property: "og:url", content: "https://www.stayland.am/search" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/search" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/search" }],
   }),
   component: SearchPage,
 });

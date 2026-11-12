@@ -8,23 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { refDataQuery } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { itemHead, loadTourSeo } from "@/lib/seo";
 
 export const Route = createFileRoute("/tour/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — տուր Հայաստանում | StayLand` },
-      {
-        name: "description",
-        content: "Տուրի մանրամասները, տևողությունը, հանդիպման վայրը և գինը այս հայկական փորձառության համար։",
-      },
-      { property: "og:title", content: "Տուր Հայաստանում — StayLand" },
-      { property: "og:description", content: "Տուրի մանրամասները, տևողությունը և գինը։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: `https://hayk-trip-hub.lovable.app/tour/${params.slug}` },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: `https://hayk-trip-hub.lovable.app/tour/${params.slug}` }],
-  }),
+  loader: async ({ params }) => ({ seo: await loadTourSeo(params.slug) }),
+  head: ({ params, loaderData }) =>
+    itemHead("tour", params.slug, loaderData?.seo, `${params.slug.replace(/-/g, " ")} — տուր Հայաստանում | StayLand`, "Տուրի մանրամասները, տևողությունը, հանդիպման վայրը և գինը այս հայկական փորձառության համար։"),
   component: TourPage,
 });
 

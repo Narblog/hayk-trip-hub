@@ -13,10 +13,10 @@ export const Route = createFileRoute("/terms")({
       { property: "og:title", content: "StayLand օգտագործման պայմաններ" },
       { property: "og:description", content: "Կանոններ հյուրերի և տանտերերի համար StayLand Հայաստան հարթակում։" },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://hayk-trip-hub.lovable.app/terms" },
+      { property: "og:url", content: "https://www.stayland.am/terms" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://hayk-trip-hub.lovable.app/terms" }],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/terms" }],
   }),
   component: TermsPage,
 });
