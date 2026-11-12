@@ -191,7 +191,7 @@ function SearchPage() {
             ))}
           </div>
 
-          {["recommended", "price_asc", "price_desc", "rating"].map((k) => (
+          {["recommended", "price_asc", "price_desc"].map((k) => (
             <Link
               key={k}
               from="/search"
