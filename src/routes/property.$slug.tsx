@@ -16,6 +16,7 @@ import { trackPropertyEvent } from "@/lib/analytics";
 import { propertyHostQuery, propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { itemHead, loadPropertySeo } from "@/lib/seo";
 
 const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
@@ -24,18 +25,9 @@ export const Route = createFileRoute("/property/$slug")({
     const ok = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
     return { checkIn: ok(s["checkIn"]), checkOut: ok(s["checkOut"]) };
   },
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand` },
-      { name: "description", content: "Լուսանկարներ, հարմարություններ, հասանելիություն և տանտիրոջ կոնտակտային տվյալներ այս կացարանի համար։" },
-      { property: "og:title", content: "Կացարան Հայաստանում — StayLand" },
-      { property: "og:description", content: "Լուսանկարներ, հարմարություններ և հասանելիություն այս կացարանի համար։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: `https://www.stayland.am/property/${params.slug}` },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: `https://www.stayland.am/property/${params.slug}` }],
-  }),
+  loader: async ({ params }) => ({ seo: await loadPropertySeo(params.slug) }),
+  head: ({ params, loaderData }) =>
+    itemHead("property", params.slug, loaderData?.seo, `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand`, "Լուսանկարներ, հարմարություններ, հասանելիություն և տանտիրոջ կոնտակտային տվյալներ այս կացարանի համար։"),
   component: PropertyPage,
 });
 
@@ -304,7 +296,6 @@ function PropertyPage() {
 
   return (
     <div className="container-page min-w-0 py-5 sm:py-8">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div
         ref={galleryRef}
         onScroll={updateActiveImage}
