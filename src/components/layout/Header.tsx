@@ -50,7 +50,7 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 w-full border-b transition-all duration-300 ${
         transparent
-          ? "border-transparent bg-background/40"
+          ? "border-transparent bg-background/75"
           : "border-border/70 bg-background/90 shadow-card"
       } backdrop-blur-xl`}
     >

@@ -5,6 +5,11 @@ import {
   Home as HomeIcon,
   CarFront,
   Gift,
+  ShieldCheck,
+  Headphones,
+  BadgePercent,
+  Map as MapIcon,
+  Users,
 } from "lucide-react";
 import { CardGridSkeleton, ErrorState } from "@/components/common/states";
 import { PackageMiniCarousel } from "@/components/package/PackageMiniCarousel";
@@ -153,15 +158,23 @@ function Home() {
           />
           <div className="hero-fade absolute inset-0" />
         </div>
-        <div className="container-page relative z-10 pb-12 pt-16 text-center md:pb-16 md:pt-24">
-          <h1 className="mx-auto max-w-4xl font-display text-[1.45rem] leading-[1.25] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-5xl md:leading-[1.15]">
+        <div className="container-page relative z-10 flex min-h-[80vh] flex-col justify-center pb-14 pt-24 md:min-h-[88vh] md:pb-20 md:pt-28">
+          {/* guests badge */}
+          <div className="absolute right-2 top-20 hidden rounded-2xl border border-background/30 bg-foreground/25 px-5 py-4 text-background backdrop-blur-md lg:block">
+            <p className="flex items-center gap-2 font-display text-2xl leading-none">
+              <Users className="size-5" /> 100+
+            </p>
+            <p className="mt-1.5 text-xs text-background/85">{t("hero.badgeSub")}</p>
+          </div>
+
+          <h1 className="max-w-3xl font-display text-[1.7rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-6xl md:leading-[1.1]">
             {t("hero.l1")} {t("hero.l2a")}
             <span className="text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]">{t("hero.hl")}</span>
             {t("hero.l2b")}
           </h1>
-          <p className="mx-auto mt-2.5 max-w-2xl px-2 text-[0.8125rem] leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:mt-3 md:text-base">{t("hero.subtitle")}</p>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base">{t("hero.subtitle")}</p>
 
-          <div className="mx-auto mt-8 max-w-4xl md:mt-12">
+          <div className="mt-8 max-w-4xl md:mt-10">
           <div className="mx-auto max-w-full rounded-3xl border border-border/70 bg-card/95 shadow-search backdrop-blur md:max-w-4xl">
             <div className="scrollbar-none mx-auto flex w-full items-center justify-start gap-1 overflow-x-auto px-1.5 pt-2 sm:w-fit sm:justify-center sm:px-2">
               <span className="flex shrink-0 items-center gap-2 rounded-t-2xl border-b-2 border-brand bg-card px-3 py-2 text-[0.8125rem] font-semibold text-foreground sm:px-5 sm:py-2.5 sm:text-sm">
@@ -187,6 +200,26 @@ function Home() {
               <SearchBar />
             </div>
           </div>
+          </div>
+
+          {/* trust badges */}
+          <div className="mt-8 grid max-w-4xl grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
+            {[
+              { icon: ShieldCheck, label: t("hero.trust1") },
+              { icon: Headphones, label: t("hero.trust2") },
+              { icon: BadgePercent, label: t("hero.trust3") },
+              { icon: MapIcon, label: t("hero.trust4") },
+            ].map((b) => (
+              <div
+                key={b.label}
+                className="flex items-center gap-2.5 rounded-2xl border border-background/25 bg-foreground/25 px-3.5 py-3 backdrop-blur-md"
+              >
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-gold/20">
+                  <b.icon className="size-4.5 text-gold" />
+                </span>
+                <span className="text-xs font-semibold leading-tight text-background sm:text-sm">{b.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
