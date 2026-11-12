@@ -142,7 +142,9 @@ function SearchPage() {
   );
 
   return (
-    <div className="container-page py-8">
+    <div className="min-h-screen bg-surface/60 py-4 sm:py-8">
+      <div className="container-page">
+        <div className="lg:rounded-[2.5rem] lg:bg-background lg:p-8 lg:shadow-card">
       <SearchBar variant="compact" initial={params} />
 
       <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
@@ -205,7 +207,16 @@ function SearchPage() {
       </div>
 
       <div className="mt-6 gap-8 lg:flex lg:items-start">
-        <aside className="hidden w-72 shrink-0 rounded-3xl border border-border/70 bg-card p-5 shadow-card lg:sticky lg:top-24 lg:block">
+        <aside className="hidden w-80 shrink-0 rounded-3xl border border-border/70 bg-card p-5 shadow-card lg:sticky lg:top-24 lg:block">
+          {!isMap && points.length > 0 ? (
+            <div className="mb-5 h-44 overflow-hidden rounded-2xl border border-border/60">
+              <ClientOnly fallback={<Skeleton className="size-full" />}>
+                <Suspense fallback={<Skeleton className="size-full" />}>
+                  <SearchMap points={points} lang={lang} onSelect={openProperty} />
+                </Suspense>
+              </ClientOnly>
+            </div>
+          ) : null}
           {panel}
         </aside>
 
@@ -260,6 +271,8 @@ function SearchPage() {
               </Button>
             </div>
           ) : null}
+        </div>
+      </div>
         </div>
       </div>
     </div>
