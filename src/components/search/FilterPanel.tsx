@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { AmenityIcon } from "@/components/property/AmenityIcon";
 import { refDataQuery } from "@/lib/data";
@@ -23,7 +22,7 @@ export const PRICE_MAX = 200000;
 function Group({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="border-t border-border/70 py-5 first:border-t-0 first:pt-0">
-      <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">{title}</h3>
+      <h3 className="mb-3 text-sm font-semibold">{title}</h3>
       {children}
     </div>
   );
@@ -46,6 +45,11 @@ export function FilterPanel({
     onChange({ [key]: list.includes(code) ? list.filter((c) => c !== code) : [...list, code] } as Partial<FilterValues>);
   };
 
+  const pill = (active: boolean) =>
+    `rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+      active ? "bg-brand text-brand-foreground" : "bg-surface text-foreground hover:bg-accent"
+    }`;
+
   return (
     <div className="text-sm">
       <div className="flex items-center justify-between pb-4">
@@ -55,30 +59,69 @@ export function FilterPanel({
         </Button>
       </div>
 
+      <Group title={t("filters.type")}>
+        <div className="flex flex-wrap gap-1.5">
+          <button
+            type="button"
+            onClick={() => onChange({ types: [] })}
+            className={pill(values.types.length === 0)}
+          >
+            {t("filters.any")}
+          </button>
+          {(ref?.types ?? []).map((ty) => (
+            <button
+              key={ty.code}
+              type="button"
+              onClick={() => toggle("types", ty.code)}
+              className={pill(values.types.includes(ty.code))}
+            >
+              {localized(ty, "name")}
+            </button>
+          ))}
+        </div>
+      </Group>
+
       <Group title={t("filters.price")}>
+        <div className="flex items-center gap-2">
+          <div className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2">
+            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{t("filters.priceFrom")}</p>
+            <p className="truncate text-xs font-semibold">{formatPrice(values.minPrice, "AMD", lang)}</p>
+          </div>
+          <div className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2">
+            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{t("filters.priceTo")}</p>
+            <p className="truncate text-xs font-semibold">
+              {formatPrice(values.maxPrice, "AMD", lang)}
+              {values.maxPrice >= PRICE_MAX ? "+" : ""}
+            </p>
+          </div>
+        </div>
         <Slider
+          className="mt-4"
           value={[values.minPrice, values.maxPrice]}
           min={PRICE_MIN}
           max={PRICE_MAX}
           step={5000}
           onValueChange={([min, max]) => onChange({ minPrice: min ?? PRICE_MIN, maxPrice: max ?? PRICE_MAX })}
         />
-        <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-          <span>{formatPrice(values.minPrice, "AMD", lang)}</span>
-          <span>
-            {formatPrice(values.maxPrice, "AMD", lang)}
-            {values.maxPrice >= PRICE_MAX ? "+" : ""}
-          </span>
-        </div>
       </Group>
 
-      <Group title={t("filters.type")}>
-        <div className="grid gap-2">
-          {(ref?.types ?? []).map((ty) => (
-            <label key={ty.code} className="flex cursor-pointer items-center gap-2.5">
-              <Checkbox checked={values.types.includes(ty.code)} onCheckedChange={() => toggle("types", ty.code)} />
-              <span>{localized(ty, "name")}</span>
-            </label>
+      <Group title={t("filters.rating")}>
+        <div className="flex flex-wrap gap-1.5">
+          {[0, 4, 4.5].map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => onChange({ minRating: n })}
+              className={`flex items-center gap-1 ${pill(values.minRating === n)}`}
+            >
+              {n === 0 ? (
+                t("filters.any")
+              ) : (
+                <>
+                  <Star className="size-3 fill-gold text-gold" /> {n}+
+                </>
+              )}
+            </button>
           ))}
         </div>
       </Group>
@@ -90,34 +133,9 @@ export function FilterPanel({
               key={n}
               type="button"
               onClick={() => onChange({ bedrooms: n })}
-              className={`rounded-full border px-3.5 py-1.5 text-xs font-medium ${
-                values.bedrooms === n ? "border-brand bg-brand-soft text-brand" : "border-border hover:bg-surface"
-              }`}
+              className={pill(values.bedrooms === n)}
             >
               {n === 0 ? t("filters.any") : `${n}+`}
-            </button>
-          ))}
-        </div>
-      </Group>
-
-      <Group title={t("filters.rating")}>
-        <div className="flex flex-wrap gap-1.5">
-          {[0, 4, 4.5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => onChange({ minRating: n })}
-              className={`flex items-center gap-1 rounded-full border px-3.5 py-1.5 text-xs font-medium ${
-                values.minRating === n ? "border-brand bg-brand-soft text-brand" : "border-border hover:bg-surface"
-              }`}
-            >
-              {n === 0 ? (
-                t("filters.any")
-              ) : (
-                <>
-                  <Star className="size-3 fill-gold text-gold" /> {n}+
-                </>
-              )}
             </button>
           ))}
         </div>

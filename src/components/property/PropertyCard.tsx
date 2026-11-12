@@ -42,37 +42,26 @@ export function PropertyCard({
   const type = ref?.types.find((x) => x.code === p.property_type);
 
   return (
-    <article className="group relative overflow-hidden rounded-3xl border border-border/70 bg-card shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-      <Link to="/property/$slug" params={{ slug: p.slug }} className="block">
-        <div
-          className={`relative overflow-hidden bg-surface ${
-            compact ? "aspect-4/3" : "aspect-4/3 sm:aspect-4/5"
-          }`}
-        >
-          {p.main_image_url ? (
-            <img
-              src={p.main_image_url}
-              alt={title}
-              loading="lazy"
-              width={1000}
-              height={1250}
-              className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-            />
-          ) : null}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-foreground/55 to-transparent sm:h-2/5" />
+    <article className="group relative flex flex-col rounded-3xl border border-border/60 bg-card p-2 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:p-2.5">
+      <Link
+        to="/property/$slug"
+        params={{ slug: p.slug }}
+        className="relative block aspect-4/3 overflow-hidden rounded-2xl bg-surface"
+      >
+        {p.main_image_url ? (
+          <img
+            src={p.main_image_url}
+            alt={title}
+            loading="lazy"
+            width={1000}
+            height={750}
+            className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+          />
+        ) : null}
 
-          {/* title overlay — keep only the name on mobile */}
-          <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
-            <p className="eyebrow hidden text-background/85 sm:block">
-              {localized(city, "name") || p.city_code} · {localized(type, "name") || p.property_type}
-            </p>
-            <h3 className="line-clamp-2 font-display text-sm leading-snug text-background drop-shadow sm:mt-1 sm:text-xl">
-              {title}
-            </h3>
-          </div>
-
-          {/* featured / available tags — desktop only on image */}
-          <div className="absolute left-3 top-3 hidden flex-col items-start gap-1.5 sm:flex">
+        {/* featured / available tags */}
+        {p.is_featured || showAvailable ? (
+          <div className="absolute left-2.5 top-2.5 flex flex-col items-start gap-1.5">
             {p.is_featured ? (
               <span className="rounded-full bg-brand px-2.5 py-1 text-[11px] font-semibold text-brand-foreground shadow-card">
                 {t("card.featured")}
@@ -84,35 +73,17 @@ export function PropertyCard({
               </span>
             ) : null}
           </div>
-        </div>
+        ) : null}
       </Link>
 
-      <FavoriteButton propertyId={p.id} className="absolute right-3 top-3 z-20" />
+      <FavoriteButton propertyId={p.id} className="absolute right-4 top-4 z-20 sm:right-5 sm:top-5" />
 
-      <div
-        className={
-          compact
-            ? "space-y-1.5 p-2.5 sm:space-y-2 sm:p-4"
-            : "space-y-2 p-2.5 sm:space-y-3 sm:p-5"
-        }
-      >
-        {/* mobile-only meta row (moved off the image) */}
-        {p.is_featured || showAvailable ? (
-          <div className="flex flex-wrap items-center gap-1.5 sm:hidden">
-            {p.is_featured ? (
-              <span className="truncate rounded-full bg-brand px-1.5 py-0.5 text-[10px] font-semibold text-brand-foreground">
-                {t("card.featured")}
-              </span>
-            ) : null}
-            {showAvailable ? (
-              <span className="truncate rounded-full bg-success px-1.5 py-0.5 text-[10px] font-semibold text-success-foreground">
-                {t("card.available")}
-              </span>
-            ) : null}
-          </div>
-        ) : null}
+      <div className="flex flex-1 flex-col px-1.5 pb-1.5 pt-2.5 sm:px-2 sm:pt-3">
+        <Link to="/property/$slug" params={{ slug: p.slug }}>
+          <h3 className="line-clamp-1 font-display text-base leading-snug sm:text-lg">{title}</h3>
+        </Link>
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground sm:text-xs">
+        <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[11px] text-muted-foreground sm:text-xs">
           <span className="flex min-w-0 items-center gap-1">
             <MapPin className="size-3.5 shrink-0" />
             <span className="truncate">{localized(city, "name") || p.city_code}</span>
@@ -127,23 +98,16 @@ export function PropertyCard({
           )}
         </div>
 
-        <div className="flex items-end justify-between gap-2 border-t border-border/70 pt-2 sm:pt-3">
-          <p className="min-w-0 flex-1 leading-tight">
-            <span className="mr-1 text-[10px] text-muted-foreground sm:text-xs">{t("card.from")}</span>
-            <span className="font-display text-sm text-brand sm:text-xl">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-2.5 sm:pt-3">
+          <p className="min-w-0 leading-tight">
+            <span className="font-display text-sm text-foreground sm:text-lg">
               {formatPrice(Number(p.price_per_night), p.currency ?? "AMD", lang)}
             </span>
-            <span className="ml-1 text-[10px] text-muted-foreground">/ {t("card.perNight")}</span>
+            <span className="ml-1 text-[10px] text-muted-foreground sm:text-xs">/ {t("card.perNight")}</span>
           </p>
-          {compact ? null : (
-            <Link
-              to="/property/$slug"
-              params={{ slug: p.slug }}
-              className="hidden rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold transition-colors hover:border-brand hover:text-brand sm:inline-block"
-            >
-              {t("card.view")}
-            </Link>
-          )}
+          <span className="shrink-0 rounded-full bg-brand-soft px-2.5 py-1 text-[10px] font-medium text-brand sm:text-[11px]">
+            {localized(type, "name") || p.property_type}
+          </span>
         </div>
       </div>
 
