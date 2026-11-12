@@ -82,10 +82,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="outline" size="sm" className="hidden rounded-full lg:inline-flex">
-            <Link to="/owner/properties/new">{t("nav.listProperty")}</Link>
+          <Button asChild variant="ghost" size="icon" className="hidden sm:inline-flex" aria-label={t("nav.favorites")}>
+            <Link to="/favorites">
+              <Heart className="size-4" />
+            </Link>
           </Button>
           <LanguageSwitcher compact />
+          <Button asChild size="sm" className="hidden rounded-full bg-brand px-4 text-brand-foreground hover:bg-brand/90 sm:inline-flex">
+            <Link to="/owner/properties/new">{t("nav.listProperty")}</Link>
+          </Button>
 
           {user ? (
             <>
