@@ -158,16 +158,16 @@ function Home() {
           />
           <div className="hero-fade absolute inset-0" />
         </div>
-        <div className="container-page relative z-10 flex min-h-[80vh] flex-col justify-center pb-14 pt-24 md:min-h-[88vh] md:pb-20 md:pt-28">
-          <h1 className="max-w-3xl font-display text-[1.7rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-6xl md:leading-[1.1]">
+        <div className="container-page relative z-10 flex min-h-[80vh] flex-col items-center justify-center pb-14 pt-24 text-center md:min-h-[88vh] md:pb-20 md:pt-28">
+          <h1 className="mx-auto max-w-3xl font-display text-[1.7rem] leading-[1.2] text-background [text-shadow:0_1px_12px_rgba(0,0,0,0.55)] md:text-6xl md:leading-[1.1]">
             {t("hero.l1")} {t("hero.l2a")}
             <span className="text-gold drop-shadow-[0_2px_4px_rgba(0,0,0,0.45)]">{t("hero.hl")}</span>
             {t("hero.l2b")}
           </h1>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base">{t("hero.subtitle")}</p>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-background [text-shadow:0_1px_8px_rgba(0,0,0,0.6)] md:text-base">{t("hero.subtitle")}</p>
           <span className="mt-2 block h-0.5 w-24 rounded-full bg-gold" />
 
-          <div className="mt-8 max-w-4xl md:mt-10">
+           <div className="mx-auto mt-8 w-full max-w-4xl md:mt-10">
           <div className="mx-auto max-w-full rounded-3xl border border-border/70 bg-card/95 shadow-search backdrop-blur md:max-w-4xl">
             <div className="text-left">
               <SearchBar />
