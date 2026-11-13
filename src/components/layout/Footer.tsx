@@ -19,7 +19,6 @@ export function Footer() {
       title: t("footer.explore"),
       links: [
         { to: "/search" as const, label: t("nav.stays") },
-        { to: "/destinations" as const, label: t("nav.destinations") },
         { to: "/tours" as const, label: t("nav.tours") },
         { to: "/favorites" as const, label: t("nav.favorites") },
       ],

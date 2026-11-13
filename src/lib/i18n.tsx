@@ -1549,7 +1549,6 @@ const brandEn: Dict = {
   "home.seeAllStays": "See all stays",
   "brand.name": "StayLand",
   "brand.tagline": "Stays in Armenia",
-  "nav.destinations": "Destinations",
   "nav.toursExperiences": "Tours & Experiences",
   "hero.l1": "Find your perfect stay",
   "hero.l2a": "in ",
@@ -1561,11 +1560,6 @@ const brandEn: Dict = {
   "hero.trust3": "Best prices",
   "hero.trust4": "All of Armenia",
   "hero.badgeSub": "happy guests",
-  "dest.eyebrow": "Explore Armenia",
-  "dest.title": "Destinations",
-  "dest.subtitle": "Pick a town or region and see every stay available there.",
-  "dest.stays": "stays",
-  "dest.stayOne": "stay",
   "footer.desc": "StayLand is an Armenian marketplace for guesthouses, cabins, vacation homes and experiences. Contact owners directly \u2014 no booking commission.",
 };
 
@@ -1601,7 +1595,6 @@ const brandHy: Dict = {
   "home.seeAllStays": "Տեսնել բոլոր կացարանները",
   "brand.name": "StayLand",
   "brand.tagline": "\u0540\u0561\u0576\u0563\u056b\u057d\u057f \u0540\u0561\u0575\u0561\u057d\u057f\u0561\u0576\u0578\u0582\u0574",
-  "nav.destinations": "\u0548\u0582\u0572\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580",
   "nav.toursExperiences": "\u054f\u0578\u0582\u0580\u0565\u0580 \u0587 \u0583\u0578\u0580\u0571\u0561\u057c\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580",
   "hero.subtitle": "Հյուրատներ, տնակներ և անմոռանալի փորձառություններ Հայաստանում",
   "hero.trust1": "Անվտանգ ամրագրում",
@@ -1609,11 +1602,6 @@ const brandHy: Dict = {
   "hero.trust3": "Լավագույն գները",
   "hero.trust4": "Ամբողջ Հայաստանը",
   "hero.badgeSub": "գոհ հաճախորդ",
-  "dest.eyebrow": "\u0532\u0561\u0581\u0561\u0570\u0561\u0575\u057f\u056b\u0580 \u0540\u0561\u0575\u0561\u057d\u057f\u0561\u0576\u0568",
-  "dest.title": "\u0548\u0582\u0572\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580",
-  "dest.subtitle": "\u0538\u0576\u057f\u0580\u056b\u0580 \u0584\u0561\u0572\u0561\u0584\u0568 \u0587 \u057f\u0565\u057d \u0562\u0578\u056c\u0578\u0580 \u0570\u0561\u057d\u0561\u0576\u0565\u056c\u056b \u056f\u0561\u0581\u0561\u0580\u0561\u0576\u0576\u0565\u0580\u0568\u0589",
-  "dest.stays": "\u056f\u0561\u0581\u0561\u0580\u0561\u0576",
-  "dest.stayOne": "\u056f\u0561\u0581\u0561\u0580\u0561\u0576",
   "footer.desc": "StayLand\u0568 \u0570\u0561\u0575\u056f\u0561\u056f\u0561\u0576 \u0570\u0561\u0580\u0569\u0561\u056f \u0567\u055d \u0570\u0575\u0578\u0582\u0580\u0561\u057f\u0576\u0565\u0580, \u057f\u0576\u0561\u056f\u0576\u0565\u0580 \u0587 \u0583\u0578\u0580\u0571\u0561\u057c\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u0589 \u0548\u0582\u0572\u056b\u0572 \u056f\u0561\u057a \u057f\u0561\u0576\u057f\u056b\u0580\u0578\u057b \u0570\u0565\u057f\u055d \u0561\u057c\u0561\u0576\u0581 \u0574\u056b\u057b\u0576\u0578\u0580\u0564\u0561\u057e\u0573\u0561\u0580\u056b\u0589",
 };
 
@@ -1649,7 +1637,6 @@ const brandRu: Dict = {
   "home.seeAllStays": "Смотреть всё жильё",
   "brand.name": "StayLand",
   "brand.tagline": "\u041e\u0442\u0434\u044b\u0445 \u0432 \u0410\u0440\u043c\u0435\u043d\u0438\u0438",
-  "nav.destinations": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
   "nav.toursExperiences": "\u0422\u0443\u0440\u044b \u0438 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u044f",
   "hero.subtitle": "\u0413\u043e\u0441\u0442\u0435\u0432\u044b\u0435 \u0434\u043e\u043c\u0430, \u0434\u043e\u043c\u0438\u043a\u0438 \u0438 \u044f\u0440\u043a\u0438\u0435 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u044f \u043f\u043e \u0432\u0441\u0435\u0439 \u0410\u0440\u043c\u0435\u043d\u0438\u0438.",
   "hero.trust1": "Безопасное бронирование",
@@ -1657,11 +1644,6 @@ const brandRu: Dict = {
   "hero.trust3": "Лучшие цены",
   "hero.trust4": "Вся Армения",
   "hero.badgeSub": "довольных гостей",
-  "dest.eyebrow": "\u0418\u0441\u0441\u043b\u0435\u0434\u0443\u0439\u0442\u0435 \u0410\u0440\u043c\u0435\u043d\u0438\u044e",
-  "dest.title": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f",
-  "dest.subtitle": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0433\u043e\u0440\u043e\u0434 \u0438 \u043f\u043e\u0441\u043c\u043e\u0442\u0440\u0438\u0442\u0435 \u0432\u0441\u0435 \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u044b \u0436\u0438\u043b\u044c\u044f.",
-  "dest.stays": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432",
-  "dest.stayOne": "\u0432\u0430\u0440\u0438\u0430\u043d\u0442",
   "footer.desc": "StayLand \u2014 \u0430\u0440\u043c\u044f\u043d\u0441\u043a\u0430\u044f \u043f\u043b\u043e\u0449\u0430\u0434\u043a\u0430 \u0433\u043e\u0441\u0442\u0435\u0432\u044b\u0445 \u0434\u043e\u043c\u043e\u0432, \u0434\u043e\u043c\u0438\u043a\u043e\u0432 \u0438 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u0439. \u041f\u0440\u044f\u043c\u043e\u0439 \u043a\u043e\u043d\u0442\u0430\u043a\u0442 \u0441 \u0445\u043e\u0437\u044f\u0438\u043d\u043e\u043c \u2014 \u0431\u0435\u0437 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438.",
 };
 

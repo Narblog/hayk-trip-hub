@@ -59,7 +59,7 @@ function SectionHead({
   eyebrow?: string | undefined;
   title: string;
   sub?: string | undefined;
-  to?: "/search" | "/tours" | "/destinations" | "/packages" | undefined;
+  to?: "/search" | "/tours" | "/packages" | undefined;
   linkLabel?: string | undefined;
   search?: Record<string, unknown> | undefined;
 }) {
