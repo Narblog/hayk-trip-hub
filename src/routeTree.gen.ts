@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as DestinationsRouteImport } from './routes/destinations'
 import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as PackagesRouteImport } from './routes/packages'
@@ -61,11 +60,6 @@ const AboutRoute = AboutRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DestinationsRoute = DestinationsRouteImport.update({
-  id: '/destinations',
-  path: '/destinations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FavoritesRoute = FavoritesRouteImport.update({
@@ -246,7 +240,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
-  '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
   '/help': typeof HelpRoute
   '/packages': typeof PackagesRoute
@@ -286,7 +279,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
-  '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
   '/help': typeof HelpRoute
   '/packages': typeof PackagesRoute
@@ -327,7 +319,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
-  '/destinations': typeof DestinationsRoute
   '/favorites': typeof FavoritesRoute
   '/help': typeof HelpRoute
   '/packages': typeof PackagesRoute
@@ -369,7 +360,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
-    | '/destinations'
     | '/favorites'
     | '/help'
     | '/packages'
@@ -409,7 +399,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
-    | '/destinations'
     | '/favorites'
     | '/help'
     | '/packages'
@@ -449,7 +438,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
-    | '/destinations'
     | '/favorites'
     | '/help'
     | '/packages'
@@ -490,7 +478,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
-  DestinationsRoute: typeof DestinationsRoute
   FavoritesRoute: typeof FavoritesRoute
   HelpRoute: typeof HelpRoute
   PackagesRoute: typeof PackagesRoute
@@ -548,13 +535,6 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/destinations': {
-      id: '/destinations'
-      path: '/destinations'
-      fullPath: '/destinations'
-      preLoaderRoute: typeof DestinationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/favorites': {
@@ -802,7 +782,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
-  DestinationsRoute: DestinationsRoute,
   FavoritesRoute: FavoritesRoute,
   HelpRoute: HelpRoute,
   PackagesRoute: PackagesRoute,
