@@ -143,7 +143,7 @@ export type Database = {
           owner_id: string | null
           package_id: string | null
           price_change_note: string | null
-          property_id: string
+          property_id: string | null
           reference: string
           responded_at: string | null
           status: Database["public"]["Enums"]["booking_status"]
@@ -173,7 +173,7 @@ export type Database = {
           owner_id?: string | null
           package_id?: string | null
           price_change_note?: string | null
-          property_id: string
+          property_id?: string | null
           reference: string
           responded_at?: string | null
           status?: Database["public"]["Enums"]["booking_status"]
@@ -203,7 +203,7 @@ export type Database = {
           owner_id?: string | null
           package_id?: string | null
           price_change_note?: string | null
-          property_id?: string
+          property_id?: string | null
           reference?: string
           responded_at?: string | null
           status?: Database["public"]["Enums"]["booking_status"]

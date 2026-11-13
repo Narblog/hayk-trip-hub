@@ -124,7 +124,7 @@ function AdminPackagesPage() {
 
   if (!isAdmin) return <div className="container-page py-16 text-center text-muted-foreground">Հասանելի չէ</div>;
 
-  const canSave = form.title.trim() && form.check_in && form.check_out && form.property_id;
+  const canSave = form.title.trim() && form.check_in && form.check_out;
 
   return (
     <div className="container-page py-8 sm:py-10">
@@ -165,13 +165,13 @@ function AdminPackagesPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Հյուրատուն</Label>
+            <Label>Հյուրատուն (ոչ պարտադիր)</Label>
             <select
               className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
               value={form.property_id ?? ""}
               onChange={(e) => setForm({ ...form, property_id: e.target.value || null })}
             >
-              <option value="">— Ընտրել —</option>
+              <option value="">— Առանց հյուրատան —</option>
               {props.data?.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
             </select>
           </div>

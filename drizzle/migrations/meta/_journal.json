@@ -78,6 +78,13 @@
       "when": 1794549576773,
       "tag": "0010_package_booking_uses_package_guest_limit",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794596676354,
+      "tag": "0011_standalone_packages",
+      "breakpoints": true
     }
   ]
 }

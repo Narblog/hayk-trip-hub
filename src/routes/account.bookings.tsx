@@ -62,7 +62,7 @@ function MyBookingsPage() {
     ? (mine.data ?? []).map((b) => ({
         id: b.id,
         reference: b.reference,
-        name: b.properties?.name ?? "",
+        name: b.properties?.name ?? b.packages?.title ?? "",
         slug: b.properties?.slug ?? "",
         check_in: b.check_in,
         check_out: b.check_out,
