@@ -206,6 +206,7 @@ function PropertyPage() {
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
     contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
     latitude: number | null; longitude: number | null;
+    public_code: string | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
   };
@@ -445,6 +446,9 @@ function PropertyPage() {
             <span className="flex items-center gap-1.5 border-l border-border pl-4">
               <Users className="size-4" /> {t("property.upToGuests").replace("{n}", String(p.max_guests))}
             </span>
+            {p.public_code ? (
+              <span className="flex items-center gap-1.5 border-l border-border pl-4 font-mono text-xs font-semibold">#{p.public_code}</span>
+            ) : null}
           </div>
 
           {descText ? (
