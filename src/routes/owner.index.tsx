@@ -8,6 +8,7 @@ import { OwnerShell } from "@/components/owner/OwnerShell";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import { TOURS_SECTION_ENABLED } from "@/lib/feature-flags";
 import {
   becomeOwner,
   commissionPercentQuery,
