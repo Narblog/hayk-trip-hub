@@ -107,7 +107,7 @@ function RelatedTours({ regionCode, cityCode }: { regionCode: string | null; cit
           <h2 className="font-display text-xl font-semibold">{t("related.tours")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">{t("related.toursSub")}</p>
         </div>
-        <span className="shrink-0 rounded-full bg-danger px-4 py-2 text-xs font-semibold text-danger-foreground">
+        <span className="shrink-0 rounded-full bg-destructive px-4 py-2 text-xs font-semibold text-destructive-foreground">
           {t("tours.soonBadge")}
         </span>
       </div>

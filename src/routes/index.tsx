@@ -275,7 +275,7 @@ function Home() {
           <div className="relative flex min-h-40 flex-col items-start justify-center gap-1.5 p-6 md:p-8">
             <h3 className="max-w-md font-display text-xl text-background md:text-2xl">{t("home.promoToursTitle")}</h3>
             <p className="max-w-md text-sm text-background/85">{t("home.promoToursSub")}</p>
-            <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-danger px-5 py-2.5 text-sm font-semibold text-danger-foreground shadow-card">
+            <span className="mt-3 inline-flex items-center gap-2 rounded-full bg-destructive px-5 py-2.5 text-sm font-semibold text-destructive-foreground shadow-card">
               {t("tours.soonBadge")}
             </span>
           </div>
