@@ -13,6 +13,7 @@ import { ReviewsSection } from "@/components/property/ReviewsSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackPropertyEvent } from "@/lib/analytics";
+import { TOURS_SECTION_ENABLED } from "@/lib/feature-flags";
 import { propertyHostQuery, propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
@@ -609,7 +610,7 @@ function PropertyPage() {
       </div>
 
       <SimilarStays cityCode={p.city_code ?? null} regionCode={p.region_code ?? null} excludeId={p.id} />
-      <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} />
+      {TOURS_SECTION_ENABLED ? <RelatedTours regionCode={p.region_code ?? null} cityCode={p.city_code ?? null} /> : null}
     </div>
   );
 }

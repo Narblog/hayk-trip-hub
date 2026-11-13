@@ -100,7 +100,9 @@ function OwnerDashboard() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild><Link to="/owner/properties/new">{t("owner.addProperty")}</Link></Button>
-          <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
+          {TOURS_SECTION_ENABLED ? (
+            <Button asChild variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
+          ) : null}
         </div>
       </div>
 
@@ -141,7 +143,9 @@ function OwnerDashboard() {
       <div className="mt-10">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="font-display text-xl font-semibold">{t("tourForm.myTours")}</h2>
-          <Button asChild size="sm" variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
+          {TOURS_SECTION_ENABLED ? (
+            <Button asChild size="sm" variant="outline"><Link to="/owner/tours/new">{t("tourForm.new")}</Link></Button>
+          ) : null}
         </div>
         {toursPending ? (
           <InlineLoader />
