@@ -215,26 +215,30 @@ function Home() {
           </section>
         ) : null}
 
-        {/* Recommended carousel */}
-        <section className="mt-10">
-          <SectionHead
-            eyebrow={t("home.featuredEyebrow")}
-            title={t("home.featured")}
-            sub={t("home.featuredSub")}
-            to="/search"
-            linkLabel={t("home.seeAll")}
-            search={{ guests: 2, page: 1, featured: true }}
-          />
-          <div className="mt-5">
-            {isError ? (
-              <ErrorState message={t("error.friendly")} onRetry={() => void refetch()} />
-            ) : isPending ? (
-              <CardGridSkeleton count={4} />
-            ) : (
-              <PropertyCarousel items={recommended} />
-            )}
-          </div>
-        </section>
+        {/* Recommended carousel — only when admin has featured stays */}
+        {recommended.length > 0 ? (
+          <section className="mt-10">
+            <SectionHead
+              eyebrow={t("home.featuredEyebrow")}
+              title={t("home.featured")}
+              sub={t("home.featuredSub")}
+              to="/search"
+              linkLabel={t("home.seeAll")}
+              search={{ guests: 2, page: 1, featured: true }}
+            />
+            <div className="mt-5">
+              {isError ? (
+                <ErrorState message={t("error.friendly")} onRetry={() => void refetch()} />
+              ) : (
+                <PropertyCarousel items={recommended} />
+              )}
+            </div>
+          </section>
+        ) : isPending ? (
+          <section className="mt-10">
+            <CardGridSkeleton count={4} />
+          </section>
+        ) : null}
 
         {/* Stays grid */}
         <section className="mt-12">
