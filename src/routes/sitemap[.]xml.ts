@@ -32,16 +32,6 @@ export const Route = createFileRoute("/sitemap.xml")({
               ),
             )
             .join("") +
-          (tours ?? [])
-            .map((tour) =>
-              urlTag(
-                `${origin}/tour/${tour.slug}`,
-                "weekly",
-                "0.6",
-                tour.updated_at ? new Date(tour.updated_at as string).toISOString().slice(0, 10) : undefined,
-              ),
-            )
-            .join("") +
           `</urlset>`;
 
         return new Response(body, {
