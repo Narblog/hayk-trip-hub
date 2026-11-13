@@ -42,7 +42,6 @@ export function Header() {
   const navItems = [
     { to: "/" as const, label: t("nav.home") },
     { to: "/search" as const, label: t("nav.stays") },
-    { to: "/tours" as const, label: t("nav.toursExperiences") },
     { to: "/packages" as const, label: t("nav.packages") },
   ];
 

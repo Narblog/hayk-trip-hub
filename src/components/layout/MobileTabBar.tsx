@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Heart, Home, Map, Search, User } from "lucide-react";
+import { Heart, Home, Search, User } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export function MobileTabBar() {
@@ -8,13 +8,12 @@ export function MobileTabBar() {
   const items = [
     { to: "/" as const, icon: Home, label: t("nav.home") },
     { to: "/search" as const, icon: Search, label: t("nav.search") },
-    { to: "/tours" as const, icon: Map, label: t("nav.tours") },
     { to: "/favorites" as const, icon: Heart, label: t("nav.favorites") },
     { to: "/account" as const, icon: User, label: t("nav.account") },
   ];
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl md:hidden">
-      <ul className="grid grid-cols-5 gap-0.5 px-1.5 py-1.5">
+      <ul className="grid grid-cols-4 gap-0.5 px-1.5 py-1.5">
         {items.map((item) => {
           const isActive =
             item.to === "/" ? location.pathname === "/" : location.pathname.startsWith(item.to);
