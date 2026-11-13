@@ -71,6 +71,13 @@
       "when": 1794118352865,
       "tag": "0009_seed_demo_guesthouses",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794549576773,
+      "tag": "0010_package_booking_uses_package_guest_limit",
+      "breakpoints": true
     }
   ]
 }
