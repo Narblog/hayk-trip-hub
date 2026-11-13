@@ -445,6 +445,9 @@ function PropertyPage() {
             <span className="flex items-center gap-1.5 border-l border-border pl-4">
               <Users className="size-4" /> {t("property.upToGuests").replace("{n}", String(p.max_guests))}
             </span>
+            {p.public_code ? (
+              <span className="flex items-center gap-1.5 border-l border-border pl-4 font-mono text-xs font-semibold">#{p.public_code}</span>
+            ) : null}
           </div>
 
           {descText ? (

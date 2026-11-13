@@ -55,7 +55,12 @@ function OwnerPropertiesPage() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{p.name}</p>
-                  <p className="text-xs text-muted-foreground">{p.city_code}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {p.city_code}
+                    {p.public_code ? (
+                      <span className="ml-2 rounded-md bg-muted px-1.5 py-0.5 font-mono text-[11px] font-semibold text-foreground">#{p.public_code}</span>
+                    ) : null}
+                  </p>
                   <div className="mt-1"><StatusBadge status={p.status} /></div>
                 </div>
                 <div className="flex flex-wrap gap-2">
