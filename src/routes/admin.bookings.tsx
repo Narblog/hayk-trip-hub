@@ -49,7 +49,7 @@ function AdminBookingsPage() {
           <article key={b.id} className="min-w-0 rounded-lg border border-border bg-card p-4 sm:p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
-                <h2 className="break-words font-display text-lg font-semibold">{b.properties?.name}</h2>
+                <h2 className="break-words font-display text-lg font-semibold">{b.properties?.name ?? b.packages?.title}</h2>
                 {isPackageBooking(b) ? <p className="mt-1 flex items-start gap-2 text-sm font-semibold text-brand"><Snowflake className="mt-0.5 size-4 shrink-0" /><span className="min-w-0 break-words">{t("book.packageBadge")}{b.packages?.title ? ` · ${b.packages.title}` : ""}</span></p> : null}
                 <p className="mt-1 text-xs text-muted-foreground">{t("book.reference")} {b.reference}</p>
               </div>
