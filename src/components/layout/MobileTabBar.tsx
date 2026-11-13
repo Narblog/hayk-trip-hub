@@ -8,7 +8,6 @@ export function MobileTabBar() {
   const items = [
     { to: "/" as const, icon: Home, label: t("nav.home") },
     { to: "/search" as const, icon: Search, label: t("nav.search") },
-    { to: "/tours" as const, icon: Map, label: t("nav.tours") },
     { to: "/favorites" as const, icon: Heart, label: t("nav.favorites") },
     { to: "/account" as const, icon: User, label: t("nav.account") },
   ];
