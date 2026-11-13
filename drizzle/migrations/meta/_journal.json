@@ -92,6 +92,13 @@
       "when": 1794598284431,
       "tag": "0012_property_public_code",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794598327760,
+      "tag": "0013_property_public_code_default",
+      "breakpoints": true
     }
   ]
 }

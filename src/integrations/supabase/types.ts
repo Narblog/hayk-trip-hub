@@ -652,7 +652,7 @@ export type Database = {
           owner_id?: string | null
           price_per_night?: number
           property_type: string
-          public_code: string
+          public_code?: string
           rating?: number
           region_code?: string | null
           review_count?: number
