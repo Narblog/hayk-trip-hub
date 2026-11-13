@@ -206,6 +206,7 @@ function PropertyPage() {
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
     contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
     latitude: number | null; longitude: number | null;
+    public_code: string | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
   };

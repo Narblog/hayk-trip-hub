@@ -133,6 +133,7 @@ function NewPropertyPage() {
         .from("properties")
         .insert({
           owner_id: user.id,
+          public_code: null,
           name: form.name.trim(),
           slug: `${slugify(form.name)}-${Math.random().toString(36).slice(2, 8)}`,
           description: form.description || null,
