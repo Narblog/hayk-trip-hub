@@ -43,6 +43,7 @@ import { Route as TourSlugRouteImport } from './routes/tour.$slug'
 import { Route as OwnerPropertiesIndexRouteImport } from './routes/owner.properties.index'
 import { Route as OwnerPropertiesNewRouteImport } from './routes/owner.properties.new'
 import { Route as OwnerToursNewRouteImport } from './routes/owner.tours.new'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as OwnerPropertiesIdCalendarRouteImport } from './routes/owner.properties.$id.calendar'
 import { Route as OwnerPropertiesIdEditRouteImport } from './routes/owner.properties.$id.edit'
 import { Route as OwnerPropertiesIdPricingRouteImport } from './routes/owner.properties.$id.pricing'
@@ -217,6 +218,12 @@ const OwnerToursNewRoute = OwnerToursNewRouteImport.update({
   path: '/owner/tours/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OwnerPropertiesIdCalendarRoute =
   OwnerPropertiesIdCalendarRouteImport.update({
     id: '/owner/properties/$id/calendar',
@@ -270,6 +277,7 @@ export interface FileRoutesByFullPath {
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/': typeof OwnerPropertiesIndexRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
   '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
@@ -309,6 +317,7 @@ export interface FileRoutesByTo {
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties': typeof OwnerPropertiesIndexRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
   '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
@@ -349,6 +358,7 @@ export interface FileRoutesById {
   '/owner/properties/new': typeof OwnerPropertiesNewRoute
   '/owner/tours/new': typeof OwnerToursNewRoute
   '/owner/properties/': typeof OwnerPropertiesIndexRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/owner/properties/$id/calendar': typeof OwnerPropertiesIdCalendarRoute
   '/owner/properties/$id/edit': typeof OwnerPropertiesIdEditRoute
   '/owner/properties/$id/pricing': typeof OwnerPropertiesIdPricingRoute
@@ -390,6 +400,7 @@ export interface FileRouteTypes {
     | '/owner/properties/new'
     | '/owner/tours/new'
     | '/owner/properties/'
+    | '/lovable/email/transactional/preview'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
     | '/owner/properties/$id/pricing'
@@ -429,6 +440,7 @@ export interface FileRouteTypes {
     | '/owner/properties/new'
     | '/owner/tours/new'
     | '/owner/properties'
+    | '/lovable/email/transactional/preview'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
     | '/owner/properties/$id/pricing'
@@ -468,6 +480,7 @@ export interface FileRouteTypes {
     | '/owner/properties/new'
     | '/owner/tours/new'
     | '/owner/properties/'
+    | '/lovable/email/transactional/preview'
     | '/owner/properties/$id/calendar'
     | '/owner/properties/$id/edit'
     | '/owner/properties/$id/pricing'
@@ -508,6 +521,7 @@ export interface RootRouteChildren {
   OwnerPropertiesNewRoute: typeof OwnerPropertiesNewRoute
   OwnerToursNewRoute: typeof OwnerToursNewRoute
   OwnerPropertiesIndexRoute: typeof OwnerPropertiesIndexRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
   OwnerPropertiesIdCalendarRoute: typeof OwnerPropertiesIdCalendarRoute
   OwnerPropertiesIdEditRoute: typeof OwnerPropertiesIdEditRoute
   OwnerPropertiesIdPricingRoute: typeof OwnerPropertiesIdPricingRoute
@@ -753,6 +767,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OwnerToursNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/owner/properties/$id/calendar': {
       id: '/owner/properties/$id/calendar'
       path: '/owner/properties/$id/calendar'
@@ -812,6 +833,7 @@ const rootRouteChildren: RootRouteChildren = {
   OwnerPropertiesNewRoute: OwnerPropertiesNewRoute,
   OwnerToursNewRoute: OwnerToursNewRoute,
   OwnerPropertiesIndexRoute: OwnerPropertiesIndexRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
   OwnerPropertiesIdCalendarRoute: OwnerPropertiesIdCalendarRoute,
   OwnerPropertiesIdEditRoute: OwnerPropertiesIdEditRoute,
   OwnerPropertiesIdPricingRoute: OwnerPropertiesIdPricingRoute,
