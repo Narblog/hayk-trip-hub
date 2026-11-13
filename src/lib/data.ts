@@ -781,16 +781,18 @@ export const destinationsQuery = () =>
         if (!p.city_code) continue;
         counts.set(p.city_code, (counts.get(p.city_code) ?? 0) + 1);
       }
-      return (cities.data ?? []).map((c) => ({
-        code: c.code,
-        name_en: c.name_en,
-        name_hy: c.name_hy,
-        name_ru: c.name_ru,
-        region_code: c.region_code,
-        image_url: c.image_url,
-        is_popular: c.is_popular,
-        stays: counts.get(c.code) ?? 0,
-      }));
+      return (cities.data ?? [])
+        .map((c) => ({
+          code: c.code,
+          name_en: c.name_en,
+          name_hy: c.name_hy,
+          name_ru: c.name_ru,
+          region_code: c.region_code,
+          image_url: c.image_url,
+          is_popular: c.is_popular,
+          stays: counts.get(c.code) ?? 0,
+        }))
+        .filter((c) => c.stays > 0);
     },
   });
 
