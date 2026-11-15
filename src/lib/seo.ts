@@ -145,3 +145,65 @@ export function propertyLodgingLd(slug: string, prop: unknown, ref: unknown): Re
   };
   return ld;
 }
+
+type PkgLike = {
+  id: string; title: string; description: string | null; check_in: string; check_out: string;
+  price: number; currency: string; image_url: string | null; image_urls?: string[] | null;
+  property?: { name: string; slug: string } | null;
+};
+
+export function packageHead(id: string, pkg: PkgLike | null) {
+  const url = `${SITE}/package/${id}`;
+  if (!pkg) {
+    return {
+      meta: [
+        { title: "Ամանորյա փաթեթ — StayLand Հայաստան" },
+        { name: "description", content: "Ամանորյա փաթեթի մանրամասները, գինը և ամրագրումը։" },
+        { property: "og:title", content: "Ամանորյա փաթեթ — StayLand" },
+        { property: "og:description", content: "Տոնական հանգիստ հյուրատներում՝ պատրաստի փաթեթներով։" },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  }
+  const title = `${pkg.title} — Ամանորյա փաթեթ | StayLand`;
+  const dates = `${pkg.check_in} – ${pkg.check_out}`;
+  const price = Number(pkg.price);
+  const base = clip(pkg.description, 120);
+  const desc = clip(`${base ? `${base} ` : ""}${dates}${pkg.property?.name ? ` · ${pkg.property.name}` : ""}${price > 0 ? ` · ${price} ${pkg.currency}` : ""}`, 160);
+  const images = Array.from(new Set([pkg.image_url, ...(pkg.image_urls ?? [])].filter(httpsOnly))).slice(0, 10);
+  const img = images[0] ?? null;
+  const ld: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: pkg.title,
+    url,
+    ...(pkg.description ? { description: clip(pkg.description, 500) } : {}),
+    ...(images.length ? { image: images } : {}),
+    brand: { "@type": "Brand", name: "StayLand" },
+    ...(price > 0
+      ? { offers: { "@type": "Offer", price, priceCurrency: pkg.currency, url, availability: "https://schema.org/InStock", validThrough: pkg.check_in } }
+      : {}),
+  };
+  return {
+    meta: [
+      { title },
+      { name: "description", content: desc },
+      { property: "og:title", content: title },
+      { property: "og:description", content: desc },
+      { property: "og:type", content: "product" },
+      { property: "og:url", content: url },
+      { name: "twitter:card", content: "summary_large_image" },
+      ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
+    ],
+    links: [{ rel: "canonical", href: url }],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
+  };
+}
+
+export const SITE_LD = [
+  { "@context": "https://schema.org", "@type": "Organization", name: "StayLand", url: `${SITE}/`, logo: `${SITE}/favicon.png` },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "StayLand", url: `${SITE}/`, inLanguage: "hy" },
+];

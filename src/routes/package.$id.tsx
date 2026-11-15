@@ -9,22 +9,20 @@ import { EmptyState, ErrorState } from "@/components/common/states";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { packageHead } from "@/lib/seo";
 import { PACKAGE_ICONS, guestRange, createPackageBookingRequest, packageNights, packageQuery } from "@/lib/packages";
 
 export const Route = createFileRoute("/package/$id")({
-  loader: ({ params }) => {
+  loader: async ({ params, context }) => {
     if (!params.id) throw notFound();
+    try {
+      const pkg = await context.queryClient.ensureQueryData(packageQuery(params.id));
+      return { pkg };
+    } catch {
+      return { pkg: undefined };
+    }
   },
-  head: () => ({
-    meta: [
-      { title: "Ամանորյա փաթեթ — StayLand Հայաստան" },
-      { name: "description", content: "Ամանորյա փաթեթի մանրամասները, գինը և ամրագրումը։" },
-      { property: "og:title", content: "Ամանորյա փաթեթ — StayLand" },
-      { property: "og:description", content: "Տոնական հանգիստ հյուրատներում՝ պատրաստի փաթեթներով։" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: ({ params, loaderData }) => packageHead(params.id, loaderData?.pkg ?? null),
   component: PackageDetailPage,
 });
 
@@ -82,7 +80,11 @@ function Stepper({
 function PackageDetailPage() {
   const { t, lang } = useI18n();
   const { id } = Route.useParams();
-  const q = useQuery(packageQuery(id));
+  const loaderData = Route.useLoaderData();
+  const q = useQuery({
+    ...packageQuery(id),
+    ...(loaderData?.pkg !== undefined ? { initialData: loaderData.pkg } : {}),
+  });
 
   if (q.isPending) {
     return (
