@@ -1,23 +1,9 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Գաղտնիության քաղաքականություն — StayLand Հայաստան" },
-      {
-        name: "description",
-        content:
-          "Ինչ տվյալներ է հավաքում StayLand-ը, ինչպես են աշխատում անանուն վիճակագրությունները և ինչպես են օգտատերերը կառավարում իրենց տվյալները։",
-      },
-      { property: "og:title", content: "StayLand գաղտնիության քաղաքականություն" },
-      { property: "og:description", content: "Նվազագույն տվյալներ, անանուն վիճակագրություն, անձնական տվյալների չվաճառք։" },
-      { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://www.stayland.am/privacy" },
-      { name: "twitter:card", content: "summary" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/privacy" }],
-  }),
+  head: ({ match }) => staticHead("privacy", match.search),
   component: PrivacyPage,
 });
 

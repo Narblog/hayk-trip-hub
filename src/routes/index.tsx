@@ -1,4 +1,6 @@
-import { SITE_LD } from "@/lib/seo";
+import { staticHead } from "@/lib/page-seo";
+import { langFromSearch } from "@/lib/lang-url";
+import { siteLd } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -30,23 +32,10 @@ import vibeMountain from "@/assets/vibe-mountain.jpg";
 import promoTours from "@/assets/promo-tours.jpg";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "StayLand — Գտիր քո իդեալական հանգիստը Հայաստանում" },
-      {
-        name: "description",
-        content:
-          "Բացահայտիր Հայաստանի լավագույն հյուրատները, տնակներն ու անմոռանալի փորձառությունները։ Կապվիր տանտիրոջ հետ ուղիղ՝ առանց միջնորդավճարի։",
-      },
-      { property: "og:title", content: "StayLand — Կացարաններ և փորձառություններ Հայաստանում" },
-      { property: "og:description", content: "Հյուրատներ, տնակներ և տուրեր ամբողջ Հայաստանում։ Կապվիր տանտիրոջ հետ ուղիղ։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.stayland.am/" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/" }],
-    scripts: SITE_LD.map((ld) => ({ type: "application/ld+json", children: JSON.stringify(ld) })),
-  }),
+  head: ({ match }) => {
+    const h = staticHead("home", match.search);
+    return { ...h, scripts: siteLd(langFromSearch(match.search)).map((ld) => ({ type: "application/ld+json", children: JSON.stringify(ld) })) };
+  },
   component: Home,
 });
 

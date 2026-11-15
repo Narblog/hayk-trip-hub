@@ -1,24 +1,10 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Compass } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/tours")({
-  head: () => ({
-    meta: [
-      { name: "robots", content: "noindex, follow" },
-      { title: "Տուրեր և փորձառություններ Հայաստանում — StayLand" },
-      {
-        name: "description",
-        content: "Օրվա տուրեր, արշավներ, գինու երթուղիներ և մշակութային փորձառություններ տեղական հայ գիդերի ուղեկցությամբ։",
-      },
-      { property: "og:title", content: "Տուրեր և փորձառություններ Հայաստանում" },
-      { property: "og:description", content: "Ամրագրեք հայկական տուրեր տեղական գիդերի ուղեկցությամբ։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.stayland.am/tours" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/tours" }],
-  }),
+  head: ({ match }) => staticHead("tours", match.search),
   component: ToursPage,
 });
 

@@ -1,3 +1,4 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute, Link, useNavigate, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
@@ -36,22 +37,7 @@ const schema = z.object({
 
 export const Route = createFileRoute("/search")({
   validateSearch: zodValidator(schema),
-  head: () => ({
-    meta: [
-      { title: "Փնտրել կացարան Հայաստանում — StayLand" },
-      {
-        name: "description",
-        content:
-          "Փնտրեք հյուրատներ, տնակներ, քոթեջներ և բնակարաններ ամբողջ Հայաստանում՝ ըստ ամսաթվերի, հյուրերի, գնի և հարմարությունների։",
-      },
-      { property: "og:title", content: "Փնտրել կացարան Հայաստանում — StayLand" },
-      { property: "og:description", content: "Գտեք ազատ կացարաններ ամբողջ Հայաստանում և կապվեք տանտերերի հետ ուղիղ։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.stayland.am/search" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/search" }],
-  }),
+  head: ({ match }) => staticHead("search", match.search),
   component: SearchPage,
 });
 

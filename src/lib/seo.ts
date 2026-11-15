@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const SITE = "https://www.stayland.am";
+import { HREFLANG, langLinks, langMeta, langUrl, SITE, type UrlLang } from "@/lib/lang-url";
+export { SITE };
 
 export type SeoItem = { name: string; description: string; image: string | null; price: number; currency: string; city?: string | null };
 
@@ -203,7 +204,10 @@ export function packageHead(id: string, pkg: PkgLike | null) {
   };
 }
 
-export const SITE_LD = [
-  { "@context": "https://schema.org", "@type": "Organization", name: "StayLand", url: `${SITE}/`, logo: `${SITE}/favicon.png` },
-  { "@context": "https://schema.org", "@type": "WebSite", name: "StayLand", url: `${SITE}/`, inLanguage: "hy" },
-];
+export function siteLd(lang: UrlLang = "hy") {
+  const url = langUrl("/", lang);
+  return [
+    { "@context": "https://schema.org", "@type": "Organization", name: "StayLand", url: `${SITE}/`, logo: `${SITE}/favicon.png` },
+    { "@context": "https://schema.org", "@type": "WebSite", name: "StayLand", url, inLanguage: HREFLANG[lang] },
+  ];
+}

@@ -1,3 +1,4 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import heroImg from "@/assets/packages-hero.jpg";
@@ -11,18 +12,7 @@ import { useI18n } from "@/lib/i18n";
 import { packagesQuery } from "@/lib/packages";
 
 export const Route = createFileRoute("/packages")({
-  head: () => ({
-    meta: [
-      { title: "Ամանորյա փաթեթներ — StayLand Հայաստան" },
-      { name: "description", content: "Ամանորյա և տոնական փաթեթներ Հայաստանի լավագույն հյուրատներում՝ ամսաթվերով, գներով և ներառված ծառայություններով։" },
-      { property: "og:title", content: "Ամանորյա փաթեթներ — StayLand" },
-      { property: "og:description", content: "Տոնական հանգիստ հյուրատներում՝ պատրաստի փաթեթներով։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.stayland.am/packages" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/packages" }],
-  }),
+  head: ({ match }) => staticHead("packages", match.search),
   component: PackagesPage,
 });
 
