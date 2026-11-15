@@ -12,7 +12,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const origin = "https://www.stayland.am";
         const staticPaths = ["/", "/search", "/packages", "/about", "/help", "/terms", "/privacy"];
 
-        const [props, pkgs] = await Promise.all([
+        const [props, pkgs, pgs] = await Promise.all([
           supabase
             .from("properties")
             .select("slug,updated_at")
@@ -21,12 +21,14 @@ export const Route = createFileRoute("/sitemap.xml")({
             .eq("is_demo", false)
             .limit(5000),
           supabase.from("packages").select("id,updated_at").eq("is_active", true).limit(1000),
+          supabase.from("pages").select("slug,updated_at").eq("is_published", true).limit(500),
         ]);
-        if (props.error || pkgs.error) {
+        if (props.error || pkgs.error || pgs.error) {
           return new Response("Sitemap temporarily unavailable", { status: 503, headers: { "retry-after": "300" } });
         }
         const properties = props.data ?? [];
         const packages = pkgs.data ?? [];
+        const infoPages = pgs.data ?? [];
         const day = (v: unknown) => (v ? new Date(v as string).toISOString().slice(0, 10) : undefined);
 
 
@@ -35,6 +37,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">` +
           staticPaths.map((p) => urlTag(`${origin}${p}`, "daily", p === "/" ? "1.0" : "0.8")).join("") +
           properties.map((p) => urlTag(`${origin}/property/${encodeURIComponent(p.slug)}`, "weekly", "0.7", day(p.updated_at))).join("") +
+          infoPages.map((p) => urlTag(`${origin}/p/${encodeURIComponent(p.slug)}`, "monthly", "0.5", day(p.updated_at))).join("") +
           packages.map((p) => urlTag(`${origin}/package/${p.id}`, "weekly", "0.6", day(p.updated_at))).join("") +
           `</urlset>`;
 
