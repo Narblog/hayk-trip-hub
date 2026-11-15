@@ -16,3 +16,4 @@
 - Preserve server-only environment loading and the targeted entities v4 deep-import aliases in Vite; never alias the entire entities package, because newer HTML parsers need their own version's exports.
 - Pass /lovable/* through request guards unchanged; each managed email handler authenticates its own caller.
 - Public detail routes (property, package) prime their data in the route loader and pass it to useQuery as initialData, so full content and JSON-LD are in server HTML without adding a query-SSR dependency.
+- Language is URL-based: "/" Armenian, "/ru/*", "/en/*" via a router rewrite to an internal root `lang` search param (retained across navigation); never duplicate route files per language. Route head() must use lang-url helpers for self canonical + hreflang, and mark untranslated language versions noindex, so Google only indexes real translations.
