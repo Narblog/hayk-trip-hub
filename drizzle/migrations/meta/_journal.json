@@ -99,6 +99,13 @@
       "when": 1794598327760,
       "tag": "0013_property_public_code_default",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794771645118,
+      "tag": "0014_respond_booking_standalone_package",
+      "breakpoints": true
     }
   ]
 }
