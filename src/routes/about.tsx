@@ -1,18 +1,9 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "StayLand-ի մասին — Հայկական կացարաններ և փորձառություններ" },
-      { name: "description", content: "StayLand-ը կապում է ճանապարհորդներին Հայաստանի հյուրատների, տնակների, վիլաների և տեղական տուր օպերատորների հետ։" },
-      { property: "og:title", content: "StayLand-ի մասին" },
-      { property: "og:description", content: "Հայկական հյուրընկալություն՝ ներկայացված հենց տանտերերի կողմից։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.stayland.am/about" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/about" }],
-  }),
+  head: ({ match }) => staticHead("about", match.search),
   component: AboutPage,
 });
 

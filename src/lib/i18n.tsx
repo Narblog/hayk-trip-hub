@@ -2225,6 +2225,9 @@ const bookRu: Dict = {
   "bstatus.COMPLETED": "Завершена",
 };
 
+import { useRouter, useRouterState } from "@tanstack/react-router";
+import { langFromSearch, langPath } from "@/lib/lang-url";
+
 const dicts: Record<Lang, Dict> = {
   en: { ...en, ...extraEn, ...brandEn, ...tourFormEn, ...legalEn, ...cmsEn, ...bookEn },
   hy: { ...hy, ...extraHy, ...brandHy, ...tourFormHy, ...legalHy, ...cmsHy, ...bookHy },
@@ -2244,21 +2247,22 @@ const I18nContext = createContext<I18nValue | null>(null);
 const STORAGE_KEY = "stayland.lang";
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("hy");
+  // The URL (/ru/..., /en/...) is the single source of truth for the language.
+  const lang = useRouterState({ select: (s) => langFromSearch(s.location.search) });
+  const router = useRouter();
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY) as Lang | null;
-    if (stored && stored in dicts) {
-      setLangState(stored);
-      document.documentElement.lang = stored;
-    }
-  }, []);
+    document.documentElement.lang = lang;
+    window.localStorage.setItem(STORAGE_KEY, lang);
+  }, [lang]);
 
   const value = useMemo<I18nValue>(() => {
     const setLang = (l: Lang) => {
-      setLangState(l);
-      window.localStorage.setItem(STORAGE_KEY, l);
-      document.documentElement.lang = l;
+      const loc = router.state.location;
+      const params = new URLSearchParams(loc.searchStr);
+      params.delete("lang");
+      const qs = params.toString();
+      router.history.push(`${langPath(loc.pathname, l)}${qs ? `?${qs}` : ""}${loc.hash ? `#${loc.hash}` : ""}`);
     };
     const t = (key: string) => dicts[lang][key] ?? enAll[key] ?? key;
     const localized = <T extends Record<string, unknown>>(row: T | null | undefined, base: string) => {
@@ -2266,9 +2270,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       return (row[`${base}_${lang}`] as string) ?? (row[`${base}_en`] as string) ?? "";
     };
     return { lang, setLang, t, localized };
-  }, [lang]);
+  }, [lang, router]);
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+}
+
+/** Translate outside React (e.g. in route head()). */
+export function tr(lang: Lang, key: string) {
+  return dicts[lang][key] ?? enAll[key] ?? key;
 }
 
 const fallbackI18n: I18nValue = {

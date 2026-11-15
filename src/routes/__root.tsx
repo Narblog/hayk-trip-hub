@@ -5,6 +5,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  retainSearchParams,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -17,6 +19,9 @@ import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth";
 import { I18nProvider } from "@/lib/i18n";
+import { z } from "zod";
+import { zodValidator } from "@tanstack/zod-adapter";
+import { langFromSearch } from "@/lib/lang-url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -79,7 +84,11 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   );
 }
 
+const rootSearch = z.object({ lang: z.enum(["ru", "en"]).optional().catch(undefined) });
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  validateSearch: zodValidator(rootSearch),
+  search: { middlewares: [retainSearchParams(["lang"])] },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -114,8 +123,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const lang = useRouterState({ select: (s) => langFromSearch(s.location.search) });
   return (
-    <html lang="hy">
+    <html lang={lang}>
       <head>
         <HeadContent />
       </head>

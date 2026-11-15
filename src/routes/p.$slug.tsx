@@ -1,3 +1,4 @@
+import { langFromSearch, langLinks, langMeta, type UrlLang } from "@/lib/lang-url";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,18 +8,22 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/p/$slug")({
   loader: async ({ params }) => {
     try {
-      const { data } = await supabase.from("pages").select("title_hy,content_hy").eq("slug", params.slug).maybeSingle();
-      return { page: data ?? null };
+      const { data } = await supabase.from("pages").select("title_hy,title_ru,title_en,content_hy,content_ru,content_en").eq("slug", params.slug).maybeSingle();
+      return { page: (data ?? null) as Record<string, string | null> | null };
     } catch {
       return { page: null };
     }
   },
-  head: ({ params, loaderData }) => {
-    const title = loaderData?.page?.title_hy ? `${loaderData.page.title_hy} — StayLand` : `${params.slug.replace(/-/g, " ")} — StayLand`;
-    const desc =
-      (loaderData?.page?.content_hy ?? "").replace(/\s+/g, " ").trim().slice(0, 158) ||
-      "StayLand-ի տեղեկատվական էջ ճանապարհորդների և տանտերերի համար։";
-    const url = `https://www.stayland.am/p/${params.slug}`;
+  head: ({ params, loaderData, match }) => {
+    const lang = langFromSearch(match.search);
+    const pg = loaderData?.page;
+    const has = (l: UrlLang) => !!(pg?.[`title_${l}`]?.trim() && pg?.[`content_${l}`]?.trim());
+    const available = (["hy", "ru", "en"] as UrlLang[]).filter(has);
+    const pick = (base: string) => pg?.[`${base}_${lang}`]?.trim() || pg?.[`${base}_hy`]?.trim() || "";
+    const title = pick("title") ? `${pick("title")} — StayLand` : `${params.slug.replace(/-/g, " ")} — StayLand`;
+    const desc = pick("content").replace(/\s+/g, " ").slice(0, 158) || "StayLand-ի տեղեկատվական էջ ճանապարհորդների և տանտերերի համար։";
+    const path = `/p/${params.slug}`;
+    const avail = available.length ? available : (["hy"] as UrlLang[]);
     return {
       meta: [
         { title },
@@ -26,10 +31,10 @@ export const Route = createFileRoute("/p/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "article" },
-        { property: "og:url", content: url },
         { name: "twitter:card", content: "summary" },
+        ...langMeta(path, lang, avail),
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: langLinks(path, lang, avail),
     };
   },
   component: DynamicPage,

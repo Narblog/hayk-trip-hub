@@ -1,3 +1,4 @@
+import { langFromSearch } from "@/lib/lang-url";
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
@@ -17,7 +18,7 @@ import { TOURS_SECTION_ENABLED } from "@/lib/feature-flags";
 import { propertyHostQuery, propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
-import { itemHead, propertySeoFromData, propertyLodgingLd } from "@/lib/seo";
+import { itemHead, propertySeoFromData, propertyLangs, propertyLodgingLd } from "@/lib/seo";
 
 const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
@@ -33,20 +34,24 @@ export const Route = createFileRoute("/property/$slug")({
         context.queryClient.ensureQueryData(propertyQuery(params.slug)),
         context.queryClient.ensureQueryData(refDataQuery()),
       ]);
-      return { prop, ref, seo: propertySeoFromData(prop) };
+      return { prop, ref };
     } catch {
-      return { prop: undefined, ref: undefined, seo: null };
+      return { prop: undefined, ref: undefined };
     }
   },
-  head: ({ params, loaderData }) =>
-    itemHead(
+  head: ({ params, loaderData, match }) => {
+    const lang = langFromSearch(match.search);
+    return itemHead(
       "property",
       params.slug,
-      loaderData?.seo,
+      propertySeoFromData(loaderData?.prop, lang),
       `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand`,
       "Լուսանկարներ, հարմարություններ, հասանելիություն և տանտիրոջ կոնտակտային տվյալներ այս կացարանի համար։",
-      loaderData?.prop ? propertyLodgingLd(params.slug, loaderData.prop, loaderData.ref ?? null) : undefined,
-    ),
+      loaderData?.prop ? propertyLodgingLd(params.slug, loaderData.prop, loaderData.ref ?? null, lang) : undefined,
+      lang,
+      loaderData?.prop ? propertyLangs(loaderData.prop) : ["hy"],
+    );
+  },
   component: PropertyPage,
 });
 

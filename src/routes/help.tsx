@@ -1,24 +1,10 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Mail, Clock } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/help")({
-  head: () => ({
-    meta: [
-      { title: "Օգնություն և կապ — StayLand Հայաստան" },
-      {
-        name: "description",
-        content:
-          "Օգնություն կացարանի, հայտարարության կամ StayLand հաշվի վերաբերյալ։ Ճանապարհորդները կապվում են տանտերերի հետ ուղիղ, տանտերերը հրապարակում են անվճար։",
-      },
-      { property: "og:title", content: "StayLand օգնություն և կապ" },
-      { property: "og:description", content: "Աջակցություն ճանապարհորդներին և տանտերերին StayLand Հայաստանում։" },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.stayland.am/help" },
-      { name: "twitter:card", content: "summary" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/help" }],
-  }),
+  head: ({ match }) => staticHead("help", match.search),
   component: HelpPage,
 });
 

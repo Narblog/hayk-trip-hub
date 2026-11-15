@@ -1,23 +1,9 @@
+import { staticHead } from "@/lib/page-seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Օգտագործման պայմաններ — StayLand Հայաստան" },
-      {
-        name: "description",
-        content:
-          "Ինչպես է աշխատում StayLand-ը՝ հայտարարություններ, տանտերեր, կարծիքներ և վճարումներ։ StayLand-ը չի գանձում ամրագրման միջնորդավճար։",
-      },
-      { property: "og:title", content: "StayLand օգտագործման պայմաններ" },
-      { property: "og:description", content: "Կանոններ հյուրերի և տանտերերի համար StayLand Հայաստան հարթակում։" },
-      { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://www.stayland.am/terms" },
-      { name: "twitter:card", content: "summary" },
-    ],
-    links: [{ rel: "canonical", href: "https://www.stayland.am/terms" }],
-  }),
+  head: ({ match }) => staticHead("terms", match.search),
   component: TermsPage,
 });
 
