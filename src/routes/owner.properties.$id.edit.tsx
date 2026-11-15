@@ -20,6 +20,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/owner/properties/$id/edit")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Edit your listing — StayLand Armenia" },
       { name: "description", content: "Update your Armenian stay: photos, price, amenities, location and contact details." },
       { property: "og:title", content: "Edit your listing — StayLand" },

@@ -13,6 +13,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/admin/commission")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Միջնորդավճար — StayLand admin" },
       { name: "description", content: "Սահմանեք ամրագրումներից գանձվող միջնորդավճարի տոկոսը։" },
       { property: "og:title", content: "Միջնորդավճար — StayLand admin" },

@@ -35,6 +35,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Ադմին պանել — StayLand Հայաստան" },
       { name: "description", content: "Կացարանների, տուրերի, փաթեթների և ամրագրումների կառավարում։" },
       { property: "og:title", content: "Ադմին պանել — StayLand" },

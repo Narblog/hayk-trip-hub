@@ -17,6 +17,7 @@ import { processImage } from "@/lib/images";
 export const Route = createFileRoute("/admin/cities")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Cities — StayLand Armenia admin" },
       { name: "description", content: "Add and update Armenian cities available to hosts when listing a stay." },
       { property: "og:title", content: "Cities — StayLand admin" },
