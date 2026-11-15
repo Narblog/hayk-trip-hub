@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth";
 import { adminBookingsQuery, respondBooking, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
+import { notifyPackageBookingDecision } from "@/lib/booking-notify.functions";
 import { isPackageBooking } from "@/lib/booking-kind";
 
 export const Route = createFileRoute("/admin/bookings")({
@@ -35,7 +36,7 @@ function AdminBookingsPage() {
   const [busy, setBusy] = useState<string | null>(null);
   const respond = async (id: string, action: "ACCEPT" | "DECLINE") => {
     setBusy(id);
-    try { await respondBooking({ bookingId: id, action }); await qc.invalidateQueries(); toast.success(action === "ACCEPT" ? "Հաստատված է" : "Մերժված է"); }
+    try { await respondBooking({ bookingId: id, action }); notifyPackageBookingDecision({ data: { bookingId: id } }).catch(() => {}); await qc.invalidateQueries(); toast.success(action === "ACCEPT" ? "Հաստատված է" : "Մերժված է"); }
     catch { toast.error(t("error.friendly")); }
     finally { setBusy(null); }
   };
