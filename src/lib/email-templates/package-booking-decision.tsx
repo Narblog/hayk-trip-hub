@@ -39,7 +39,7 @@ const Email = ({ name, packageTitle, reference, accepted, checkIn, checkOut, tot
 
 export const template = {
   component: Email,
-  subject: (d: Record<string, any>) => (d.accepted ? 'Ձեր ամրագրումը հաստատվեց' : 'Ձեր ամրագրման հայտը մերժվեց') + (d.reference ? ` · ${d.reference}` : ''),
+  subject: (d: Record<string, any>) => (d['accepted'] ? 'Ձեր ամրագրումը հաստատվեց' : 'Ձեր ամրագրման հայտը մերժվեց') + (d['reference'] ? ` · ${d['reference']}` : ''),
   displayName: 'Փաթեթի ամրագրման պատասխան',
   previewData: { name: 'Անի', packageTitle: 'Ամանոր Դիլիջանում', reference: 'SL-1234', accepted: true, checkIn: '30.12.2026', checkOut: '02.01.2027', total: '250,000 AMD' },
 } satisfies TemplateEntry
