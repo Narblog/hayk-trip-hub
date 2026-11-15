@@ -1,3 +1,4 @@
+import { SITE_LD } from "@/lib/seo";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -44,6 +45,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://www.stayland.am/" }],
+    scripts: SITE_LD.map((ld) => ({ type: "application/ld+json", children: JSON.stringify(ld) })),
   }),
   component: Home,
 });

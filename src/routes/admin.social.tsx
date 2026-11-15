@@ -13,6 +13,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/admin/social")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Social links — StayLand Armenia admin" },
       {
         name: "description",

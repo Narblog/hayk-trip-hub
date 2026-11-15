@@ -15,6 +15,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/owner/properties/$id/calendar")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Availability calendar — StayLand Armenia" },
       { name: "description", content: "Block and free dates for your Armenian property so travellers always see real availability." },
       { property: "og:title", content: "Availability calendar — StayLand" },

@@ -13,6 +13,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/account/bookings")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "My bookings — StayLand Armenia" },
       { name: "description", content: "Track the booking requests you sent to hosts across Armenia: pending, confirmed, past and cancelled." },
       { property: "og:title", content: "My bookings — StayLand" },

@@ -19,6 +19,7 @@ import { processImage } from "@/lib/images";
 export const Route = createFileRoute("/owner/tours/new")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Add a tour in Armenia — StayLand" },
       {
         name: "description",

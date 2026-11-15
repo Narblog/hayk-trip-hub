@@ -19,6 +19,7 @@ import { isPackageBooking } from "@/lib/booking-kind";
 export const Route = createFileRoute("/owner/bookings")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Booking requests — StayLand Armenia" },
       { name: "description", content: "Review, accept or decline booking requests travellers send for your Armenian stays." },
       { property: "og:title", content: "Booking requests — StayLand" },

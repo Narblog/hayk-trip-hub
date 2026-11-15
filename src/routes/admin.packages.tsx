@@ -28,6 +28,7 @@ import {
 export const Route = createFileRoute("/admin/packages")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Փաթեթներ — StayLand ադմին" },
       { name: "description", content: "Ավելացնել և խմբագրել ամանորյա ու տոնական փաթեթները։" },
       { property: "og:title", content: "Փաթեթներ — StayLand ադմին" },

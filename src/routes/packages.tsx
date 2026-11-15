@@ -18,8 +18,10 @@ export const Route = createFileRoute("/packages")({
       { property: "og:title", content: "Ամանորյա փաթեթներ — StayLand" },
       { property: "og:description", content: "Տոնական հանգիստ հյուրատներում՝ պատրաստի փաթեթներով։" },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.stayland.am/packages" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://www.stayland.am/packages" }],
   }),
   component: PackagesPage,
 });

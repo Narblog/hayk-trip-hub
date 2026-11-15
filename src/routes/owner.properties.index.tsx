@@ -12,6 +12,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/owner/properties/")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "My listings — StayLand Armenia" },
       { name: "description", content: "Edit, price and manage availability for every stay you host on StayLand." },
       { property: "og:title", content: "My listings — StayLand" },

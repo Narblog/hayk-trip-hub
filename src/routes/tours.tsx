@@ -5,6 +5,7 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/tours")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Տուրեր և փորձառություններ Հայաստանում — StayLand" },
       {
         name: "description",

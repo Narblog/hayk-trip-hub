@@ -18,6 +18,7 @@ export const Route = createFileRoute("/auth")({
   validateSearch: zodValidator(schema),
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Sign in — StayLand Armenia" },
       { name: "description", content: "Sign in or create a StayLand account to save stays, manage listings and contact Armenian hosts." },
       { property: "og:title", content: "Sign in — StayLand Armenia" },
