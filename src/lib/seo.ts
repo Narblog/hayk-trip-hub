@@ -50,8 +50,9 @@ export async function loadTourSeo(slug: string): Promise<SeoItem | null> {
   }
 }
 
-export function itemHead(kind: "property" | "tour", slug: string, seo: SeoItem | null | undefined, fallbackTitle: string, fallbackDesc: string, ldOverride?: Record<string, unknown> | null) {
-  const url = `${SITE}/${kind}/${slug}`;
+export function itemHead(kind: "property" | "tour", slug: string, seo: SeoItem | null | undefined, fallbackTitle: string, fallbackDesc: string, ldOverride?: Record<string, unknown> | null, lang: UrlLang = "hy", available: UrlLang[] = ["hy"]) {
+  const path = `/${kind}/${slug}`;
+  const url = langUrl(path, lang);
   const title = seo ? `${seo.name} — StayLand` : fallbackTitle;
   const desc = seo?.description || fallbackDesc;
   const img = seo?.image && /^https:\/\//.test(seo.image) ? seo.image : null;
@@ -67,11 +68,11 @@ export function itemHead(kind: "property" | "tour", slug: string, seo: SeoItem |
       { property: "og:title", content: title },
       { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: url },
       { name: "twitter:card", content: "summary_large_image" },
+      ...langMeta(path, lang, available),
       ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
     ],
-    links: [{ rel: "canonical", href: url }],
+    links: langLinks(path, lang, available),
     scripts: ld ? [{ type: "application/ld+json", children: JSON.stringify(ld) }] : [],
   };
 }
@@ -82,14 +83,30 @@ type PropRow = Record<string, unknown> & {
   property_images?: { image_url: string; is_cover: boolean | null; sort_order: number }[] | null;
   property_amenities?: { amenity_code: string }[] | null;
 };
-type RefRow = { cities?: { code: string; name_en: string }[]; regions?: { code: string; name_en: string }[]; amenities?: { code: string; name_en: string }[] } | null;
+type RefItem = Record<string, unknown> & { code: string };
+type RefRow = { cities?: RefItem[]; regions?: RefItem[]; amenities?: RefItem[] } | null;
 
-export function propertySeoFromData(prop: unknown): SeoItem | null {
+const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : "");
+
+/** Languages with a real translated name + description. Armenian is always available (falls back to the base fields). */
+export function propertyLangs(prop: unknown): UrlLang[] {
+  const d = prop as Record<string, unknown> | null | undefined;
+  if (!d) return ["hy"];
+  return (["hy", "ru", "en"] as UrlLang[]).filter((l) => l === "hy" || (str(d[`name_${l}`]) && str(d[`description_${l}`])));
+}
+
+function propText(d: Record<string, unknown>, base: "name" | "description", lang: UrlLang) {
+  const own = str(d[`${base}_${lang}`]);
+  if (own) return own;
+  return str(d[`${base}_hy`]) || str(d[base]);
+}
+
+export function propertySeoFromData(prop: unknown, lang: UrlLang = "hy"): SeoItem | null {
   const d = prop as PropRow | null | undefined;
   if (!d) return null;
   return {
-    name: (d.name_hy || d.name || "") as string,
-    description: clip((d.description_hy || d.description) as string | null),
+    name: propText(d, "name", lang),
+    description: clip(propText(d, "description", lang)),
     image: (d.main_image_url as string | null) ?? null,
     price: Number(d.price_per_night),
     currency: (d.currency as string) ?? "AMD",
@@ -99,25 +116,26 @@ export function propertySeoFromData(prop: unknown): SeoItem | null {
 const httpsOnly = (u: unknown): u is string => typeof u === "string" && /^https:\/\//.test(u);
 
 /** LodgingBusiness JSON-LD built only from real listing fields; missing data is omitted, never invented. */
-export function propertyLodgingLd(slug: string, prop: unknown, ref: unknown): Record<string, unknown> | null {
+export function propertyLodgingLd(slug: string, prop: unknown, ref: unknown, lang: UrlLang = "hy"): Record<string, unknown> | null {
   const d = prop as PropRow | null | undefined;
   if (!d) return null;
   const r = ref as RefRow;
-  const url = `${SITE}/property/${slug}`;
-  const name = (d.name_hy || d.name) as string;
-  const description = clip((d.description_hy || d.description) as string | null, 500);
+  const url = langUrl(`/property/${slug}`, lang);
+  const name = propText(d, "name", lang);
+  const description = clip(propText(d, "description", lang), 500);
+  const nm = (x: Record<string, unknown> | undefined) => (x ? str(x[`name_${lang}`]) || str(x["name_en"]) : "") || undefined;
   const images = [
     ...((d.property_images ?? []).slice().sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort_order - b.sort_order).map((i) => i.image_url)),
     d.main_image_url,
   ].filter(httpsOnly);
   const uniqImages = Array.from(new Set(images)).slice(0, 10);
   const exact = d["show_exact_location"] === true;
-  const city = r?.cities?.find((c) => c.code === d["city_code"])?.name_en;
-  const region = r?.regions?.find((c) => c.code === d["region_code"])?.name_en;
+  const city = nm(r?.cities?.find((c) => c.code === d["city_code"]));
+  const region = nm(r?.regions?.find((c) => c.code === d["region_code"]));
   const street = exact && typeof d["address"] === "string" && d["address"].trim() ? (d["address"] as string).trim() : undefined;
   const lat = d["latitude"], lng = d["longitude"];
   const amenities = (d.property_amenities ?? [])
-    .map((a) => r?.amenities?.find((x) => x.code === a.amenity_code)?.name_en)
+    .map((a) => nm(r?.amenities?.find((x) => x.code === a.amenity_code)))
     .filter((n): n is string => !!n)
     .map((n) => ({ "@type": "LocationFeatureSpecification", name: n, value: true }));
   const price = Number(d.price_per_night);
@@ -142,6 +160,7 @@ export function propertyLodgingLd(slug: string, prop: unknown, ref: unknown): Re
     ...(num("bedrooms") ? { numberOfRooms: num("bedrooms") } : {}),
     ...(typeof d["check_in_time"] === "string" && d["check_in_time"] ? { checkinTime: d["check_in_time"] } : {}),
     ...(typeof d["check_out_time"] === "string" && d["check_out_time"] ? { checkoutTime: d["check_out_time"] } : {}),
+    inLanguage: HREFLANG[lang],
     ...(price > 0 ? { priceRange: `from ${price} ${d.currency ?? "AMD"} per night` } : {}),
   };
   return ld;
@@ -153,8 +172,12 @@ type PkgLike = {
   property?: { name: string; slug: string } | null;
 };
 
-export function packageHead(id: string, pkg: PkgLike | null) {
-  const url = `${SITE}/package/${id}`;
+// Package titles/descriptions exist only in one language, so only the Armenian URL is indexable.
+export function packageHead(id: string, pkg: PkgLike | null, lang: UrlLang = "hy") {
+  const path = `/package/${id}`;
+  const url = langUrl(path, lang);
+  const seoLinks = langLinks(path, lang, ["hy"]);
+  const seoMeta = langMeta(path, lang, ["hy"]);
   if (!pkg) {
     return {
       meta: [
@@ -163,10 +186,10 @@ export function packageHead(id: string, pkg: PkgLike | null) {
         { property: "og:title", content: "Ամանորյա փաթեթ — StayLand" },
         { property: "og:description", content: "Տոնական հանգիստ հյուրատներում՝ պատրաստի փաթեթներով։" },
         { property: "og:type", content: "website" },
-        { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
+        ...seoMeta,
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: seoLinks,
     };
   }
   const title = `${pkg.title} — Ամանորյա փաթեթ | StayLand`;
@@ -195,11 +218,11 @@ export function packageHead(id: string, pkg: PkgLike | null) {
       { property: "og:title", content: title },
       { property: "og:description", content: desc },
       { property: "og:type", content: "product" },
-      { property: "og:url", content: url },
       { name: "twitter:card", content: "summary_large_image" },
+      ...seoMeta,
       ...(img ? [{ property: "og:image", content: img }, { name: "twitter:image", content: img }] : []),
     ],
-    links: [{ rel: "canonical", href: url }],
+    links: seoLinks,
     scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
   };
 }

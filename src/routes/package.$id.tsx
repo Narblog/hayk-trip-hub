@@ -1,3 +1,4 @@
+import { langFromSearch } from "@/lib/lang-url";
 import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/package/$id")({
       return { pkg: undefined };
     }
   },
-  head: ({ params, loaderData }) => packageHead(params.id, loaderData?.pkg ?? null),
+  head: ({ params, loaderData, match }) => packageHead(params.id, loaderData?.pkg ?? null, langFromSearch(match.search)),
   component: PackageDetailPage,
 });
 
