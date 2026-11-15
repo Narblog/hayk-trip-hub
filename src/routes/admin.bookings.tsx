@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { ArrowLeft, CalendarDays, Phone, Snowflake, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BookingStatusPill } from "@/components/booking/BookingStatusPill";
 import { EmptyState, ErrorState, InlineLoader } from "@/components/common/states";
 import { useAuth } from "@/lib/auth";
-import { adminBookingsQuery, type BookingStatus } from "@/lib/data";
+import { adminBookingsQuery, respondBooking, type BookingStatus } from "@/lib/data";
 import { formatDate, formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
 import { isPackageBooking } from "@/lib/booking-kind";
@@ -30,6 +31,14 @@ function AdminBookingsPage() {
   const q = useQuery({ ...adminBookingsQuery(), enabled: isAdmin });
   const [status, setStatus] = useState<BookingStatus | "ALL">("ALL");
   const [packagesOnly, setPackagesOnly] = useState(false);
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState<string | null>(null);
+  const respond = async (id: string, action: "ACCEPT" | "DECLINE") => {
+    setBusy(id);
+    try { await respondBooking({ bookingId: id, action }); await qc.invalidateQueries(); toast.success(action === "ACCEPT" ? "Հաստատված է" : "Մերժված է"); }
+    catch { toast.error(t("error.friendly")); }
+    finally { setBusy(null); }
+  };
   if (loading) return <InlineLoader />;
   if (!isAdmin) return <div className="container-page py-16 text-center text-muted-foreground">{t("error.title")}</div>;
   const rows = (q.data ?? []).filter((b) => (status === "ALL" || b.status === status) && (!packagesOnly || isPackageBooking(b)));
@@ -61,6 +70,12 @@ function AdminBookingsPage() {
               <div className="space-y-2"><p className="flex items-start gap-2"><CalendarDays className="mt-0.5 size-4 shrink-0 text-muted-foreground" /><span>{formatDate(b.check_in, lang)} – {formatDate(b.check_out, lang)}</span></p><p className="flex items-center gap-2 text-muted-foreground"><Users className="size-4" />{b.adults + b.children} {t("book.guests")} · {b.nights} {t("book.nights")}</p></div>
               <div><p className="text-xs text-muted-foreground">{t("book.total")}</p><p className="break-words font-display text-xl font-semibold">{formatPrice(Number(b.confirmed_total_price ?? b.total_price), b.currency, lang)}</p></div>
             </div>
+            {b.status === "PENDING" && !b.properties ? (
+              <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-3">
+                <Button size="sm" disabled={busy === b.id} onClick={() => respond(b.id, "ACCEPT")}>Հաստատել</Button>
+                <Button size="sm" variant="outline" disabled={busy === b.id} onClick={() => respond(b.id, "DECLINE")}>Մերժել</Button>
+              </div>
+            ) : null}
             {b.message ? <p className="mt-4 whitespace-pre-line break-words border-t border-border pt-3 text-sm text-muted-foreground">{b.message}</p> : null}
           </article>
         ))}
