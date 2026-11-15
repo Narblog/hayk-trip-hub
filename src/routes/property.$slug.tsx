@@ -17,7 +17,7 @@ import { TOURS_SECTION_ENABLED } from "@/lib/feature-flags";
 import { propertyHostQuery, propertyQuery, refDataQuery, relatedToursQuery, similarPropertiesQuery, type SimilarProperty } from "@/lib/data";
 import { formatPrice } from "@/lib/format";
 import { useI18n } from "@/lib/i18n";
-import { itemHead, loadPropertySeo } from "@/lib/seo";
+import { itemHead, propertySeoFromData, propertyLodgingLd } from "@/lib/seo";
 
 const PropertyMiniMap = lazy(() => import("@/components/property/PropertyMiniMap"));
 
@@ -26,9 +26,27 @@ export const Route = createFileRoute("/property/$slug")({
     const ok = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
     return { checkIn: ok(s["checkIn"]), checkOut: ok(s["checkOut"]) };
   },
-  loader: async ({ params }) => ({ seo: await loadPropertySeo(params.slug) }),
+  loader: async ({ params, context }) => {
+    // Prime listing + reference data on the server so the full page is in the initial HTML.
+    try {
+      const [prop, ref] = await Promise.all([
+        context.queryClient.ensureQueryData(propertyQuery(params.slug)),
+        context.queryClient.ensureQueryData(refDataQuery()),
+      ]);
+      return { prop, ref, seo: propertySeoFromData(prop) };
+    } catch {
+      return { prop: undefined, ref: undefined, seo: null };
+    }
+  },
   head: ({ params, loaderData }) =>
-    itemHead("property", params.slug, loaderData?.seo, `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand`, "Լուսանկարներ, հարմարություններ, հասանելիություն և տանտիրոջ կոնտակտային տվյալներ այս կացարանի համար։"),
+    itemHead(
+      "property",
+      params.slug,
+      loaderData?.seo,
+      `${params.slug.replace(/-/g, " ")} — կացարան Հայաստանում | StayLand`,
+      "Լուսանկարներ, հարմարություններ, հասանելիություն և տանտիրոջ կոնտակտային տվյալներ այս կացարանի համար։",
+      loaderData?.prop ? propertyLodgingLd(params.slug, loaderData.prop, loaderData.ref ?? null) : undefined,
+    ),
   component: PropertyPage,
 });
 
@@ -159,8 +177,15 @@ function PropertyPage() {
   const { slug } = Route.useParams();
   const pkgDates = Route.useSearch();
   const { t, lang, localized } = useI18n();
-  const { data, isPending, isError, refetch } = useQuery(propertyQuery(slug));
-  const { data: ref, isPending: isRefPending, isError: isRefError, refetch: refetchRef } = useQuery(refDataQuery());
+  const loaderData = Route.useLoaderData();
+  const { data, isPending, isError, refetch } = useQuery({
+    ...propertyQuery(slug),
+    ...(loaderData?.prop !== undefined ? { initialData: loaderData.prop } : {}),
+  });
+  const { data: ref, isPending: isRefPending, isError: isRefError, refetch: refetchRef } = useQuery({
+    ...refDataQuery(),
+    ...(loaderData?.ref ? { initialData: loaderData.ref } : {}),
+  });
   const [activeImage, setActiveImage] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
