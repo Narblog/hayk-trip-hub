@@ -15,3 +15,4 @@
 - App emails use the server-only managed send helper and React Email registry; do not create queues or generic send endpoints because delivery is managed externally.
 - Preserve server-only environment loading and the targeted entities v4 deep-import aliases in Vite; never alias the entire entities package, because newer HTML parsers need their own version's exports.
 - Pass /lovable/* through request guards unchanged; each managed email handler authenticates its own caller.
+- Public detail routes (property, package) prime their data in the route loader and pass it to useQuery as initialData, so full content and JSON-LD are in server HTML without adding a query-SSR dependency.
