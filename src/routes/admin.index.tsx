@@ -316,6 +316,11 @@ function AdminPage() {
                     {t("admin.review")}
                   </Link>
                 </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/owner/properties/$id/edit" params={{ id: p.id }}>
+                    {t("owner.edit")}
+                  </Link>
+                </Button>
                 {p.status !== "APPROVED" ? (
                   <Button
                     size="sm"
