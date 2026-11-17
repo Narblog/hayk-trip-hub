@@ -1,13 +1,5 @@
 # Roadmap
 
-- [x] Optimize owner-uploaded property images before storage upload.
-- [x] Add resilient retries to home and property queries.
-- [x] Add localized loading fallbacks and actionable error states.
-- [ ] Verify upload output, mobile/desktop states, diagnostics, and metadata.
-- [x] Stabilize the property page layout on iPhone-sized screens.
-- [x] Complete editable package photo galleries and included-service descriptions.
-- [x] Add admin bookings page and navigation with clear New Year package badges.
-- [x] Verify the package management and booking display on desktop/mobile.
-- [x] Show only New Year bookings in the admin page and full-width package cards on the packages page.
-- [ ] Require editable check-in and check-out times when adding or editing a property.
-- [ ] Verify owners keep individual bookings and admins see every booking newest-first.
+- [x] Require blank-by-default, editable check-in and check-out times when adding or editing a property.
+- [x] Keep owner bookings individual and show every property and package booking to admins newest-first.
+- [x] Verify required-time validation, saved-time readback, admin and owner booking lists, and test-data cleanup.
