@@ -9,3 +9,5 @@
 - [x] Add admin bookings page and navigation with clear New Year package badges.
 - [x] Verify the package management and booking display on desktop/mobile.
 - [x] Show only New Year bookings in the admin page and full-width package cards on the packages page.
+- [ ] Require editable check-in and check-out times when adding or editing a property.
+- [ ] Verify owners keep individual bookings and admins see every booking newest-first.

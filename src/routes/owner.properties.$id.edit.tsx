@@ -16,6 +16,7 @@ import { useAuth } from "@/lib/auth";
 import { refDataQuery } from "@/lib/data";
 import { processImage } from "@/lib/images";
 import { useI18n } from "@/lib/i18n";
+import { requiredPropertyTimeErrors } from "@/lib/property-times";
 
 export const Route = createFileRoute("/owner/properties/$id/edit")({
   head: () => ({
@@ -61,6 +62,8 @@ function EditPropertyPage() {
     bedrooms: "1",
     beds: "1",
     bathrooms: "1",
+    check_in_time: "",
+    check_out_time: "",
     contact_phone: "",
     contact_whatsapp: "",
     contact_instagram: "",
@@ -100,6 +103,8 @@ function EditPropertyPage() {
       bedrooms: String(property.bedrooms ?? 0),
       beds: String(property.beds ?? 0),
       bathrooms: String(property.bathrooms ?? 0),
+      check_in_time: property.check_in_time ?? "",
+      check_out_time: property.check_out_time ?? "",
       contact_phone: property.contact_phone ?? "",
       contact_whatsapp: property.contact_whatsapp ?? "",
       contact_instagram: property.contact_instagram ?? "",
@@ -135,6 +140,9 @@ function EditPropertyPage() {
     if (!form.property_type) e['property_type'] = t("form.errType");
     if (!form.city_code) e['city_code'] = t("form.errCity");
     if (!form.price_per_night || Number(form.price_per_night) <= 0) e['price_per_night'] = t("form.errPrice");
+    const timeErrors = requiredPropertyTimeErrors(form.check_in_time, form.check_out_time);
+    if (timeErrors.check_in_time) e['check_in_time'] = t("form.errCheckInTime");
+    if (timeErrors.check_out_time) e['check_out_time'] = t("form.errCheckOutTime");
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -221,6 +229,8 @@ function EditPropertyPage() {
           bedrooms: Number(form.bedrooms) || 0,
           beds: Number(form.beds) || 0,
           bathrooms: Number(form.bathrooms) || 0,
+          check_in_time: form.check_in_time,
+          check_out_time: form.check_out_time,
           main_image_url: cover,
           contact_phone: form.contact_phone || null,
           contact_whatsapp: form.contact_whatsapp || null,
@@ -506,6 +516,40 @@ function EditPropertyPage() {
             <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
           </div>
           <LocationField lat={coords.lat} lng={coords.lng} onChange={(lat, lng) => setCoords({ lat, lng })} />
+        </div>
+
+        <div className={section}>
+          <h2 className="font-display text-lg font-semibold">{t("form.arrivalTimes")}</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="check_in_time">{t("form.checkInTime")} *</Label>
+              <Input
+                id="check_in_time"
+                type="time"
+                step={300}
+                required
+                value={form.check_in_time}
+                onChange={(e) => set("check_in_time", e.target.value)}
+                aria-invalid={!!errors['check_in_time']}
+                className={errors['check_in_time'] ? errCls : undefined}
+              />
+              <FieldError id="check_in_time" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="check_out_time">{t("form.checkOutTime")} *</Label>
+              <Input
+                id="check_out_time"
+                type="time"
+                step={300}
+                required
+                value={form.check_out_time}
+                onChange={(e) => set("check_out_time", e.target.value)}
+                aria-invalid={!!errors['check_out_time']}
+                className={errors['check_out_time'] ? errCls : undefined}
+              />
+              <FieldError id="check_out_time" />
+            </div>
+          </div>
         </div>
 
         <div className={section}>

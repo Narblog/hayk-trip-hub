@@ -2,7 +2,7 @@ import { langFromSearch } from "@/lib/lang-url";
 import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { CarFront, ChevronLeft, ChevronRight, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
+import { CarFront, ChevronLeft, ChevronRight, Clock3, ExternalLink, Images, Instagram, MapPin, MessageCircle, Phone, Share2, ShieldCheck, Star, Users, X } from "lucide-react";
 import { toast } from "sonner";
 import { EmptyState, ErrorState, PropertyPageSkeleton } from "@/components/common/states";
 import { FavoriteButton } from "@/components/property/FavoriteButton";
@@ -236,6 +236,7 @@ function PropertyPage() {
     address: string | null; contact_phone: string | null; contact_whatsapp: string | null;
     contact_instagram: string | null; house_rules: string | null; owner_id: string | null;
     latitude: number | null; longitude: number | null;
+    check_in_time: string | null; check_out_time: string | null;
     public_code: string | null;
     property_images: Img[];
     property_amenities?: { amenity_code: string }[];
@@ -483,6 +484,23 @@ function PropertyPage() {
 
           {descText ? (
             <p className="mt-4 min-w-0 whitespace-pre-line break-words leading-relaxed text-muted-foreground">{descText}</p>
+          ) : null}
+
+          {(p.check_in_time || p.check_out_time) ? (
+            <section aria-label={t("form.arrivalTimes")} className="mt-5 grid max-w-md grid-cols-2 gap-3">
+              {p.check_in_time ? (
+                <div className="rounded-2xl border border-border bg-card p-3.5">
+                  <p className="flex items-center gap-2 text-xs text-muted-foreground"><Clock3 className="size-4 text-brand" />{t("form.checkInTime")}</p>
+                  <p className="mt-1 font-display text-lg font-semibold">{p.check_in_time.slice(0, 5)}</p>
+                </div>
+              ) : null}
+              {p.check_out_time ? (
+                <div className="rounded-2xl border border-border bg-card p-3.5">
+                  <p className="flex items-center gap-2 text-xs text-muted-foreground"><Clock3 className="size-4 text-brand" />{t("form.checkOutTime")}</p>
+                  <p className="mt-1 font-display text-lg font-semibold">{p.check_out_time.slice(0, 5)}</p>
+                </div>
+              ) : null}
+            </section>
           ) : null}
 
           <div aria-hidden="true" className="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 text-brand">
