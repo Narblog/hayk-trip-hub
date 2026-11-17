@@ -18,6 +18,8 @@ import { processImage } from "@/lib/images";
 import { useI18n } from "@/lib/i18n";
 import { requiredPropertyTimeErrors } from "@/lib/property-times";
 
+const TIME_OPTIONS = Array.from({ length: 48 }, (_, i) => `${String(Math.floor(i / 2)).padStart(2, "0")}:${i % 2 ? "30" : "00"}`);
+
 export const Route = createFileRoute("/owner/properties/$id/edit")({
   head: () => ({
     meta: [
@@ -103,8 +105,8 @@ function EditPropertyPage() {
       bedrooms: String(property.bedrooms ?? 0),
       beds: String(property.beds ?? 0),
       bathrooms: String(property.bathrooms ?? 0),
-      check_in_time: property.check_in_time ?? "",
-      check_out_time: property.check_out_time ?? "",
+      check_in_time: property.check_in_time?.slice(0, 5) ?? "",
+      check_out_time: property.check_out_time?.slice(0, 5) ?? "",
       contact_phone: property.contact_phone ?? "",
       contact_whatsapp: property.contact_whatsapp ?? "",
       contact_instagram: property.contact_instagram ?? "",
@@ -523,30 +525,12 @@ function EditPropertyPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="check_in_time">{t("form.checkInTime")} *</Label>
-              <Input
-                id="check_in_time"
-                type="time"
-                step={300}
-                required
-                value={form.check_in_time}
-                onChange={(e) => set("check_in_time", e.target.value)}
-                aria-invalid={!!errors['check_in_time']}
-                className={errors['check_in_time'] ? errCls : undefined}
-              />
+              <select id="check_in_time" required value={form.check_in_time} onChange={(e) => set("check_in_time", e.target.value)} aria-invalid={!!errors['check_in_time']} className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${errors['check_in_time'] ? errCls : ""}`}><option value="">--:--</option>{TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}</select>
               <FieldError id="check_in_time" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="check_out_time">{t("form.checkOutTime")} *</Label>
-              <Input
-                id="check_out_time"
-                type="time"
-                step={300}
-                required
-                value={form.check_out_time}
-                onChange={(e) => set("check_out_time", e.target.value)}
-                aria-invalid={!!errors['check_out_time']}
-                className={errors['check_out_time'] ? errCls : undefined}
-              />
+              <select id="check_out_time" required value={form.check_out_time} onChange={(e) => set("check_out_time", e.target.value)} aria-invalid={!!errors['check_out_time']} className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ${errors['check_out_time'] ? errCls : ""}`}><option value="">--:--</option>{TIME_OPTIONS.map((t) => <option key={t} value={t}>{t}</option>)}</select>
               <FieldError id="check_out_time" />
             </div>
           </div>
