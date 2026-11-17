@@ -1322,6 +1322,11 @@ export async function respondBooking(input: {
   if (error) throw error;
 }
 
+export async function remindBookingOwner(bookingId: string) {
+  const { error } = await supabase.rpc("remind_booking_owner", { p_booking_id: bookingId });
+  if (error) throw error;
+}
+
 export async function cancelBooking(bookingId: string, token?: string) {
   const { error } = await supabase.rpc("cancel_booking_request", {
     p_booking_id: bookingId,

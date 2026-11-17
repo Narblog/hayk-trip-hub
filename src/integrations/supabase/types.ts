@@ -1518,6 +1518,7 @@ export type Database = {
           nightly_price: number
         }[]
       }
+      remind_booking_owner: { Args: { p_booking_id: string }; Returns: boolean }
       respond_booking_request: {
         Args: {
           p_action: string

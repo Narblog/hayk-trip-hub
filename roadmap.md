@@ -1,5 +1,5 @@
 # Roadmap
 
-- [x] Require blank-by-default, editable check-in and check-out times when adding or editing a property.
-- [x] Keep owner bookings individual and show every property and package booking to admins newest-first.
-- [x] Verify required-time validation, saved-time readback, admin and owner booking lists, and test-data cleanup.
+- [x] Make pending admin bookings easy to spot with counts and waiting duration.
+- [x] Let admins send an in-app reminder to the property owner without deciding on their behalf.
+- [x] Verify the combined admin list, reminder delivery, non-admin blocking, and test-data cleanup.
